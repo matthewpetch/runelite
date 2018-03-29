@@ -1,6 +1,7 @@
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.Socket;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.LinkedList;
@@ -10,30 +11,16 @@ import net.runelite.mapping.Implements;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("el")
+@ObfuscatedName("ef")
 @Implements("UrlRequester")
 public class UrlRequester implements Runnable {
-   @ObfuscatedName("oo")
-   @ObfuscatedSignature(
-      signature = "Ldd;"
-   )
-   @Export("soundSystem1")
-   static AbstractSoundSystem soundSystem1;
-   @ObfuscatedName("s")
-   public static int[] field2099;
-   @ObfuscatedName("bl")
-   @ObfuscatedSignature(
-      signature = "Lbv;"
-   )
-   @Export("mouseRecorder")
-   static MouseRecorder mouseRecorder;
-   @ObfuscatedName("n")
+   @ObfuscatedName("c")
    @Export("thread")
    final Thread thread;
-   @ObfuscatedName("v")
+   @ObfuscatedName("i")
    @Export("isClosed")
    volatile boolean isClosed;
-   @ObfuscatedName("y")
+   @ObfuscatedName("o")
    @Export("requests")
    Queue requests;
 
@@ -44,10 +31,10 @@ public class UrlRequester implements Runnable {
       this.thread.start();
    }
 
-   @ObfuscatedName("n")
+   @ObfuscatedName("c")
    @ObfuscatedSignature(
-      signature = "(Ljava/net/URL;I)Len;",
-      garbageValue = "1365732955"
+      signature = "(Ljava/net/URL;S)Les;",
+      garbageValue = "1536"
    )
    @Export("request")
    public UrlRequest request(URL var1) {
@@ -59,10 +46,10 @@ public class UrlRequester implements Runnable {
       }
    }
 
-   @ObfuscatedName("v")
+   @ObfuscatedName("i")
    @ObfuscatedSignature(
       signature = "(I)V",
-      garbageValue = "-1913587742"
+      garbageValue = "288850234"
    )
    @Export("close")
    public void close() {
@@ -127,59 +114,18 @@ public class UrlRequester implements Runnable {
 
             }
          } catch (Exception var17) {
-            Bounds.method5132((String)null, var17);
+            UrlRequest.processClientError((String)null, var17);
          }
       }
 
    }
 
-   @ObfuscatedName("n")
+   @ObfuscatedName("c")
    @ObfuscatedSignature(
-      signature = "(II)Lhq;",
-      garbageValue = "-1583521359"
+      signature = "(Ljava/net/Socket;III)Lfr;",
+      garbageValue = "650936836"
    )
-   @Export("getWidget")
-   public static Widget getWidget(int var0) {
-      int var1 = var0 >> 16;
-      int var2 = var0 & 65535;
-      if(Widget.widgets[var1] == null || Widget.widgets[var1][var2] == null) {
-         boolean var3 = FontName.loadWidget(var1);
-         if(!var3) {
-            return null;
-         }
-      }
-
-      return Widget.widgets[var1][var2];
-   }
-
-   @ObfuscatedName("n")
-   @ObfuscatedSignature(
-      signature = "(II)Lcv;",
-      garbageValue = "-1313291930"
-   )
-   @Export("getScript")
-   static Script getScript(int var0) {
-      Script var1 = (Script)Script.field1435.get((long)var0);
-      if(var1 != null) {
-         return var1;
-      } else {
-         byte[] var2 = Timer.indexScripts.getConfigData(var0, 0);
-         if(var2 == null) {
-            return null;
-         } else {
-            var1 = class218.newScript(var2);
-            Script.field1435.put(var1, (long)var0);
-            return var1;
-         }
-      }
-   }
-
-   @ObfuscatedName("v")
-   @ObfuscatedSignature(
-      signature = "(Lgv;I)Ljava/lang/String;",
-      garbageValue = "-548112750"
-   )
-   public static String method2972(Buffer var0) {
-      return WorldMapData.method341(var0, 32767);
+   public static class169 method3107(Socket var0, int var1, int var2) throws IOException {
+      return new class171(var0, var1, var2);
    }
 }

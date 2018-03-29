@@ -25,18 +25,15 @@
  */
 package net.runelite.client.plugins.devtools;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
 import java.util.List;
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 import net.runelite.api.Actor;
 import net.runelite.api.Client;
@@ -46,6 +43,7 @@ import net.runelite.api.GroundObject;
 import net.runelite.api.Item;
 import net.runelite.api.ItemLayer;
 import net.runelite.api.NPC;
+import net.runelite.api.NPCComposition;
 import net.runelite.api.Node;
 import net.runelite.api.Perspective;
 import net.runelite.api.Player;
@@ -53,6 +51,7 @@ import net.runelite.api.Projectile;
 import net.runelite.api.Region;
 import net.runelite.api.Tile;
 import net.runelite.api.WallObject;
+import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.api.widgets.WidgetItem;
@@ -83,7 +82,7 @@ public class DevToolsOverlay extends Overlay
 	private final DevToolsPlugin plugin;
 
 	@Inject
-	public DevToolsOverlay(@Nullable Client client, DevToolsPlugin plugin)
+	public DevToolsOverlay(Client client, DevToolsPlugin plugin)
 	{
 		setPosition(OverlayPosition.DYNAMIC);
 		setLayer(OverlayLayer.ALWAYS_ON_TOP);
@@ -92,7 +91,7 @@ public class DevToolsOverlay extends Overlay
 	}
 
 	@Override
-	public Dimension render(Graphics2D graphics, Point parent)
+	public Dimension render(Graphics2D graphics)
 	{
 		Font font = plugin.getFont();
 		if (font != null)
@@ -154,7 +153,14 @@ public class DevToolsOverlay extends Overlay
 		List<NPC> npcs = client.getNpcs();
 		for (NPC npc : npcs)
 		{
-			String text = npc.getName() + " (ID: " + npc.getId() + ") (A: " + npc.getAnimation() + ") (G: " + npc.getGraphic() + ")";
+			NPCComposition composition = npc.getComposition();
+			if (composition.getConfigs() != null)
+			{
+				composition = composition.transform();
+			}
+
+			String text = composition.getName() + " (ID: " + composition.getId() + ") (A: " + npc.getAnimation()
+					+ ") (G: " + npc.getGraphic() + ")";
 			if (npc.getCombatLevel() > 1)
 			{
 				OverlayUtil.renderActorOverlay(graphics, npc, text, YELLOW);
@@ -342,7 +348,7 @@ public class DevToolsOverlay extends Overlay
 			int originX = projectile.getX1();
 			int originY = projectile.getY1();
 
-			net.runelite.api.Point tilePoint = new net.runelite.api.Point(originX, originY);
+			LocalPoint tilePoint = new LocalPoint(originX, originY);
 			Polygon poly = Perspective.getCanvasTilePoly(client, tilePoint);
 
 			if (poly != null)
@@ -350,7 +356,6 @@ public class DevToolsOverlay extends Overlay
 				OverlayUtil.renderPolygon(graphics, poly, Color.RED);
 			}
 
-			long projectileLength = projectile.getLength().toMillis();
 			int projectileId = projectile.getId();
 			Actor projectileInteracting = projectile.getInteracting();
 
@@ -365,30 +370,13 @@ public class DevToolsOverlay extends Overlay
 				infoString += "Targeted (T: " + projectileInteracting.getName() + ")";
 			}
 
-			infoString += " (ID: " + projectileId + ") (L: " + projectileLength + "ms)";
+			infoString += " (ID: " + projectileId + ")";
 
 			if (projectileInteracting != null)
 			{
 				OverlayUtil.renderActorOverlay(graphics, projectile.getInteracting(), infoString, Color.RED);
 			}
-			else
-			{
-				net.runelite.api.Point targetPoint = projectile.getTarget();
-				OverlayUtil.renderTilePointOverlay(graphics, client, targetPoint, infoString, Color.RED);
-			}
-
 		}
-	}
-
-	public void renderProjectileOrigin(Graphics2D graphics, Projectile projectile, int floor, net.runelite.api.Point origin)
-	{
-		Polygon poly = Perspective.getCanvasTilePoly(client, origin);
-
-		graphics.setColor(Color.RED);
-		graphics.setStroke(new BasicStroke(2));
-		graphics.drawPolygon(poly);
-		graphics.setColor(Color.RED);
-		graphics.fillPolygon(poly);
 	}
 
 	public void renderWidgets(Graphics2D graphics)

@@ -24,23 +24,26 @@
  */
 package net.runelite.client.plugins.cannon;
 
-import static java.awt.Color.GREEN;
-import static java.awt.Color.ORANGE;
-import static java.awt.Color.RED;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.Point;
+import java.awt.Polygon;
 import javax.inject.Inject;
 import net.runelite.api.Client;
 import net.runelite.api.Perspective;
-import net.runelite.api.widgets.Widget;
+import static net.runelite.api.Perspective.LOCAL_TILE_SIZE;
+import net.runelite.api.Point;
+import net.runelite.api.coords.LocalPoint;
 import net.runelite.client.ui.overlay.Overlay;
-import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
+import net.runelite.client.ui.overlay.OverlayPriority;
+import net.runelite.client.ui.overlay.OverlayUtil;
 import net.runelite.client.ui.overlay.components.TextComponent;
 
 class CannonOverlay extends Overlay
 {
+	private static final int MAX_DISTANCE = 2500;
+
 	private final Client client;
 	private final CannonConfig config;
 	private final CannonPlugin plugin;
@@ -50,48 +53,89 @@ class CannonOverlay extends Overlay
 	CannonOverlay(Client client, CannonConfig config, CannonPlugin plugin)
 	{
 		setPosition(OverlayPosition.DYNAMIC);
-		setLayer(OverlayLayer.UNDER_WIDGETS);
+		setPriority(OverlayPriority.MED);
 		this.client = client;
 		this.config = config;
 		this.plugin = plugin;
 	}
 
 	@Override
-	public Dimension render(Graphics2D graphics, Point parent)
+	public Dimension render(Graphics2D graphics)
 	{
-		if (!plugin.cannonPlaced || plugin.myCannon == null || !config.enabled())
+		if (!plugin.isCannonPlaced() || plugin.getCannonPosition() == null)
 		{
 			return null;
 		}
 
-		net.runelite.api.Point cannonLoc = Perspective.getCanvasTextLocation(client,
-			graphics,
-			Perspective.worldToLocal(client, plugin.myCannon),
-			String.valueOf(plugin.cballsLeft), 200);
+		LocalPoint cannonPoint = LocalPoint.fromWorld(client, plugin.getCannonPosition());
 
-		Widget viewport = client.getViewportWidget();
-
-		if (viewport != null && cannonLoc != null && viewport.contains(cannonLoc))
+		if (cannonPoint == null)
 		{
-			textComponent.setText(String.valueOf(plugin.cballsLeft));
-			textComponent.setPosition(new Point(cannonLoc.getX(), cannonLoc.getY()));
+			return null;
+		}
 
-			if (plugin.cballsLeft > 15)
+		LocalPoint localLocation = client.getLocalPlayer().getLocalLocation();
+
+		if (localLocation.distanceTo(cannonPoint) <= MAX_DISTANCE)
+		{
+			Point cannonLoc = Perspective.getCanvasTextLocation(client,
+				graphics,
+				cannonPoint,
+				String.valueOf(plugin.getCballsLeft()), 200);
+
+			if (cannonLoc != null)
 			{
-				textComponent.setColor(GREEN);;
-			}
-			else if (plugin.cballsLeft > 5)
-			{
-				textComponent.setColor(ORANGE);
-			}
-			else
-			{
-				textComponent.setColor(RED);
+				textComponent.setText(String.valueOf(plugin.getCballsLeft()));
+				textComponent.setPosition(new java.awt.Point(cannonLoc.getX(), cannonLoc.getY()));
+				textComponent.setColor(plugin.getStateColor());
+				textComponent.render(graphics);
 			}
 
-			textComponent.render(graphics, parent);
+			if (config.showDoubleHitSpot())
+			{
+				Color color = config.highlightDoubleHitColor();
+				drawDoubleHitSpots(graphics, cannonPoint, color);
+			}
 		}
 
 		return null;
+	}
+
+
+	/**
+	 * Draw the double hit spots on a 6 by 6 grid around the cannon
+	 * @param startTile The position of the cannon
+	 */
+	private void drawDoubleHitSpots(Graphics2D graphics, LocalPoint startTile, Color color)
+	{
+		for (int x = -3; x <= 3; x++)
+		{
+			for (int y = -3; y <= 3; y++)
+			{
+				if (y != 1 && x != 1 && y != -1 && x != -1)
+				{
+					continue;
+				}
+
+				//Ignore center square
+				if (y >= -1 && y <= 1 && x >= -1 && x <= 1)
+				{
+					continue;
+				}
+
+				int xPos = startTile.getX() - (x * LOCAL_TILE_SIZE);
+				int yPos = startTile.getY() - (y * LOCAL_TILE_SIZE);
+
+				LocalPoint marker = new LocalPoint(xPos, yPos);
+				Polygon poly = Perspective.getCanvasTilePoly(client, marker);
+
+				if (poly == null)
+				{
+					continue;
+				}
+
+				OverlayUtil.renderPolygon(graphics, poly, color);
+			}
+		}
 	}
 }

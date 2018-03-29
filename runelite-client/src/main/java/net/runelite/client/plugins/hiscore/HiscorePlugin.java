@@ -25,20 +25,24 @@
 package net.runelite.client.plugins.hiscore;
 
 import com.google.common.eventbus.Subscribe;
+import com.google.inject.Provides;
+import java.awt.image.BufferedImage;
 import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.ScheduledExecutorService;
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
 import javax.swing.SwingUtilities;
+import net.runelite.api.events.ConfigChanged;
 import net.runelite.api.events.PlayerMenuOptionClicked;
+import net.runelite.client.config.ConfigManager;
 import net.runelite.client.menus.MenuManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
-import net.runelite.client.ui.ClientUI;
 import net.runelite.client.ui.NavigationButton;
+import net.runelite.client.ui.PluginToolbar;
 
 @PluginDescriptor(
-	name = "Hiscore plugin",
+	name = "HiScore",
 	loadWhenOutdated = true
 )
 public class HiscorePlugin extends Plugin
@@ -46,35 +50,70 @@ public class HiscorePlugin extends Plugin
 	private static final String LOOKUP = "Lookup";
 
 	@Inject
-	ClientUI ui;
+	private PluginToolbar pluginToolbar;
 
 	@Inject
-	MenuManager menuManager;
+	private MenuManager menuManager;
 
 	@Inject
-	ScheduledExecutorService executor;
+	private ScheduledExecutorService executor;
+
+	@Inject
+	private HiscoreConfig config;
 
 	private NavigationButton navButton;
 	private HiscorePanel hiscorePanel;
+
+	@Provides
+	HiscoreConfig provideConfig(ConfigManager configManager)
+	{
+		return configManager.getConfig(HiscoreConfig.class);
+	}
 
 	@Override
 	protected void startUp() throws Exception
 	{
 		hiscorePanel = injector.getInstance(HiscorePanel.class);
-		navButton = new NavigationButton(
-			"Hiscore",
-			ImageIO.read(getClass().getResourceAsStream("hiscore.gif")),
-			() -> hiscorePanel);
 
-		ui.getPluginToolbar().addNavigation(navButton);
+		BufferedImage icon;
+		synchronized (ImageIO.class)
+		{
+			icon = ImageIO.read(getClass().getResourceAsStream("hiscore.gif"));
+		}
 
-		menuManager.addPlayerMenuItem(LOOKUP);
+		navButton = NavigationButton.builder()
+			.name("Hiscore")
+			.icon(icon)
+			.panel(hiscorePanel)
+			.build();
+
+		pluginToolbar.addNavigation(navButton);
+
+		if (config.playerOption())
+		{
+			menuManager.addPlayerMenuItem(LOOKUP);
+		}
 	}
 
 	@Override
 	protected void shutDown() throws Exception
 	{
-		ui.getPluginToolbar().removeNavigation(navButton);
+		pluginToolbar.removeNavigation(navButton);
+		menuManager.removePlayerMenuItem(LOOKUP);
+	}
+
+	@Subscribe
+	public void onConfigChanged(ConfigChanged event)
+	{
+		if (event.getGroup().equals("hiscore"))
+		{
+			menuManager.removePlayerMenuItem(LOOKUP);
+
+			if (config.playerOption())
+			{
+				menuManager.addPlayerMenuItem(LOOKUP);
+			}
+		}
 	}
 
 	@Subscribe
@@ -90,7 +129,7 @@ public class HiscorePlugin extends Plugin
 					{
 						if (!navButton.isSelected())
 						{
-							navButton.doClick();
+							navButton.getOnSelect().run();
 						}
 					});
 				}

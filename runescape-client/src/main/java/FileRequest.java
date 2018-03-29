@@ -4,57 +4,82 @@ import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("it")
+@ObfuscatedName("jv")
 @Implements("FileRequest")
 public class FileRequest extends CacheableNode {
-   @ObfuscatedName("er")
+   @ObfuscatedName("c")
    @ObfuscatedSignature(
-      signature = "Ljz;"
-   )
-   @Export("fontPlain11")
-   static Font fontPlain11;
-   @ObfuscatedName("n")
-   @ObfuscatedSignature(
-      signature = "Lif;"
+      signature = "Ljs;"
    )
    @Export("index")
-   public IndexData index;
-   @ObfuscatedName("v")
+   IndexData index;
+   @ObfuscatedName("i")
    @ObfuscatedGetter(
-      intValue = -1509332601
+      intValue = 1970862263
    )
    @Export("crc")
-   public int crc;
-   @ObfuscatedName("y")
+   int crc;
+   @ObfuscatedName("o")
    @Export("padding")
-   public byte padding;
+   byte padding;
 
-   @ObfuscatedName("v")
+   @ObfuscatedName("c")
    @ObfuscatedSignature(
-      signature = "(I)V",
-      garbageValue = "-809334691"
+      signature = "(II)Ljj;",
+      garbageValue = "406579834"
    )
-   static void method4300() {
-      class61.field734 = null;
-      class61.field731 = null;
-      class61.field733 = null;
-      class37.field487 = null;
-      class161.field2183 = null;
-      Resampler.field1595 = null;
-      class61.field730 = null;
-      class60.field721 = null;
-      class161.field2189 = null;
-      class263.field3483 = null;
-      WidgetNode.field788 = null;
-      class54.field639 = null;
+   @Export("getObjectDefinition")
+   public static ObjectComposition getObjectDefinition(int var0) {
+      ObjectComposition var1 = (ObjectComposition)ObjectComposition.objects.get((long)var0);
+      if(var1 != null) {
+         return var1;
+      } else {
+         byte[] var2 = class252.objects_ref.getConfigData(6, var0);
+         var1 = new ObjectComposition();
+         var1.id = var0;
+         if(var2 != null) {
+            var1.decode(new Buffer(var2));
+         }
+
+         var1.post();
+         if(var1.isHollow) {
+            var1.clipType = 0;
+            var1.blocksProjectile = false;
+         }
+
+         ObjectComposition.objects.put(var1, (long)var0);
+         return var1;
+      }
    }
 
-   @ObfuscatedName("r")
+   @ObfuscatedName("c")
    @ObfuscatedSignature(
-      signature = "(IB)V",
-      garbageValue = "1"
+      signature = "(Ljm;Ljm;B)V",
+      garbageValue = "-83"
    )
-   public static void method4301(int var0) {
-      MouseInput.mouseIdleTicks = var0;
+   public static void method4545(IndexDataBase var0, IndexDataBase var1) {
+      class33.field441 = var0;
+      class316.field3919 = var1;
+   }
+
+   @ObfuscatedName("c")
+   @ObfuscatedSignature(
+      signature = "(IB)Ljb;",
+      garbageValue = "106"
+   )
+   public static VarPlayerType method4547(int var0) {
+      VarPlayerType var1 = (VarPlayerType)VarPlayerType.varplayers.get((long)var0);
+      if(var1 != null) {
+         return var1;
+      } else {
+         byte[] var2 = VarPlayerType.varplayer_ref.getConfigData(16, var0);
+         var1 = new VarPlayerType();
+         if(var2 != null) {
+            var1.decode(new Buffer(var2));
+         }
+
+         VarPlayerType.varplayers.put(var1, (long)var0);
+         return var1;
+      }
    }
 }

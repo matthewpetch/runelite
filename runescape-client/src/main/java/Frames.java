@@ -4,35 +4,33 @@ import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("ek")
+@ObfuscatedName("ee")
 @Implements("Frames")
 public class Frames extends CacheableNode {
-   @ObfuscatedName("s")
-   public static int[] field2042;
-   @ObfuscatedName("e")
-   public static short[] field2043;
-   @ObfuscatedName("dk")
+   @ObfuscatedName("i")
+   @ObfuscatedSignature(
+      signature = "Ljm;"
+   )
+   @Export("SpotAnimationDefinition_modelIndexCache")
+   static IndexDataBase SpotAnimationDefinition_modelIndexCache;
+   @ObfuscatedName("jf")
    @ObfuscatedGetter(
-      intValue = 560840327
+      intValue = -425019147
    )
-   @Export("port1")
-   static int port1;
-   @ObfuscatedName("hl")
+   @Export("menuY")
+   static int menuY;
+   @ObfuscatedName("c")
    @ObfuscatedSignature(
-      signature = "Lhq;"
-   )
-   static Widget field2040;
-   @ObfuscatedName("n")
-   @ObfuscatedSignature(
-      signature = "[Leu;"
+      signature = "[Ldy;"
    )
    @Export("skeletons")
    Frame[] skeletons;
 
    @ObfuscatedSignature(
-      signature = "(Lil;Lil;IZ)V"
+      signature = "(Ljm;Ljm;IZ)V",
+      garbageValue = "0"
    )
-   Frames(IndexDataBase var1, IndexDataBase var2, int var3, boolean var4) {
+   public Frames(IndexDataBase var1, IndexDataBase var2, int var3, boolean var4) {
       Deque var5 = new Deque();
       int var6 = var1.fileCount(var3);
       this.skeletons = new Frame[var6];
@@ -51,13 +49,7 @@ public class Frames extends CacheableNode {
          }
 
          if(var10 == null) {
-            byte[] var13;
-            if(var4) {
-               var13 = var2.getChild(0, var11);
-            } else {
-               var13 = var2.getChild(var11, 0);
-            }
-
+            byte[] var13 = var2.getChild(var11, 0);
             var10 = new FrameMap(var11, var13);
             var5.addFront(var10);
          }
@@ -67,53 +59,59 @@ public class Frames extends CacheableNode {
 
    }
 
-   @ObfuscatedName("v")
+   @ObfuscatedName("c")
    @ObfuscatedSignature(
-      signature = "(IB)Z",
-      garbageValue = "-79"
+      signature = "(II)Z",
+      garbageValue = "1944805564"
    )
-   public boolean method2932(int var1) {
+   public boolean method3079(int var1) {
       return this.skeletons[var1].showing;
    }
 
-   @ObfuscatedName("e")
+   @ObfuscatedName("k")
    @ObfuscatedSignature(
-      signature = "(ILcv;ZI)I",
-      garbageValue = "1172966436"
+      signature = "(Ljs;IIIBZB)V",
+      garbageValue = "36"
    )
-   static int method2941(int var0, Script var1, boolean var2) {
-      Widget var3 = var2?class82.field1267:CombatInfo1.field1216;
-      if(var0 == 1500) {
-         class82.intStack[++class82.intStackSize - 1] = var3.relativeX;
-         return 1;
-      } else if(var0 == 1501) {
-         class82.intStack[++class82.intStackSize - 1] = var3.relativeY;
-         return 1;
-      } else if(var0 == 1502) {
-         class82.intStack[++class82.intStackSize - 1] = var3.width;
-         return 1;
-      } else if(var0 == 1503) {
-         class82.intStack[++class82.intStackSize - 1] = var3.height;
-         return 1;
-      } else if(var0 == 1504) {
-         class82.intStack[++class82.intStackSize - 1] = var3.isHidden?1:0;
-         return 1;
-      } else if(var0 == 1505) {
-         class82.intStack[++class82.intStackSize - 1] = var3.parentId;
-         return 1;
-      } else {
-         return 2;
-      }
-   }
+   @Export("requestNetFile")
+   static void requestNetFile(IndexData var0, int var1, int var2, int var3, byte var4, boolean var5) {
+      long var6 = (long)((var1 << 16) + var2);
+      FileRequest var8 = (FileRequest)class264.NetCache_pendingPriorityWrites.get(var6);
+      if(var8 == null) {
+         var8 = (FileRequest)class264.NetCache_pendingPriorityResponses.get(var6);
+         if(var8 == null) {
+            var8 = (FileRequest)class264.NetCache_pendingWrites.get(var6);
+            if(var8 != null) {
+               if(var5) {
+                  var8.unlinkDual();
+                  class264.NetCache_pendingPriorityWrites.put(var8, var6);
+                  --class264.NetCache_pendingWritesCount;
+                  ++class264.NetCache_pendingPriorityWritesCount;
+               }
 
-   @ObfuscatedName("c")
-   @ObfuscatedSignature(
-      signature = "(I)V",
-      garbageValue = "-2114520108"
-   )
-   public static void method2942() {
-      ItemComposition.items.reset();
-      ItemComposition.itemModelCache.reset();
-      ItemComposition.itemSpriteCache.reset();
+            } else {
+               if(!var5) {
+                  var8 = (FileRequest)class264.NetCache_pendingResponses.get(var6);
+                  if(var8 != null) {
+                     return;
+                  }
+               }
+
+               var8 = new FileRequest();
+               var8.index = var0;
+               var8.crc = var3;
+               var8.padding = var4;
+               if(var5) {
+                  class264.NetCache_pendingPriorityWrites.put(var8, var6);
+                  ++class264.NetCache_pendingPriorityWritesCount;
+               } else {
+                  class264.NetCache_pendingWritesQueue.push(var8);
+                  class264.NetCache_pendingWrites.put(var8, var6);
+                  ++class264.NetCache_pendingWritesCount;
+               }
+
+            }
+         }
+      }
    }
 }

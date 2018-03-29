@@ -24,45 +24,71 @@
  */
 package net.runelite.client.plugins.xptracker;
 
-import static net.runelite.client.plugins.xptracker.XpWorldType.NORMAL;
 import com.google.common.eventbus.Subscribe;
+import com.google.inject.Binder;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ScheduledExecutorService;
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
+import net.runelite.api.Player;
+import net.runelite.api.Skill;
 import net.runelite.api.events.ExperienceChanged;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.GameTick;
+import net.runelite.client.game.SkillIconManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
-import net.runelite.client.ui.ClientUI;
+import static net.runelite.client.plugins.xptracker.XpWorldType.NORMAL;
 import net.runelite.client.ui.NavigationButton;
+import net.runelite.client.ui.PluginToolbar;
 import net.runelite.http.api.worlds.World;
 import net.runelite.http.api.worlds.WorldClient;
 import net.runelite.http.api.worlds.WorldResult;
 import net.runelite.http.api.worlds.WorldType;
+import net.runelite.http.api.xp.XpClient;
 
 @PluginDescriptor(
-	name = "XP tracker plugin"
+	name = "XP Tracker"
 )
 @Slf4j
 public class XpTrackerPlugin extends Plugin
 {
 	@Inject
-	ClientUI ui;
+	private PluginToolbar pluginToolbar;
 
 	@Inject
-	Client client;
+	private Client client;
+
+	@Inject
+	private SkillIconManager skillIconManager;
+
+	@Inject
+	private ScheduledExecutorService executor;
 
 	private NavigationButton navButton;
 	private XpPanel xpPanel;
+
+	private final Map<Skill, SkillXPInfo> xpInfos = new HashMap<>();
+
 	private WorldResult worlds;
 	private XpWorldType lastWorldType;
 	private String lastUsername;
+
+	private final XpClient xpClient = new XpClient();
+
+	@Override
+	public void configure(Binder binder)
+	{
+		binder.bind(XpTrackerService.class).to(XpTrackerServiceImpl.class);
+	}
 
 	@Override
 	protected void startUp() throws Exception
@@ -78,19 +104,27 @@ public class XpTrackerPlugin extends Plugin
 			log.warn("Error looking up worlds list", e);
 		}
 
-		xpPanel = new XpPanel(client);
-		navButton = new NavigationButton(
-			"XP Tracker",
-			ImageIO.read(getClass().getResourceAsStream("xp.png")),
-			() -> xpPanel);
+		xpPanel = new XpPanel(this, client, skillIconManager);
 
-		ui.getPluginToolbar().addNavigation(navButton);
+		BufferedImage icon;
+		synchronized (ImageIO.class)
+		{
+			icon = ImageIO.read(getClass().getResourceAsStream("xp.png"));
+		}
+
+		navButton = NavigationButton.builder()
+			.name("XP Tracker")
+			.icon(icon)
+			.panel(xpPanel)
+			.build();
+
+		pluginToolbar.addNavigation(navButton);
 	}
 
 	@Override
 	protected void shutDown() throws Exception
 	{
-		ui.getPluginToolbar().removeNavigation(navButton);
+		pluginToolbar.removeNavigation(navButton);
 	}
 
 	@Subscribe
@@ -121,6 +155,27 @@ public class XpTrackerPlugin extends Plugin
 				xpPanel.resetAllInfoBoxes();
 			}
 		}
+		else if (event.getGameState() == GameState.LOGIN_SCREEN)
+		{
+			Player local = client.getLocalPlayer();
+			String username = local != null ? local.getName() : null;
+			if (username != null)
+			{
+				log.debug("Submitting xp track for {}", username);
+
+				executor.submit(() ->
+				{
+					try
+					{
+						xpClient.update(username);
+					}
+					catch (IOException ex)
+					{
+						log.warn("error submitting xp track", ex);
+					}
+				});
+			}
+		}
 	}
 
 	private XpWorldType worldSetToType(EnumSet<WorldType> types)
@@ -135,6 +190,11 @@ public class XpTrackerPlugin extends Plugin
 			}
 		}
 		return xpType;
+	}
+
+	public SkillXPInfo getSkillXpInfo(Skill skill)
+	{
+		return xpInfos.computeIfAbsent(skill, s -> new SkillXPInfo(s));
 	}
 
 	@Subscribe

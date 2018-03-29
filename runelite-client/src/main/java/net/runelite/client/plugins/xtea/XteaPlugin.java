@@ -39,7 +39,8 @@ import net.runelite.http.api.xtea.XteaClient;
 import okhttp3.Response;
 
 @PluginDescriptor(
-	name = "Xtea plugin"
+	name = "Xtea",
+	hidden = true
 )
 @Slf4j
 public class XteaPlugin extends Plugin
@@ -49,10 +50,10 @@ public class XteaPlugin extends Plugin
 	private final Set<Integer> sentRegions = new HashSet<>();
 
 	@Inject
-	Client client;
+	private Client client;
 
 	@Inject
-	ScheduledExecutorService executor;
+	private ScheduledExecutorService executor;
 
 	@Subscribe
 	public void onMapRegionChanged(MapRegionChanged event)

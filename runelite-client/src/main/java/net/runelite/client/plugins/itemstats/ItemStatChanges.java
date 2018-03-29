@@ -30,6 +30,7 @@ import java.util.HashSet;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import static net.runelite.api.ItemID.*;
+import net.runelite.client.plugins.itemstats.special.SpicyStew;
 import net.runelite.client.plugins.itemstats.potions.SuperRestore;
 import static net.runelite.client.plugins.itemstats.Builders.*;
 import static net.runelite.client.plugins.itemstats.stats.Stats.*;
@@ -41,41 +42,44 @@ import net.runelite.client.plugins.itemstats.potions.PrayerPotion;
 public class ItemStatChanges
 {
 
-	public ItemStatChanges()
+	ItemStatChanges()
 	{
 		init();
 	}
 
-	final void init()
+	private void init()
 	{
 		add(food(-5), POISON_KARAMBWAN);
 		add(food(1), POTATO, ONION, CABBAGE, POT_OF_CREAM, CHOPPED_ONION);
-		add(food(2), TOMATO, BANANA, ORANGE, PINEAPPLE_CHUNKS, PINEAPPLE_RING, SPICY_SAUCE, CHEESE);
+		add(food(2), TOMATO, BANANA, ORANGE, PINEAPPLE_CHUNKS, PINEAPPLE_RING, SPICY_SAUCE, CHEESE, SPINACH_ROLL);
 		add(food(3), SHRIMPS, COOKED_MEAT, COOKED_CHICKEN, ROE, CAVIAR, CHOCOLATE_BAR);
 		add(food(4), SARDINE, CAKE, _23_CAKE, SLICE_OF_CAKE);
 		add(food(5), BREAD, HERRING, CHOCOLATE_CAKE, _23_CHOCOLATE_CAKE, CHOCOLATE_SLICE, COOKED_RABBIT, CHILLI_CON_CARNE,
 			FRIED_MUSHROOMS, FRIED_ONIONS, REDBERRY_PIE, HALF_A_REDBERRY_PIE);
-		add(food(6), CHOCICE, MACKEREL, MEAT_PIE, HALF_A_MEAT_PIE);
+		add(food(6), CHOCICE, MACKEREL, MEAT_PIE, HALF_A_MEAT_PIE, GUANIC_BAT_0, ROAST_BIRD_MEAT,
+			SQUARE_SANDWICH, ROLL, BAGUETTE, TRIANGLE_SANDWICH);
 		add(food(7), TROUT, COD, PLAIN_PIZZA, _12_PLAIN_PIZZA, APPLE_PIE, HALF_AN_APPLE_PIE, ROAST_RABBIT, BAKED_POTATO,
 			PREMADE_CH_CRUNCH, CHOCCHIP_CRUNCHIES, PREMADE_SY_CRUNCH, SPICY_CRUNCHIES);
 		add(food(8), PIKE, ROAST_BEAST_MEAT, MEAT_PIZZA, _12_MEAT_PIZZA, PREMADE_WM_CRUN, WORM_CRUNCHIES, PREMADE_TD_CRUNCH,
-			TOAD_CRUNCHIES, EGG_AND_TOMATO);
+			TOAD_CRUNCHIES, EGG_AND_TOMATO, LECKISH_FISH_2, PRAEL_BAT_1);
 		add(food(9), PREMADE_P_PUNCH, PINEAPPLE_PUNCH, PREMADE_FR_BLAST, FRUIT_BLAST, SALMON, ANCHOVY_PIZZA,
 			_12_ANCHOVY_PIZZA);
 		add(food(10), TUNA, COOKED_SWEETCORN, CRAB_MEAT, CHOPPED_TUNA, COOKED_CHOMPY);
 		add(food(11), JUG_OF_WINE, RAINBOW_FISH, STEW, PINEAPPLE_PIZZA, _12_PINEAPPLE_PIZZA, COOKED_FISHCAKE,
 			PREMADE_VEG_BATTA, VEGETABLE_BATTA, PREMADE_WM_BATTA, WORM_BATTA, PREMADE_TD_BATTA, TOAD_BATTA, PREMADE_CT_BATTA,
-			CHEESETOM_BATTA, MUSHROOM__ONION);
+			CHEESETOM_BATTA, MUSHROOM__ONION, GIRAL_BAT_2, LAVA_EEL);
 		add(food(12), LOBSTER, PREMADE_WORM_HOLE, WORM_HOLE, PREMADE_VEG_BALL, VEG_BALL);
 		add(food(13), BASS, TUNA_AND_CORN);
-		add(food(14), POTATO_WITH_BUTTER, CHILLI_POTATO, SWORDFISH);
+		add(food(14), POTATO_WITH_BUTTER, CHILLI_POTATO, SWORDFISH, PHLUXIA_BAT_3);
 		add(food(15), PREMADE_TTL, TANGLED_TOADS_LEGS, PREMADE_CHOC_BOMB, CHOCOLATE_BOMB);
 		add(food(16), MONKFISH, POTATO_WITH_CHEESE, EGG_POTATO);
+		add(food(17), MYCIL_FISH_4, KRYKET_BAT_4);
 		add(food(18), COOKED_KARAMBWAN);
 		add(food(19), CURRY, UGTHANKI_KEBAB);
-		add(food(20), MUSHROOM_POTATO, SHARK);
+		add(food(20), MUSHROOM_POTATO, SHARK, ROQED_FISH_5, MURNG_BAT_5);
 		add(food(21), SEA_TURTLE);
 		add(food(22), MANTA_RAY, DARK_CRAB, TUNA_POTATO);
+		add(food(23), KYREN_FISH_6, PSYKK_BAT_6);
 		add(new Anglerfish(), ANGLERFISH);
 		add(food(maxHP -> (int) Math.ceil(maxHP * .06)), STRAWBERRY);
 		add(food(maxHP -> (int) Math.ceil(maxHP * .05)), WATERMELON_SLICE);
@@ -101,7 +105,7 @@ public class ItemStatChanges
 		add(boost(STRENGTH, perc(.10, 3)), STRENGTH_POTION1, STRENGTH_POTION2, STRENGTH_POTION3, STRENGTH_POTION4);
 		add(boost(DEFENCE, perc(.10, 3)), DEFENCE_POTION1, DEFENCE_POTION2, DEFENCE_POTION3, DEFENCE_POTION4);
 		add(boost(MAGIC, 4), MAGIC_POTION1, MAGIC_POTION2, MAGIC_POTION3, MAGIC_POTION4);
-		add(boost(RANGED, perc(.10, 3)), RANGING_POTION1, RANGING_POTION2, RANGING_POTION3, RANGING_POTION4);
+		add(boost(RANGED, perc(.10, 4)), RANGING_POTION1, RANGING_POTION2, RANGING_POTION3, RANGING_POTION4);
 		add(combo(2, boost(ATTACK, perc(.10, 3)), boost(STRENGTH, perc(.10, 3))), COMBAT_POTION1, COMBAT_POTION2, COMBAT_POTION3, COMBAT_POTION4);
 		add(boost(ATTACK, perc(.15, 5)), SUPER_ATTACK1, SUPER_ATTACK2, SUPER_ATTACK3, SUPER_ATTACK4);
 		add(boost(STRENGTH, perc(.15, 5)), SUPER_STRENGTH1, SUPER_STRENGTH2, SUPER_STRENGTH3, SUPER_STRENGTH4);
@@ -144,9 +148,11 @@ public class ItemStatChanges
 		add(combo(2, heal(HITPOINTS, 11), boost(AGILITY, 5), heal(RUN_ENERGY, 10)), SUMMER_PIE, HALF_A_SUMMER_PIE);
 
 		// Other
+		add(new SpicyStew(), SPICY_STEW);
 		add(boost(MAGIC, perc(.10, 1)), IMBUED_HEART);
+		add(combo(boost(ATTACK, 2), boost(STRENGTH, 1), heal(DEFENCE, -1)), JANGERBERRIES);
 
-		log.debug("{} items; {} behaviours loaded", effects.size(), new HashSet(effects.values()).size());
+		log.debug("{} items; {} behaviours loaded", effects.size(), new HashSet<>(effects.values()).size());
 	}
 
 	private final Map<Integer, Effect> effects = new HashMap<>();

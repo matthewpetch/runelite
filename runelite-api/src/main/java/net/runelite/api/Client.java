@@ -25,8 +25,11 @@
 package net.runelite.api;
 
 import java.awt.Canvas;
+import java.awt.Dimension;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.Nullable;
+import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetInfo;
 
@@ -36,11 +39,13 @@ public interface Client extends GameEngine
 
 	List<NPC> getNpcs();
 
+	NPC[] getCachedNPCs();
+
 	int getBoostedSkillLevel(Skill skill);
 
 	int getRealSkillLevel(Skill skill);
 
-	void sendGameMessage(ChatMessageType type, String message);
+	void addChatMessage(ChatMessageType type, String name, String message, String sender);
 
 	GameState getGameState();
 
@@ -58,6 +63,9 @@ public interface Client extends GameEngine
 
 	int getCameraZ();
 
+	/**
+	 * This returns the actual pitch of the camera in JAUs
+	 */
 	int getCameraPitch();
 
 	int getCameraYaw();
@@ -84,11 +92,21 @@ public interface Client extends GameEngine
 
 	ItemComposition getItemDefinition(int id);
 
-	SpritePixels createItemSprite(int itemId, int quantity, int border, int shadowColor, int stackable, boolean noted);
+	SpritePixels createItemSprite(int itemId, int quantity, int border, int shadowColor, int stackable, boolean noted, int scale);
 
 	int getBaseX();
 
 	int getBaseY();
+
+	int getMouseCurrentButton();
+
+	boolean isDraggingWidget();
+
+	Widget getDraggedWidget();
+
+	Widget getDraggedOnWidget();
+
+	void setDraggedOnWidget(Widget widget);
 
 	Widget[] getWidgetRoots();
 
@@ -101,7 +119,7 @@ public interface Client extends GameEngine
 	int[] getWidgetPositionsX();
 
 	int[] getWidgetPositionsY();
-	
+
 	int getEnergy();
 
 	String[] getPlayerOptions();
@@ -109,6 +127,12 @@ public interface Client extends GameEngine
 	boolean[] getPlayerOptionsPriorities();
 
 	int[] getPlayerMenuTypes();
+
+	/**
+	 * Get list of all RuneScape worlds
+	 * @return world list
+	 */
+	World[] getWorldList();
 
 	MenuEntry[] getMenuEntries();
 
@@ -124,19 +148,21 @@ public interface Client extends GameEngine
 
 	int[] getMapRegions();
 
+	int[][][] getInstanceTemplateChunks();
+
 	int[][] getXteaKeys();
 
-	int[] getSettings();
+	int[] getVarps();
 
-	int[] getWidgetSettings();
+	Varcs getVarcs();
+
+	int getSetting(Setting setting);
 
 	int getSetting(Varbits varbit);
 
-	int getClanChatCount();
-
-	ClanMember[] getClanMembers();
-
 	HashTable getComponentTable();
+
+	GrandExchangeOffer[] getGrandExchangeOffers();
 
 	boolean isPrayerActive(Prayer prayer);
 
@@ -154,9 +180,13 @@ public interface Client extends GameEngine
 
 	ObjectComposition getObjectDefinition(int objectId);
 
+	NPCComposition getNpcDefinition(int npcId);
+
 	Area[] getMapAreas();
 
 	IndexedSprite[] getMapScene();
+	
+	SpritePixels[] getMapDots();
 
 	int getGameCycle();
 
@@ -168,38 +198,40 @@ public interface Client extends GameEngine
 
 	IndexedSprite createIndexedSprite();
 
-	boolean isFriended(String name, boolean mustBeLoggedIn);
+	SpritePixels createSpritePixels(int[] pixels, int width, int height);
 
-	boolean isIgnored(String name);
-
-	boolean isClanMember(String name);
-
-	Point getSceneDestinationLocation();
+	@Nullable
+	LocalPoint getLocalDestinationLocation();
 
 	List<Projectile> getProjectiles();
 
 	/**
-	 * Play a sound effect at the player's current location.
-	 * This is how UI, and player-generated (e.g. mining, woodcutting) sound effects are normally played
+	 * Play a sound effect at the player's current location. This is how UI,
+	 * and player-generated (e.g. mining, woodcutting) sound effects are
+	 * normally played
 	 *
-	 * @param id the ID of the sound to play. Any int is allowed, but see {@link SoundEffectID} for some common ones
+	 * @param id the ID of the sound to play. Any int is allowed, but see
+	 * {@link SoundEffectID} for some common ones
 	 */
 	void playSoundEffect(int id);
 
 	/**
 	 * Play a sound effect from some point in the world.
 	 *
-	 * @param id the ID of the sound to play. Any int is allowed, but see {@link SoundEffectID} for some common ones
+	 * @param id the ID of the sound to play. Any int is allowed, but see
+	 * {@link SoundEffectID} for some common ones
 	 * @param x the ground coordinate on the x axis
 	 * @param y the ground coordinate on the y axis
-	 * @param range the number of tiles away that the sound can be heard from
+	 * @param range the number of tiles away that the sound can be heard
+	 * from
 	 */
 	void playSoundEffect(int id, int x, int y, int range);
 
 	boolean getDrawBoundingBoxes2D();
 
 	/**
-	 * When {@code shouldDraw} is true, a 2D bounding box will be drawn for all on-screen objects
+	 * When {@code shouldDraw} is true, a 2D bounding box will be drawn for
+	 * all on-screen objects
 	 *
 	 * @param shouldDraw whether or not to draw 2D bounding boxes
 	 */
@@ -209,8 +241,9 @@ public interface Client extends GameEngine
 
 	/**
 	 * When {@code shouldDraw} is true, 3D bounding boxes will be drawn
-	 * 	either for the object under the cursor, or every object on screen
-	 * 	according to {@link #setBoundingBoxAlwaysOnMode(boolean) BoundingBoxAlwaysOnMode}
+	 * either for the object under the cursor, or every object on screen
+	 * according to
+	 * {@link #setBoundingBoxAlwaysOnMode(boolean) BoundingBoxAlwaysOnMode}
 	 *
 	 * @param shouldDraw whether or not to draw 3D bounding boxes
 	 */
@@ -219,7 +252,8 @@ public interface Client extends GameEngine
 	boolean getdrawObjectGeometry2D();
 
 	/**
-	 * When {@code shouldDraw} is true, the clickbox geometry for the object under the cursor will be displayed
+	 * When {@code shouldDraw} is true, the clickbox geometry for the object
+	 * under the cursor will be displayed
 	 *
 	 * @param shouldDraw whether or not to draw the clickbox geometry
 	 */
@@ -229,10 +263,12 @@ public interface Client extends GameEngine
 
 	/**
 	 * Changes how {@link #getDrawBoundingBoxes3D()} behaves when active.
-	 * When {@code alwaysDrawBoxes} is true, 3D bounding boxes will be drawn.
-	 * When false, a 3D bounding box will only be drawn for the object under the cursor
+	 * When {@code alwaysDrawBoxes} is true, 3D bounding boxes will be
+	 * drawn. When false, a 3D bounding box will only be drawn for the
+	 * object under the cursor
 	 *
-	 * @param alwaysDrawBoxes whether or not to draw every 3D bounding box, when 3D bounding boxes are enabled
+	 * @param alwaysDrawBoxes whether or not to draw every 3D bounding box,
+	 * when 3D bounding boxes are enabled
 	 */
 	void setBoundingBoxAlwaysOnMode(boolean alwaysDrawBoxes);
 
@@ -243,17 +279,20 @@ public interface Client extends GameEngine
 	int getKeyboardIdleTicks();
 
 	/**
-	 * Changes how game behaves based on memory mode. Low memory mode skips drawing of all floors and renders ground
-	 * textures in low quality.
+	 * Changes how game behaves based on memory mode. Low memory mode skips
+	 * drawing of all floors and renders ground textures in low quality.
+	 *
 	 * @param lowMemory if we are running in low memory mode or not
 	 */
 	void changeMemoryMode(boolean lowMemory);
 
 	/**
 	 * Get the item container for an inventory
+	 *
 	 * @param inventory
 	 * @return
 	 */
+	@Nullable
 	ItemContainer getItemContainer(InventoryID inventory);
 
 	int getIntStackSize();
@@ -267,4 +306,46 @@ public interface Client extends GameEngine
 	void setStringStackSize(int stackSize);
 
 	String[] getStringStack();
+
+	boolean isFriended(String name, boolean mustBeLoggedIn);
+
+	int getClanChatCount();
+
+	ClanMember[] getClanMembers();
+
+	boolean isClanMember(String name);
+
+	Preferences getPreferences();
+
+	void setCameraPitchRelaxerEnabled(boolean enabled);
+
+	RenderOverview getRenderOverview();
+
+	boolean isStretchedEnabled();
+
+	void setStretchedEnabled(boolean state);
+
+	boolean isStretchedFast();
+
+	void setStretchedFast(boolean state);
+
+	void setStretchedKeepAspectRatio(boolean state);
+
+	Dimension getStretchedDimensions();
+
+	Dimension getRealDimensions();
+
+	/**
+	 * Changes world. Works only on login screen
+	 * @param world world
+	 */
+	void changeWorld(World world);
+
+	/**
+	 * Creates instance of new world
+	 * @return world
+	 */
+	World createWorld();
+
+	SpritePixels drawInstanceMap(int z);
 }

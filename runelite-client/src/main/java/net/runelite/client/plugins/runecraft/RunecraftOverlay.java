@@ -37,6 +37,7 @@ import net.runelite.api.queries.InventoryWidgetItemQuery;
 import net.runelite.api.widgets.WidgetItem;
 import net.runelite.client.ui.FontManager;
 import net.runelite.client.ui.overlay.Overlay;
+import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.components.TextComponent;
 import net.runelite.client.util.QueryRunner;
@@ -56,13 +57,14 @@ public class RunecraftOverlay extends Overlay
 	RunecraftOverlay(QueryRunner queryRunner, Client client, RunecraftConfig config)
 	{
 		setPosition(OverlayPosition.DYNAMIC);
+		setLayer(OverlayLayer.ABOVE_WIDGETS);
 		this.queryRunner = queryRunner;
 		this.client = client;
 		this.config = config;
 	}
 
 	@Override
-	public Dimension render(Graphics2D graphics, Point parent)
+	public Dimension render(Graphics2D graphics)
 	{
 		if (!config.showPouch())
 		{
@@ -102,7 +104,7 @@ public class RunecraftOverlay extends Overlay
 			final TextComponent textComponent = new TextComponent();
 			textComponent.setPosition(new Point(bounds.x, bounds.y + 16));
 			textComponent.setText(String.valueOf(client.getSetting(varbits)));
-			textComponent.render(graphics, parent);
+			textComponent.render(graphics);
 		}
 
 		return null;

@@ -4,29 +4,34 @@ import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("im")
+@ObfuscatedName("jb")
 @Implements("VarPlayerType")
 public class VarPlayerType extends CacheableNode {
-   @ObfuscatedName("v")
+   @ObfuscatedName("ph")
    @ObfuscatedGetter(
-      intValue = 240707839
+      intValue = -2105974075
    )
-   public static int field3378;
-   @ObfuscatedName("y")
+   static int field3441;
+   @ObfuscatedName("c")
    @ObfuscatedSignature(
-      signature = "Lga;"
+      signature = "Ljm;"
+   )
+   @Export("varplayer_ref")
+   public static IndexDataBase varplayer_ref;
+   @ObfuscatedName("i")
+   @ObfuscatedGetter(
+      intValue = 855580013
+   )
+   public static int field3445;
+   @ObfuscatedName("o")
+   @ObfuscatedSignature(
+      signature = "Lhj;"
    )
    @Export("varplayers")
    public static NodeCache varplayers;
-   @ObfuscatedName("fq")
-   @ObfuscatedSignature(
-      signature = "Lkg;"
-   )
-   @Export("compass")
-   static SpritePixels compass;
-   @ObfuscatedName("r")
+   @ObfuscatedName("j")
    @ObfuscatedGetter(
-      intValue = -1128845797
+      intValue = -308780597
    )
    @Export("configType")
    public int configType;
@@ -35,17 +40,17 @@ public class VarPlayerType extends CacheableNode {
       varplayers = new NodeCache(64);
    }
 
-   VarPlayerType() {
+   public VarPlayerType() {
       this.configType = 0;
    }
 
-   @ObfuscatedName("v")
+   @ObfuscatedName("i")
    @ObfuscatedSignature(
-      signature = "(Lgv;I)V",
-      garbageValue = "-2106061408"
+      signature = "(Lgp;I)V",
+      garbageValue = "-2129205886"
    )
    @Export("decode")
-   void decode(Buffer var1) {
+   public void decode(Buffer var1) {
       while(true) {
          int var2 = var1.readUnsignedByte();
          if(var2 == 0) {
@@ -56,10 +61,10 @@ public class VarPlayerType extends CacheableNode {
       }
    }
 
-   @ObfuscatedName("y")
+   @ObfuscatedName("o")
    @ObfuscatedSignature(
-      signature = "(Lgv;II)V",
-      garbageValue = "1328932662"
+      signature = "(Lgp;II)V",
+      garbageValue = "1841418787"
    )
    @Export("decode")
    void decode(Buffer var1, int var2) {
@@ -67,5 +72,28 @@ public class VarPlayerType extends CacheableNode {
          this.configType = var1.readUnsignedShort();
       }
 
+   }
+
+   @ObfuscatedName("i")
+   @ObfuscatedSignature(
+      signature = "(II)Lkv;",
+      garbageValue = "-1375974826"
+   )
+   @Export("getOverlayDefinition")
+   public static Overlay getOverlayDefinition(int var0) {
+      Overlay var1 = (Overlay)Overlay.overlays.get((long)var0);
+      if(var1 != null) {
+         return var1;
+      } else {
+         byte[] var2 = Overlay.overlay_ref.getConfigData(4, var0);
+         var1 = new Overlay();
+         if(var2 != null) {
+            var1.decode(new Buffer(var2), var0);
+         }
+
+         var1.post();
+         Overlay.overlays.put(var1, (long)var0);
+         return var1;
+      }
    }
 }

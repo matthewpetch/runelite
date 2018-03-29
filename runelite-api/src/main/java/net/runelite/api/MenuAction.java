@@ -210,6 +210,15 @@ public enum MenuAction
 	 */
 	WIDGET_FIFTH_OPTION(43),
 
+	PLAYER_FIRST_OPTION(44),
+	PLAYER_SECOND_OPTION(45),
+	PLAYER_THIRD_OPTION(46),
+	PLAYER_FOURTH_OPTION(47),
+	PLAYER_FIFTH_OPTION(48),
+	PLAYER_SIXTH_OPTION(49),
+	PLAYER_SEVENTH_OPTION(50),
+	PLAYER_EIGTH_OPTION(51),
+
 	/**
 	 * Default menu action for a widget.
 	 */
@@ -231,6 +240,10 @@ public enum MenuAction
 	 * Menu action triggered by examining item in inventory.
 	 */
 	EXAMINE_ITEM(1005),
+	/**
+	 * Menu action triggered by canceling a menu.
+	 */
+	CANCEL(1006),
 	/**
 	 * Menu action triggered by either examining item in bank, examining
 	 * item in inventory while having bank open, or examining equipped item.

@@ -4,47 +4,36 @@ import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("e")
+@ObfuscatedName("w")
 @Implements("BoundingBox2D")
 public final class BoundingBox2D extends BoundingBox {
-   @ObfuscatedName("b")
+   @ObfuscatedName("c")
    @ObfuscatedGetter(
-      intValue = -2043323419
-   )
-   static int field235;
-   @ObfuscatedName("ja")
-   @ObfuscatedGetter(
-      intValue = 1739205817
-   )
-   @Export("menuWidth")
-   static int menuWidth;
-   @ObfuscatedName("n")
-   @ObfuscatedGetter(
-      intValue = 1811040767
+      intValue = -1546245765
    )
    @Export("xMin")
    final int xMin;
-   @ObfuscatedName("v")
+   @ObfuscatedName("i")
    @ObfuscatedGetter(
-      intValue = -710978531
+      intValue = 1442306253
    )
    @Export("yMin")
    final int yMin;
-   @ObfuscatedName("y")
+   @ObfuscatedName("o")
    @ObfuscatedGetter(
-      intValue = 1190502023
+      intValue = 768200023
    )
    @Export("xMax")
    final int xMax;
-   @ObfuscatedName("r")
+   @ObfuscatedName("j")
    @ObfuscatedGetter(
-      intValue = -714743463
+      intValue = -1880251377
    )
    @Export("yMax")
    final int yMax;
-   @ObfuscatedName("h")
+   @ObfuscatedName("k")
    @ObfuscatedGetter(
-      intValue = 955236265
+      intValue = -1912374301
    )
    @Export("color")
    final int color;
@@ -57,58 +46,52 @@ public final class BoundingBox2D extends BoundingBox {
       this.color = var5;
    }
 
-   @ObfuscatedName("n")
+   @ObfuscatedName("c")
    @ObfuscatedSignature(
       signature = "(I)V",
-      garbageValue = "980177459"
+      garbageValue = "-254890889"
    )
-   final void draw() {
+   final void vmethod63() {
       Rasterizer2D.drawRectangle(this.xMin + Rasterizer2D.draw_region_x, this.yMin + Rasterizer2D.drawingAreaTop, this.xMax - this.xMin, this.yMax - this.yMin, this.color);
    }
 
-   @ObfuscatedName("n")
+   @ObfuscatedName("c")
    @ObfuscatedSignature(
-      signature = "(Lil;Lil;S)V",
-      garbageValue = "-3438"
+      signature = "(IB)Ljf;",
+      garbageValue = "73"
    )
-   public static void method38(IndexDataBase var0, IndexDataBase var1) {
-      Spotanim.SpotAnimationDefinition_indexCache = var0;
-      Spotanim.SpotAnimationDefinition_modelIndexCache = var1;
+   public static class281 method49(int var0) {
+      class281 var1 = (class281)class281.field3566.get((long)var0);
+      if(var1 != null) {
+         return var1;
+      } else {
+         byte[] var2 = class281.field3576.getConfigData(32, var0);
+         var1 = new class281();
+         if(var2 != null) {
+            var1.method4977(new Buffer(var2));
+         }
+
+         class281.field3566.put(var1, (long)var0);
+         return var1;
+      }
    }
 
-   @ObfuscatedName("v")
+   @ObfuscatedName("i")
    @ObfuscatedSignature(
-      signature = "(IIIIB)V",
-      garbageValue = "49"
+      signature = "(I)Lgg;",
+      garbageValue = "-2114697654"
    )
-   @Export("setItemTableSlot")
-   static void setItemTableSlot(int var0, int var1, int var2, int var3) {
-      ItemContainer var4 = (ItemContainer)ItemContainer.itemContainers.get((long)var0);
-      if(var4 == null) {
-         var4 = new ItemContainer();
-         ItemContainer.itemContainers.put(var4, (long)var0);
+   public static PacketNode method44() {
+      PacketNode var0;
+      if(PacketNode.field2496 == 0) {
+         var0 = new PacketNode();
+      } else {
+         var0 = PacketNode.packetBufferNodes[--PacketNode.field2496];
       }
 
-      if(var4.itemIds.length <= var1) {
-         int[] var5 = new int[var1 + 1];
-         int[] var6 = new int[var1 + 1];
-
-         int var7;
-         for(var7 = 0; var7 < var4.itemIds.length; ++var7) {
-            var5[var7] = var4.itemIds[var7];
-            var6[var7] = var4.stackSizes[var7];
-         }
-
-         for(var7 = var4.itemIds.length; var7 < var1; ++var7) {
-            var5[var7] = -1;
-            var6[var7] = 0;
-         }
-
-         var4.itemIds = var5;
-         var4.stackSizes = var6;
-      }
-
-      var4.itemIds[var1] = var2;
-      var4.stackSizes[var1] = var3;
+      var0.clientPacket = null;
+      var0.field2492 = 0;
+      var0.packetBuffer = new PacketBuffer(5000);
+      return var0;
    }
 }

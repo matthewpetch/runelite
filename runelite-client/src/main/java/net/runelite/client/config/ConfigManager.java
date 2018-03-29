@@ -24,11 +24,12 @@
  */
 package net.runelite.client.config;
 
+import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.eventbus.EventBus;
-import com.google.inject.Injector;
-import com.google.inject.Key;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Point;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -37,19 +38,19 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.slf4j.Slf4j;
+import net.runelite.api.events.ConfigChanged;
 import net.runelite.client.RuneLite;
 import net.runelite.client.account.AccountSession;
-import net.runelite.api.events.ConfigChanged;
-import net.runelite.client.plugins.PluginManager;
 import net.runelite.http.api.config.ConfigClient;
 import net.runelite.http.api.config.ConfigEntry;
 import net.runelite.http.api.config.Configuration;
@@ -66,9 +67,6 @@ public class ConfigManager
 	@Inject
 	ScheduledExecutorService executor;
 
-	@Inject
-	PluginManager pluginManager;
-
 	private AccountSession session;
 	private ConfigClient client;
 	private File propertiesFile;
@@ -79,42 +77,6 @@ public class ConfigManager
 	public ConfigManager()
 	{
 		this.propertiesFile = getPropertiesFile();
-	}
-
-	public ConfigManager(EventBus eventBus, AccountSession session)
-	{
-		this.eventBus = eventBus;
-		switchSession(session);
-	}
-
-	public List<Config> getConfigProxies()
-	{
-		List<Injector> injectors = new ArrayList<>();
-		injectors.add(RuneLite.getInjector());
-		pluginManager.getPlugins().forEach(pl -> injectors.add(pl.getInjector()));
-
-		List<Config> list = new ArrayList<>();
-		for (Injector injector : injectors)
-		{
-			for (Key<?> key : injector.getAllBindings().keySet())
-			{
-				Class<?> type = key.getTypeLiteral().getRawType();
-				if (Config.class.isAssignableFrom(type))
-				{
-					Config config = (Config) injector.getInstance(key);
-					list.add(config);
-				}
-			}
-		}
-		return list;
-	}
-
-	public void loadDefault()
-	{
-		for (Object config : getConfigProxies())
-		{
-			setDefaultConfiguration(config, false);
-		}
 	}
 
 	public final void switchSession(AccountSession session)
@@ -133,7 +95,6 @@ public class ConfigManager
 		this.propertiesFile = getPropertiesFile();
 
 		load(); // load profile specific config
-		loadDefault(); // set defaults over anything not set
 	}
 
 	private File getPropertiesFile()
@@ -183,8 +144,18 @@ public class ConfigManager
 		for (ConfigEntry entry : configuration.getConfig())
 		{
 			log.debug("Loading configuration value from client {}: {}", entry.getKey(), entry.getValue());
+			final String[] split = entry.getKey().split("\\.");
+			final String groupName = split[0];
+			final String key = split[1];
+			final String value = entry.getValue();
+			final String oldValue = (String) properties.setProperty(entry.getKey(), value);
 
-			properties.setProperty(entry.getKey(), entry.getValue());
+			ConfigChanged configChanged = new ConfigChanged();
+			configChanged.setGroup(groupName);
+			configChanged.setKey(key);
+			configChanged.setOldValue(oldValue);
+			configChanged.setNewValue(value);
+			eventBus.post(configChanged);
 		}
 
 		try
@@ -199,7 +170,7 @@ public class ConfigManager
 		}
 	}
 
-	private void loadFromFile()
+	private synchronized void loadFromFile()
 	{
 		properties.clear();
 
@@ -215,9 +186,37 @@ public class ConfigManager
 		{
 			log.warn("Unable to load settings", ex);
 		}
+
+		try
+		{
+			Map<String, String> copy = (Map) ImmutableMap.copyOf(properties);
+			copy.forEach((groupAndKey, value) ->
+			{
+				final String[] split = ((String) groupAndKey).split("\\.");
+				if (split.length != 2)
+				{
+					log.debug("Properties key malformed!: {}", groupAndKey);
+					return;
+				}
+
+				final String groupName = split[0];
+				final String key = split[1];
+
+				ConfigChanged configChanged = new ConfigChanged();
+				configChanged.setGroup(groupName);
+				configChanged.setKey(key);
+				configChanged.setOldValue(null);
+				configChanged.setNewValue((String) value);
+				eventBus.post(configChanged);
+			});
+		}
+		catch (Exception ex)
+		{
+			log.warn("Error posting config events", ex);
+		}
 	}
 
-	private void saveToFile() throws IOException
+	private synchronized void saveToFile() throws IOException
 	{
 		propertiesFile.getParentFile().mkdirs();
 
@@ -247,6 +246,16 @@ public class ConfigManager
 		return properties.getProperty(groupName + "." + key);
 	}
 
+	public <T> T getConfiguration(String groupName, String key, Class<T> clazz)
+	{
+		String value = getConfiguration(groupName, key);
+		if (!Strings.isNullOrEmpty(value))
+		{
+			return (T) stringToObject(value, clazz);
+		}
+		return null;
+	}
+
 	public void setConfiguration(String groupName, String key, String value)
 	{
 		log.debug("Setting configuration value for {}.{} to {}", groupName, key, value);
@@ -270,14 +279,18 @@ public class ConfigManager
 
 		}
 
-		try
+		Runnable task = () ->
 		{
-			saveToFile();
-		}
-		catch (IOException ex)
-		{
-			log.warn("unable to save configuration file", ex);
-		}
+			try
+			{
+				saveToFile();
+			}
+			catch (IOException ex)
+			{
+				log.warn("unable to save configuration file", ex);
+			}
+		};
+		executor.execute(task);
 
 		ConfigChanged configChanged = new ConfigChanged();
 		configChanged.setGroup(groupName);
@@ -288,6 +301,11 @@ public class ConfigManager
 		eventBus.post(configChanged);
 	}
 
+	public void setConfiguration(String groupName, String key, Object value)
+	{
+		setConfiguration(groupName, key, objectToString(value));
+	}
+
 	public void unsetConfiguration(String groupName, String key)
 	{
 		log.debug("Unsetting configuration value for {}.{}", groupName, key);
@@ -296,24 +314,33 @@ public class ConfigManager
 
 		if (client != null)
 		{
+			final Runnable task = () ->
+			{
+				try
+				{
+					client.unset(groupName + "." + key);
+				}
+				catch (IOException ex)
+				{
+					log.warn("unable to set configuration item", ex);
+				}
+			};
+
+			executor.execute(task);
+		}
+
+		Runnable task = () ->
+		{
 			try
 			{
-				client.unset(groupName + "." + key);
+				saveToFile();
 			}
 			catch (IOException ex)
 			{
-				log.warn("unable to set configuration item", ex);
+				log.warn("unable to save configuration file", ex);
 			}
-		}
-
-		try
-		{
-			saveToFile();
-		}
-		catch (IOException ex)
-		{
-			log.warn("unable to save configuration file", ex);
-		}
+		};
+		executor.execute(task);
 
 		ConfigChanged configChanged = new ConfigChanged();
 		configChanged.setGroup(groupName);
@@ -335,16 +362,11 @@ public class ConfigManager
 
 		List<ConfigItemDescriptor> items = Arrays.stream(inter.getMethods())
 			.filter(m -> m.getParameterCount() == 0)
-			.sorted((m1, m2)
-				-> Integer.compare(
-				m1.getDeclaredAnnotation(ConfigItem.class).position(),
-				m2.getDeclaredAnnotation(ConfigItem.class).position()
-			)
-			)
+			.sorted(Comparator.comparingInt(m -> m.getDeclaredAnnotation(ConfigItem.class).position()))
 			.map(m -> new ConfigItemDescriptor(
-			m.getDeclaredAnnotation(ConfigItem.class),
-			m.getReturnType()
-		))
+				m.getDeclaredAnnotation(ConfigItem.class),
+				m.getReturnType()
+			))
 			.collect(Collectors.toList());
 		return new ConfigDescriptor(group, items);
 	}
@@ -420,6 +442,13 @@ public class ConfigManager
 			int height = Integer.parseInt(splitStr[1]);
 			return new Dimension(width, height);
 		}
+		if (type == Point.class)
+		{
+			String[] splitStr = str.split(":");
+			int width = Integer.parseInt(splitStr[0]);
+			int height = Integer.parseInt(splitStr[1]);
+			return new Point(width, height);
+		}
 		if (type.isEnum())
 		{
 			return Enum.valueOf((Class<? extends Enum>) type, str);
@@ -441,6 +470,11 @@ public class ConfigManager
 		{
 			Dimension d = (Dimension) object;
 			return d.width + "x" + d.height;
+		}
+		if (object instanceof Point)
+		{
+			Point p = (Point) object;
+			return p.x + ":" + p.y;
 		}
 		return object.toString();
 	}

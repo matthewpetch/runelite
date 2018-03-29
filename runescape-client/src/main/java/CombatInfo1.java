@@ -4,46 +4,30 @@ import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("cj")
+@ObfuscatedName("bd")
 @Implements("CombatInfo1")
 public class CombatInfo1 extends Node {
-   @ObfuscatedName("p")
-   @ObfuscatedSignature(
-      signature = "Lhq;"
-   )
-   static Widget field1216;
-   @ObfuscatedName("ev")
-   @ObfuscatedSignature(
-      signature = "Ljz;"
-   )
-   @Export("font_p12full")
-   static Font font_p12full;
-   @ObfuscatedName("fh")
+   @ObfuscatedName("c")
    @ObfuscatedGetter(
-      intValue = -1816575847
-   )
-   static int field1215;
-   @ObfuscatedName("n")
-   @ObfuscatedGetter(
-      intValue = 410263585
+      intValue = -833582695
    )
    @Export("cycle")
    int cycle;
-   @ObfuscatedName("v")
+   @ObfuscatedName("i")
    @ObfuscatedGetter(
-      intValue = -1060883801
+      intValue = -189311435
    )
    @Export("healthRatio")
    int healthRatio;
-   @ObfuscatedName("y")
+   @ObfuscatedName("o")
    @ObfuscatedGetter(
-      intValue = -1905379511
+      intValue = -1388541921
    )
    @Export("health")
    int health;
-   @ObfuscatedName("r")
+   @ObfuscatedName("j")
    @ObfuscatedGetter(
-      intValue = 1422168483
+      intValue = -1958781031
    )
    @Export("int2")
    int int2;
@@ -55,10 +39,10 @@ public class CombatInfo1 extends Node {
       this.int2 = var4;
    }
 
-   @ObfuscatedName("n")
+   @ObfuscatedName("c")
    @ObfuscatedSignature(
-      signature = "(IIIIB)V",
-      garbageValue = "62"
+      signature = "(IIIII)V",
+      garbageValue = "-556137649"
    )
    @Export("set")
    void set(int var1, int var2, int var3, int var4) {
@@ -68,19 +52,12 @@ public class CombatInfo1 extends Node {
       this.int2 = var4;
    }
 
-   @ObfuscatedName("gz")
+   @ObfuscatedName("p")
    @ObfuscatedSignature(
       signature = "(I)V",
-      garbageValue = "1035838025"
+      garbageValue = "-1483104103"
    )
-   static final void method1576() {
-      for(int var0 = 0; var0 < Client.npcIndexesCount; ++var0) {
-         int var1 = Client.npcIndices[var0];
-         NPC var2 = Client.cachedNPCs[var1];
-         if(var2 != null) {
-            class215.method4018(var2, var2.composition.field3667);
-         }
-      }
-
+   public static void method1606() {
+      class279.field3550.reset();
    }
 }

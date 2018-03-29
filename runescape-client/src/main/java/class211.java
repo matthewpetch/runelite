@@ -2,57 +2,57 @@ import java.util.Iterator;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("hx")
+@ObfuscatedName("hw")
 public class class211 implements Iterator {
-   @ObfuscatedName("n")
+   @ObfuscatedName("c")
    @ObfuscatedSignature(
       signature = "Lhe;"
    )
-   IterableDualNodeQueue field2614;
-   @ObfuscatedName("v")
+   CombatInfoList field2625;
+   @ObfuscatedName("i")
    @ObfuscatedSignature(
-      signature = "Lgd;"
+      signature = "Lhg;"
    )
-   CacheableNode field2612;
-   @ObfuscatedName("y")
+   Node field2624;
+   @ObfuscatedName("o")
    @ObfuscatedSignature(
-      signature = "Lgd;"
+      signature = "Lhg;"
    )
-   CacheableNode field2613;
+   Node field2623;
 
    @ObfuscatedSignature(
       signature = "(Lhe;)V"
    )
-   class211(IterableDualNodeQueue var1) {
-      this.field2613 = null;
-      this.field2614 = var1;
-      this.field2612 = this.field2614.sentinel.previous;
-      this.field2613 = null;
+   class211(CombatInfoList var1) {
+      this.field2623 = null;
+      this.field2625 = var1;
+      this.field2624 = this.field2625.node.next;
+      this.field2623 = null;
    }
 
    public Object next() {
-      CacheableNode var1 = this.field2612;
-      if(var1 == this.field2614.sentinel) {
+      Node var1 = this.field2624;
+      if(var1 == this.field2625.node) {
          var1 = null;
-         this.field2612 = null;
+         this.field2624 = null;
       } else {
-         this.field2612 = var1.previous;
+         this.field2624 = var1.next;
       }
 
-      this.field2613 = var1;
+      this.field2623 = var1;
       return var1;
    }
 
-   public void remove() {
-      if(this.field2613 == null) {
-         throw new IllegalStateException();
-      } else {
-         this.field2613.unlinkDual();
-         this.field2613 = null;
-      }
+   public boolean hasNext() {
+      return this.field2625.node != this.field2624;
    }
 
-   public boolean hasNext() {
-      return this.field2614.sentinel != this.field2612;
+   public void remove() {
+      if(this.field2623 == null) {
+         throw new IllegalStateException();
+      } else {
+         this.field2623.unlink();
+         this.field2623 = null;
+      }
    }
 }

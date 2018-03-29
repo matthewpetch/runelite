@@ -4,60 +4,57 @@ import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("kr")
+@ObfuscatedName("lj")
 @Implements("BufferProvider")
 public abstract class BufferProvider {
-   @ObfuscatedName("y")
+   @ObfuscatedName("o")
    @Export("pixels")
    public int[] pixels;
-   @ObfuscatedName("r")
+   @ObfuscatedName("j")
    @ObfuscatedGetter(
-      intValue = 1852809795
+      intValue = 1927789777
    )
    @Export("width")
    public int width;
-   @ObfuscatedName("h")
+   @ObfuscatedName("k")
    @ObfuscatedGetter(
-      intValue = 116038231
+      intValue = 920466167
    )
    @Export("height")
    public int height;
 
-   @ObfuscatedName("v")
+   @ObfuscatedName("i")
    @ObfuscatedSignature(
       signature = "(III)V",
-      garbageValue = "-1348763863"
+      garbageValue = "1667435857"
    )
    @Export("drawFull")
    public abstract void drawFull(int var1, int var2);
 
-   @ObfuscatedName("y")
+   @ObfuscatedName("o")
    @ObfuscatedSignature(
-      signature = "(IIIIB)V",
-      garbageValue = "-128"
+      signature = "(IIIII)V",
+      garbageValue = "383662295"
    )
    @Export("draw")
    public abstract void draw(int var1, int var2, int var3, int var4);
 
-   @ObfuscatedName("c")
+   @ObfuscatedName("u")
    @ObfuscatedSignature(
       signature = "(I)V",
-      garbageValue = "1860461639"
+      garbageValue = "-905436369"
    )
    @Export("setRaster")
    public final void setRaster() {
       Rasterizer2D.setRasterBuffer(this.pixels, this.width, this.height);
    }
 
-   @ObfuscatedName("h")
+   @ObfuscatedName("i")
    @ObfuscatedSignature(
-      signature = "(Lil;Ljava/lang/String;Ljava/lang/String;B)[Lkm;",
-      garbageValue = "-121"
+      signature = "(Ljm;III)Lla;",
+      garbageValue = "1724582313"
    )
-   @Export("getIndexedSprites")
-   public static IndexedSprite[] getIndexedSprites(IndexDataBase var0, String var1, String var2) {
-      int var3 = var0.getFile(var1);
-      int var4 = var0.getChild(var3, var2);
-      return AbstractSoundSystem.method2112(var0, var3, var4);
+   public static SpritePixels method5831(IndexDataBase var0, int var1, int var2) {
+      return !class288.method5204(var0, var1, var2)?null:WorldMapDecorationType.method4517();
    }
 }

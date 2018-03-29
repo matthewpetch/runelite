@@ -43,10 +43,8 @@ import java.util.Objects;
 import java.util.Set;
 import joptsimple.OptionSet;
 import net.runelite.api.Client;
-import net.runelite.client.Notifier;
 import net.runelite.client.RuneLite;
 import net.runelite.client.RuneLiteModule;
-import net.runelite.client.ui.ClientUI;
 import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Rule;
@@ -69,13 +67,7 @@ public class PluginManagerTest
 	private Set<Class> pluginClasses;
 
 	@Mock
-	ClientUI clientUi;
-
-	@Mock
 	Client client;
-
-	@Mock
-	Notifier notifier;
 
 	@Before
 	public void before() throws IOException
@@ -87,8 +79,6 @@ public class PluginManagerTest
 		RuneLite.setInjector(injector);
 
 		runelite = injector.getInstance(RuneLite.class);
-		runelite.setGui(clientUi);
-		runelite.setNotifier(notifier);
 
 		// Find plugins we expect to have
 		pluginClasses = new HashSet<>();

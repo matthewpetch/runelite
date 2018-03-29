@@ -1,27 +1,23 @@
+import java.io.File;
+import java.io.IOException;
 import net.runelite.mapping.Export;
 import net.runelite.mapping.Implements;
 import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("eo")
+@ObfuscatedName("ek")
 @Implements("Renderable")
 public abstract class Renderable extends CacheableNode {
-   @ObfuscatedName("on")
+   @ObfuscatedName("dh")
    @ObfuscatedSignature(
-      signature = "Ldd;"
+      signature = "Ljs;"
    )
-   @Export("soundSystem0")
-   static AbstractSoundSystem soundSystem0;
-   @ObfuscatedName("cw")
-   @ObfuscatedSignature(
-      signature = "Lif;"
-   )
-   @Export("indexSprites")
-   static IndexData indexSprites;
-   @ObfuscatedName("cf")
+   @Export("indexCache15")
+   static IndexData indexCache15;
+   @ObfuscatedName("ci")
    @ObfuscatedGetter(
-      intValue = 1603129761
+      intValue = -9892427
    )
    @Export("modelHeight")
    public int modelHeight;
@@ -30,17 +26,17 @@ public abstract class Renderable extends CacheableNode {
       this.modelHeight = 1000;
    }
 
-   @ObfuscatedName("y")
+   @ObfuscatedName("w")
    @ObfuscatedSignature(
-      signature = "(B)Les;",
-      garbageValue = "-17"
+      signature = "(B)Led;",
+      garbageValue = "-83"
    )
    @Export("getModel")
    protected Model getModel() {
       return null;
    }
 
-   @ObfuscatedName("cp")
+   @ObfuscatedName("cr")
    @Export("draw")
    void draw(int var1, int var2, int var3, int var4, int var5, int var6, int var7, int var8, int var9) {
       Model var10 = this.getModel();
@@ -51,52 +47,55 @@ public abstract class Renderable extends CacheableNode {
 
    }
 
-   @ObfuscatedName("ge")
+   @ObfuscatedName("o")
    @ObfuscatedSignature(
-      signature = "(Lhq;III)V",
-      garbageValue = "1378554582"
+      signature = "(Ljava/lang/String;Ljava/lang/String;ZI)Ldp;",
+      garbageValue = "435090535"
    )
-   static final void method2929(Widget var0, int var1, int var2) {
-      if(Client.field1089 == 0 || Client.field1089 == 3) {
-         if(MouseInput.mouseLastButton == 1 || !class45.middleMouseMovesCamera && MouseInput.mouseLastButton == 4) {
-            class221 var3 = var0.method4209(true);
-            if(var3 == null) {
-               return;
-            }
-
-            int var4 = MouseInput.mouseLastPressedX - var1;
-            int var5 = MouseInput.mouseLastPressedY - var2;
-            if(var3.method4141(var4, var5)) {
-               var4 -= var3.field2721 / 2;
-               var5 -= var3.field2718 / 2;
-               int var6 = Client.mapAngle & 2047;
-               int var7 = Graphics3D.SINE[var6];
-               int var8 = Graphics3D.COSINE[var6];
-               int var9 = var4 * var8 + var7 * var5 >> 11;
-               int var10 = var5 * var8 - var4 * var7 >> 11;
-               int var11 = var9 + GrandExchangeOffer.localPlayer.x >> 7;
-               int var12 = GrandExchangeOffer.localPlayer.y - var10 >> 7;
-               PacketNode var13 = class235.method4272(ClientPacket.field2398, Client.field915.field1462);
-               var13.packetBuffer.putByte(18);
-               var13.packetBuffer.writeIntLE(var11 + class175.baseX);
-               var13.packetBuffer.method3361(KeyFocusListener.keyPressed[82]?(KeyFocusListener.keyPressed[81]?2:1):0);
-               var13.packetBuffer.putShortLE(var12 + GraphicsObject.baseY);
-               var13.packetBuffer.putByte(var4);
-               var13.packetBuffer.putByte(var5);
-               var13.packetBuffer.putShort(Client.mapAngle);
-               var13.packetBuffer.putByte(57);
-               var13.packetBuffer.putByte(0);
-               var13.packetBuffer.putByte(0);
-               var13.packetBuffer.putByte(89);
-               var13.packetBuffer.putShort(GrandExchangeOffer.localPlayer.x);
-               var13.packetBuffer.putShort(GrandExchangeOffer.localPlayer.y);
-               var13.packetBuffer.putByte(63);
-               Client.field915.method1898(var13);
-               Client.destinationX = var11;
-               Client.destinationY = var12;
-            }
+   @Export("getPreferencesFile")
+   public static FileOnDisk getPreferencesFile(String var0, String var1, boolean var2) {
+      File var3 = new File(class167.field2206, "preferences" + var0 + ".dat");
+      if(var3.exists()) {
+         try {
+            FileOnDisk var10 = new FileOnDisk(var3, "rw", 10000L);
+            return var10;
+         } catch (IOException var9) {
+            ;
          }
-
       }
+
+      String var4 = "";
+      if(PendingSpawn.field1146 == 33) {
+         var4 = "_rc";
+      } else if(PendingSpawn.field1146 == 34) {
+         var4 = "_wip";
+      }
+
+      File var5 = new File(class22.userHome, "jagex_" + var1 + "_preferences" + var0 + var4 + ".dat");
+      FileOnDisk var6;
+      if(!var2 && var5.exists()) {
+         try {
+            var6 = new FileOnDisk(var5, "rw", 10000L);
+            return var6;
+         } catch (IOException var8) {
+            ;
+         }
+      }
+
+      try {
+         var6 = new FileOnDisk(var3, "rw", 10000L);
+         return var6;
+      } catch (IOException var7) {
+         throw new RuntimeException();
+      }
+   }
+
+   @ObfuscatedName("jp")
+   @ObfuscatedSignature(
+      signature = "(IB)Ljava/lang/String;",
+      garbageValue = "97"
+   )
+   static final String method3069(int var0) {
+      return var0 < 999999999?Integer.toString(var0):"*";
    }
 }

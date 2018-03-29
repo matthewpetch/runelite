@@ -1,67 +1,65 @@
-import java.io.IOException;
-import java.net.Socket;
 import net.runelite.mapping.Export;
+import net.runelite.mapping.Hook;
 import net.runelite.mapping.Implements;
 import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("dx")
+@ObfuscatedName("dw")
 @Implements("TextureProvider")
 public class TextureProvider implements ITextureLoader {
-   @ObfuscatedName("qb")
+   @ObfuscatedName("r")
    @ObfuscatedSignature(
-      signature = "Lkl;"
+      signature = "Llq;"
    )
-   @Export("renderOverview")
-   static RenderOverview renderOverview;
-   @ObfuscatedName("cf")
-   @ObfuscatedGetter(
-      intValue = -1257170287
-   )
-   public static int field1683;
-   @ObfuscatedName("n")
+   static IndexedSprite field1691;
+   @ObfuscatedName("im")
    @ObfuscatedSignature(
-      signature = "[Ldz;"
+      signature = "Lib;"
+   )
+   static Widget field1701;
+   @ObfuscatedName("c")
+   @ObfuscatedSignature(
+      signature = "[Ldc;"
    )
    @Export("textures")
    Texture[] textures;
-   @ObfuscatedName("v")
+   @ObfuscatedName("i")
    @ObfuscatedSignature(
-      signature = "Lgi;"
+      signature = "Lhl;"
    )
    @Export("deque")
    Deque deque;
-   @ObfuscatedName("y")
+   @ObfuscatedName("o")
    @ObfuscatedGetter(
-      intValue = 1420530535
+      intValue = 668092963
    )
    @Export("maxSize")
    int maxSize;
-   @ObfuscatedName("r")
+   @ObfuscatedName("j")
    @ObfuscatedGetter(
-      intValue = 826241847
+      intValue = -1004512887
    )
    @Export("size")
    int size;
-   @ObfuscatedName("h")
+   @ObfuscatedName("k")
    @Export("brightness")
    double brightness;
-   @ObfuscatedName("d")
+   @ObfuscatedName("x")
    @ObfuscatedGetter(
-      intValue = 1637241803
+      intValue = 2064588337
    )
    @Export("width")
    int width;
-   @ObfuscatedName("s")
+   @ObfuscatedName("z")
    @ObfuscatedSignature(
-      signature = "Lil;"
+      signature = "Ljm;"
    )
    @Export("sprites")
    IndexDataBase sprites;
 
    @ObfuscatedSignature(
-      signature = "(Lil;Lil;IDI)V"
+      signature = "(Ljm;Ljm;IDI)V"
    )
    public TextureProvider(IndexDataBase var1, IndexDataBase var2, int var3, double var4, int var6) {
       this.deque = new Deque();
@@ -84,12 +82,12 @@ public class TextureProvider implements ITextureLoader {
 
    }
 
-   @ObfuscatedName("n")
+   @ObfuscatedName("c")
    @ObfuscatedSignature(
-      signature = "(B)I",
-      garbageValue = "4"
+      signature = "(I)I",
+      garbageValue = "664914821"
    )
-   public int method2469() {
+   public int method2555() {
       int var1 = 0;
       int var2 = 0;
       Texture[] var3 = this.textures;
@@ -102,7 +100,7 @@ public class TextureProvider implements ITextureLoader {
 
             for(int var7 = 0; var7 < var6.length; ++var7) {
                int var8 = var6[var7];
-               if(this.sprites.method4308(var8)) {
+               if(this.sprites.method4630(var8)) {
                   ++var2;
                }
             }
@@ -116,17 +114,17 @@ public class TextureProvider implements ITextureLoader {
       }
    }
 
-   @ObfuscatedName("v")
+   @ObfuscatedName("i")
    @Export("brightness")
    public void brightness(double var1) {
       this.brightness = var1;
       this.reset();
    }
 
-   @ObfuscatedName("y")
+   @ObfuscatedName("o")
    @ObfuscatedSignature(
-      signature = "(IB)[I",
-      garbageValue = "8"
+      signature = "(IS)[I",
+      garbageValue = "1306"
    )
    @Export("load")
    public int[] load(int var1) {
@@ -138,7 +136,7 @@ public class TextureProvider implements ITextureLoader {
             return var2.pixels;
          }
 
-         boolean var3 = var2.method2562(this.brightness, this.width, this.sprites);
+         boolean var3 = var2.method2671(this.brightness, this.width, this.sprites);
          if(var3) {
             if(this.size == 0) {
                Texture var4 = (Texture)this.deque.popTail();
@@ -156,38 +154,38 @@ public class TextureProvider implements ITextureLoader {
       return null;
    }
 
-   @ObfuscatedName("r")
+   @ObfuscatedName("j")
    @ObfuscatedSignature(
-      signature = "(IB)I",
-      garbageValue = "-12"
+      signature = "(II)I",
+      garbageValue = "1373867862"
    )
    @Export("getAverageTextureRGB")
    public int getAverageTextureRGB(int var1) {
-      return this.textures[var1] != null?this.textures[var1].field1781:0;
+      return this.textures[var1] != null?this.textures[var1].field1794:0;
    }
 
-   @ObfuscatedName("h")
+   @ObfuscatedName("k")
    @ObfuscatedSignature(
       signature = "(II)Z",
-      garbageValue = "868418969"
+      garbageValue = "1901285645"
    )
-   public boolean vmethod2943(int var1) {
-      return this.textures[var1].field1790;
+   public boolean vmethod3087(int var1) {
+      return this.textures[var1].field1793;
    }
 
-   @ObfuscatedName("d")
+   @ObfuscatedName("x")
    @ObfuscatedSignature(
-      signature = "(IB)Z",
-      garbageValue = "-111"
+      signature = "(II)Z",
+      garbageValue = "583682207"
    )
-   public boolean vmethod2946(int var1) {
+   public boolean vmethod3086(int var1) {
       return this.width == 64;
    }
 
-   @ObfuscatedName("s")
+   @ObfuscatedName("z")
    @ObfuscatedSignature(
       signature = "(I)V",
-      garbageValue = "-159912745"
+      garbageValue = "179534492"
    )
    @Export("reset")
    public void reset() {
@@ -201,58 +199,24 @@ public class TextureProvider implements ITextureLoader {
       this.size = this.maxSize;
    }
 
-   @ObfuscatedName("b")
+   @ObfuscatedName("p")
    @ObfuscatedSignature(
       signature = "(II)V",
-      garbageValue = "-11786678"
+      garbageValue = "1299945036"
    )
-   public void method2447(int var1) {
+   @Hook(
+      value = "drawAboveOverheads",
+      end = true
+   )
+   @Export("checkTextures")
+   public void checkTextures(int var1) {
       for(int var2 = 0; var2 < this.textures.length; ++var2) {
          Texture var3 = this.textures[var2];
-         if(var3 != null && var3.field1787 != 0 && var3.loaded) {
-            var3.method2564(var1);
+         if(var3 != null && var3.field1790 != 0 && var3.loaded) {
+            var3.method2668(var1);
             var3.loaded = false;
          }
       }
 
-   }
-
-   @ObfuscatedName("n")
-   @ObfuscatedSignature(
-      signature = "(III)Z",
-      garbageValue = "-1763546538"
-   )
-   static boolean method2470(int var0, int var1) {
-      return var0 != 4 || var1 < 8;
-   }
-
-   @ObfuscatedName("n")
-   @ObfuscatedSignature(
-      signature = "(Ljava/net/Socket;IIB)Lfl;",
-      garbageValue = "-109"
-   )
-   public static class159 method2448(Socket var0, int var1, int var2) throws IOException {
-      return new class161(var0, var1, var2);
-   }
-
-   @ObfuscatedName("id")
-   @ObfuscatedSignature(
-      signature = "(Ljava/lang/String;Ljava/lang/String;IIIIZI)V",
-      garbageValue = "1444756347"
-   )
-   static final void method2461(String var0, String var1, int var2, int var3, int var4, int var5, boolean var6) {
-      if(!Client.isMenuOpen) {
-         if(Client.menuOptionCount < 500) {
-            Client.menuOptions[Client.menuOptionCount] = var0;
-            Client.menuTargets[Client.menuOptionCount] = var1;
-            Client.menuTypes[Client.menuOptionCount] = var2;
-            Client.menuIdentifiers[Client.menuOptionCount] = var3;
-            Client.menuActionParams0[Client.menuOptionCount] = var4;
-            Client.menuActionParams1[Client.menuOptionCount] = var5;
-            Client.menuBooleanArray[Client.menuOptionCount] = var6;
-            ++Client.menuOptionCount;
-         }
-
-      }
    }
 }

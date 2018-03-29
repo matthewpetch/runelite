@@ -36,16 +36,6 @@ import net.runelite.client.config.ConfigItem;
 public interface TimersConfig extends Config
 {
 	@ConfigItem(
-		keyName = "enabled",
-		name = "Enable",
-		description = "Configures whether the timer plugin is displayed"
-	)
-	default boolean enabled()
-	{
-		return true;
-	}
-
-	@ConfigItem(
 		keyName = "showStamina",
 		name = "Stamina timer",
 		description = "Configures whether stamina timer is displayed"
@@ -211,6 +201,46 @@ public interface TimersConfig extends Config
 		description = "Configures whether antivenom timer is displayed"
 	)
 	default boolean showAntiVenom()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "showPrayerEnhance",
+		name = "Prayer enhance timer",
+		description = "Configures whether prayer enhance timer is displayed"
+	)
+	default boolean showPrayerEnhance()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "showGodWarsAltar",
+		name = "God wars altar timer",
+		description = "Configures whether god wars altar timer is displayed"
+	)
+	default boolean showGodWarsAltar()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "showAntipoison",
+		name = "Antipoison timer",
+		description = "Configures whether Antipoison timer is displayed"
+	)
+	default boolean showAntiPoison()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "showSuperantipoison",
+		name = "Superantipoison timer",
+		description = "Configures whether Superantipoison timer is displayed"
+	)
+	default boolean showSuperantipoison()
 	{
 		return true;
 	}

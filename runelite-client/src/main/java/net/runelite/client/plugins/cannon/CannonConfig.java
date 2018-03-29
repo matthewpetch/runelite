@@ -24,33 +24,64 @@
  */
 package net.runelite.client.plugins.cannon;
 
+import java.awt.Color;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
 
 @ConfigGroup(
 	keyName = "cannon",
-	name = "Cannon Plugin",
+	name = "Cannon",
 	description = "Configuration for the Cannon plugin"
 )
 public interface CannonConfig extends Config
 {
-	@ConfigItem(
-		keyName = "enabled",
-		name = "Enabled",
-		description = "Configures whether or not the Cannon plugin is displayed"
-	)
-	default boolean enabled()
-	{
-		return true;
-	}
-
 	@ConfigItem(
 		keyName = "showEmptyCannonNotification",
 		name = "Empty cannon notification",
 		description = "Configures whether to notify you that the cannon is empty"
 	)
 	default boolean showEmptyCannonNotification()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "showInfobox",
+		name = "Show Cannonball infobox",
+		description = "Configures whether to show the cannonballs in an infobox"
+	)
+	default boolean showInfobox()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		keyName = "showDoubleHitSpot",
+		name = "Show double hit spots",
+		description = "Configures whether to show the NPC double hit spot"
+	)
+	default boolean showDoubleHitSpot()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		keyName = "highlightDoubleHitColor",
+		name = "Color of double hit spots",
+		description = "Configures the highlight color of double hit spots"
+	)
+	default Color highlightDoubleHitColor()
+	{
+		return Color.RED;
+	}
+
+	@ConfigItem(
+		keyName = "showCannonSpots",
+		name = "Show common cannon spots",
+		description = "Configures whether to show common cannon spots or not"
+	)
+	default boolean showCannonSpots()
 	{
 		return true;
 	}

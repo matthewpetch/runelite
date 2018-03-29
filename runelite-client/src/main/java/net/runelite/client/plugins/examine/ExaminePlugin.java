@@ -39,26 +39,27 @@ import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
 import net.runelite.api.ItemComposition;
-import net.runelite.api.NPC;
+import net.runelite.api.events.ChatMessage;
+import net.runelite.api.events.ConfigChanged;
+import net.runelite.api.events.GameStateChanged;
+import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.api.widgets.Widget;
 import net.runelite.api.widgets.WidgetInfo;
+import static net.runelite.api.widgets.WidgetInfo.TO_CHILD;
+import static net.runelite.api.widgets.WidgetInfo.TO_GROUP;
 import net.runelite.api.widgets.WidgetItem;
 import net.runelite.client.chat.ChatColor;
 import net.runelite.client.chat.ChatColorType;
 import net.runelite.client.chat.ChatMessageBuilder;
 import net.runelite.client.chat.ChatMessageManager;
+import net.runelite.client.chat.QueuedMessage;
 import net.runelite.client.config.ConfigManager;
-import net.runelite.api.events.ChatMessage;
-import net.runelite.api.events.ConfigChanged;
-import net.runelite.api.events.GameStateChanged;
-import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.util.StackFormatter;
 import net.runelite.http.api.examine.ExamineClient;
 import net.runelite.http.api.item.ItemPrice;
-import static net.runelite.api.widgets.WidgetInfo.TO_CHILD;
-import static net.runelite.api.widgets.WidgetInfo.TO_GROUP;
 
 /**
  * Submits exammine info to the api
@@ -66,7 +67,7 @@ import static net.runelite.api.widgets.WidgetInfo.TO_GROUP;
  * @author Adam
  */
 @PluginDescriptor(
-	name = "Examine plugin"
+	name = "Examine"
 )
 @Slf4j
 public class ExaminePlugin extends Plugin
@@ -80,19 +81,26 @@ public class ExaminePlugin extends Plugin
 		.build();
 
 	@Inject
-	Client client;
+	private Client client;
 
 	@Inject
-	ExamineConfig config;
+	private ExamineConfig config;
 
 	@Inject
-	ItemManager itemManager;
+	private ItemManager itemManager;
 
 	@Inject
-	ChatMessageManager chatMessageManager;
+	private ChatMessageManager chatMessageManager;
 
 	@Inject
-	ScheduledExecutorService executor;
+	private ScheduledExecutorService executor;
+
+	@Override
+	protected void startUp()
+	{
+		cacheConfiguredColors();
+		chatMessageManager.refreshAll();
+	}
 
 	@Provides
 	ExamineConfig provideConfig(ConfigManager configManager)
@@ -137,6 +145,11 @@ public class ExaminePlugin extends Plugin
 	@Subscribe
 	public void onMenuOptionClicked(MenuOptionClicked event)
 	{
+		if (!event.getMenuOption().equals("Examine"))
+		{
+			return;
+		}
+
 		ExamineType type;
 		int id;
 		switch (event.getMenuAction())
@@ -209,11 +222,7 @@ public class ExaminePlugin extends Plugin
 
 		log.debug("Got examine for {} {}: {}", pendingExamine.getType(), pendingExamine.getId(), event.getMessage());
 
-		if (config.itemPrice())
-		{
-			findExamineItem(pendingExamine);
-		}
-
+		findExamineItem(pendingExamine);
 		CacheKey key = new CacheKey(type, pendingExamine.getId());
 		Boolean cached = cache.getIfPresent(key);
 		if (cached != null)
@@ -258,7 +267,8 @@ public class ExaminePlugin extends Plugin
 					itemId = widgetItem.getItemId();
 				}
 			}
-			else if (WidgetInfo.BANK_INVENTORY_ITEMS_CONTAINER.getGroupId() == widgetGroup)
+			else if (WidgetInfo.BANK_INVENTORY_ITEMS_CONTAINER.getGroupId() == widgetGroup
+					|| WidgetInfo.RUNE_POUCH_ITEM_CONTAINER.getGroupId() == widgetGroup)
 			{
 				Widget widgetItem = widget.getChild(pendingExamine.getActionParam());
 				if (widgetItem != null)
@@ -311,10 +321,8 @@ public class ExaminePlugin extends Plugin
 		}
 
 		int itemCompositionPrice = itemComposition.getPrice();
-		final int gePrice = itemPrice == null ? 0 : itemPrice.getPrice() * quantity;
-		final int alchPrice = itemCompositionPrice <= 0
-			? 0
-			: Math.round(itemCompositionPrice * HIGH_ALCHEMY_CONSTANT) * quantity;
+		final int gePrice = itemPrice == null ? 0 : itemPrice.getPrice();
+		final int alchPrice = itemCompositionPrice <= 0 ? 0 : Math.round(itemCompositionPrice * HIGH_ALCHEMY_CONSTANT);
 
 		if (gePrice > 0 || alchPrice > 0)
 		{
@@ -326,7 +334,7 @@ public class ExaminePlugin extends Plugin
 			if (quantity > 1)
 			{
 				message
-					.append(String.format("%,d", quantity))
+					.append(StackFormatter.formatNumber(quantity))
 					.append(" x ");
 			}
 
@@ -341,7 +349,18 @@ public class ExaminePlugin extends Plugin
 					.append(ChatColorType.NORMAL)
 					.append(" GE average ")
 					.append(ChatColorType.HIGHLIGHT)
-					.append(String.format("%,d", gePrice));
+					.append(StackFormatter.formatNumber(gePrice * quantity));
+			}
+
+			if (quantity > 1)
+			{
+				message
+					.append(ChatColorType.NORMAL)
+					.append(" (")
+					.append(ChatColorType.HIGHLIGHT)
+					.append(StackFormatter.formatNumber(gePrice))
+					.append(ChatColorType.NORMAL)
+					.append("ea)");
 			}
 
 			if (alchPrice > 0)
@@ -350,11 +369,24 @@ public class ExaminePlugin extends Plugin
 					.append(ChatColorType.NORMAL)
 					.append(" HA value ")
 					.append(ChatColorType.HIGHLIGHT)
-					.append(String.format("%,d", alchPrice));
+					.append(StackFormatter.formatNumber(alchPrice * quantity));
 			}
 
-			chatMessageManager.queue(ChatMessageType.EXAMINE_ITEM, message.build());
-			client.refreshChat();
+			if (quantity > 1)
+			{
+				message
+					.append(ChatColorType.NORMAL)
+					.append(" (")
+					.append(ChatColorType.HIGHLIGHT)
+					.append(StackFormatter.formatNumber(alchPrice))
+					.append(ChatColorType.NORMAL)
+					.append("ea)");
+			}
+
+			chatMessageManager.queue(QueuedMessage.builder()
+				.type(ChatMessageType.EXAMINE_ITEM)
+				.runeLiteFormattedMessage(message.build())
+				.build());
 		}
 	}
 

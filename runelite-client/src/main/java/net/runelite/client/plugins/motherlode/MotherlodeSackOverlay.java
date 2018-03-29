@@ -1,5 +1,6 @@
 /*
- * Copyright (c) 2016-2018, Seth <Sethtroll3@gmail.com>
+ * Copyright (c) 2018, Seth <Sethtroll3@gmail.com>
+*  Copyright (c) 2018, Adam <Adam@sigterm.info>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -24,6 +25,9 @@
  */
 package net.runelite.client.plugins.motherlode;
 
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import javax.inject.Inject;
 import net.runelite.api.Client;
 import net.runelite.api.Varbits;
 import net.runelite.api.widgets.Widget;
@@ -31,11 +35,6 @@ import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.components.PanelComponent;
-
-import javax.inject.Inject;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.Point;
 
 class MotherlodeSackOverlay extends Overlay
 {
@@ -52,13 +51,8 @@ class MotherlodeSackOverlay extends Overlay
 	}
 
 	@Override
-	public Dimension render(Graphics2D graphics, Point parent)
+	public Dimension render(Graphics2D graphics)
 	{
-		if (!config.enabled())
-		{
-			return null;
-		}
-
 		Widget sack = client.getWidget(WidgetInfo.MOTHERLODE_MINE);
 
 		panelComponent.getLines().clear();
@@ -70,12 +64,12 @@ class MotherlodeSackOverlay extends Overlay
 			if (config.showSack())
 			{
 				panelComponent.getLines().add(new PanelComponent.Line(
-						"Pay-dirt in sack:",
-						String.valueOf(client.getSetting(Varbits.SACK_NUMBER))
+					"Pay-dirt in sack:",
+					String.valueOf(client.getSetting(Varbits.SACK_NUMBER))
 				));
 			}
 		}
 
-		return panelComponent.render(graphics, parent);
+		return panelComponent.render(graphics);
 	}
 }

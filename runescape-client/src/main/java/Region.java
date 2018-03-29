@@ -4,185 +4,185 @@ import net.runelite.mapping.Implements;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("eh")
+@ObfuscatedName("ez")
 @Implements("Region")
 public class Region {
-   @ObfuscatedName("n")
+   @ObfuscatedName("c")
    @Export("regionLowMemory")
    public static boolean regionLowMemory;
-   @ObfuscatedName("t")
+   @ObfuscatedName("l")
    @Export("tileUpdateCount")
    static int tileUpdateCount;
-   @ObfuscatedName("o")
+   @ObfuscatedName("m")
    @Export("Scene_plane")
    static int Scene_plane;
-   @ObfuscatedName("a")
+   @ObfuscatedName("b")
    @Export("cycle")
    static int cycle;
-   @ObfuscatedName("i")
+   @ObfuscatedName("h")
    @Export("minTileX")
    static int minTileX;
-   @ObfuscatedName("m")
+   @ObfuscatedName("t")
    @Export("maxTileX")
    static int maxTileX;
-   @ObfuscatedName("x")
+   @ObfuscatedName("v")
    @Export("minTileZ")
    static int minTileZ;
-   @ObfuscatedName("l")
+   @ObfuscatedName("n")
    @Export("maxTileZ")
    static int maxTileZ;
-   @ObfuscatedName("j")
+   @ObfuscatedName("u")
    @Export("screenCenterX")
    static int screenCenterX;
-   @ObfuscatedName("g")
+   @ObfuscatedName("q")
    @Export("screenCenterZ")
    static int screenCenterZ;
-   @ObfuscatedName("c")
+   @ObfuscatedName("g")
    @Export("cameraX2")
    static int cameraX2;
-   @ObfuscatedName("k")
+   @ObfuscatedName("y")
    @Export("cameraY2")
    static int cameraY2;
-   @ObfuscatedName("q")
+   @ObfuscatedName("s")
    @Export("cameraZ2")
    static int cameraZ2;
    @ObfuscatedName("ac")
    @Export("pitchSin")
    static int pitchSin;
-   @ObfuscatedName("aw")
+   @ObfuscatedName("ap")
    @Export("pitchCos")
    static int pitchCos;
-   @ObfuscatedName("at")
+   @ObfuscatedName("al")
    @Export("yawSin")
    static int yawSin;
-   @ObfuscatedName("ag")
+   @ObfuscatedName("ai")
    @Export("yawCos")
    static int yawCos;
-   @ObfuscatedName("ad")
+   @ObfuscatedName("ab")
    @ObfuscatedSignature(
-      signature = "[Lee;"
+      signature = "[Lep;"
    )
    @Export("entityBuffer")
    static GameObject[] entityBuffer;
-   @ObfuscatedName("af")
+   @ObfuscatedName("ak")
    @Export("checkClick")
    static boolean checkClick;
-   @ObfuscatedName("az")
-   static int field1991;
-   @ObfuscatedName("ae")
+   @ObfuscatedName("as")
+   static int field2008;
+   @ObfuscatedName("aa")
    @Export("mouseX2")
    static int mouseX2;
-   @ObfuscatedName("av")
+   @ObfuscatedName("ah")
    @Export("mouseY2")
    static int mouseY2;
-   @ObfuscatedName("am")
+   @ObfuscatedName("ao")
    @Export("selectedRegionTileX")
    public static int selectedRegionTileX;
-   @ObfuscatedName("ax")
+   @ObfuscatedName("am")
    @Export("selectedRegionTileY")
    public static int selectedRegionTileY;
-   @ObfuscatedName("ah")
+   @ObfuscatedName("aq")
    @Export("viewportWalking")
    static boolean viewportWalking;
-   @ObfuscatedName("aa")
+   @ObfuscatedName("aw")
    @Export("MAX_OCCLUDER_LEVELS")
    static int MAX_OCCLUDER_LEVELS;
-   @ObfuscatedName("ao")
+   @ObfuscatedName("ax")
    @Export("levelOccluderCount")
    static int[] levelOccluderCount;
-   @ObfuscatedName("al")
+   @ObfuscatedName("ag")
    @ObfuscatedSignature(
-      signature = "[[Led;"
+      signature = "[[Lew;"
    )
    @Export("levelOccluders")
    static Occluder[][] levelOccluders;
    @ObfuscatedName("ay")
-   static int field2002;
-   @ObfuscatedName("aq")
+   static int field1982;
+   @ObfuscatedName("ad")
    @ObfuscatedSignature(
-      signature = "[Led;"
+      signature = "[Lew;"
    )
-   static Occluder[] field1961;
-   @ObfuscatedName("ak")
+   static Occluder[] field2020;
+   @ObfuscatedName("at")
    @ObfuscatedSignature(
-      signature = "Lgi;"
+      signature = "Lhl;"
    )
    @Export("tileDeque")
    static Deque tileDeque;
-   @ObfuscatedName("as")
-   static final int[] field2005;
-   @ObfuscatedName("au")
-   static final int[] field2006;
-   @ObfuscatedName("an")
+   @ObfuscatedName("av")
+   static final int[] field2022;
+   @ObfuscatedName("az")
+   static final int[] field1999;
+   @ObfuscatedName("aj")
    @Export("TILE_WALL_DRAW_FLAGS_1")
    static final int[] TILE_WALL_DRAW_FLAGS_1;
-   @ObfuscatedName("ai")
+   @ObfuscatedName("ar")
    @Export("WALL_UNCULL_FLAGS_0")
    static final int[] WALL_UNCULL_FLAGS_0;
-   @ObfuscatedName("ap")
+   @ObfuscatedName("au")
    @Export("WALL_UNCULL_FLAGS_1")
    static final int[] WALL_UNCULL_FLAGS_1;
-   @ObfuscatedName("ar")
+   @ObfuscatedName("an")
    @Export("WALL_UNCULL_FLAGS_2")
    static final int[] WALL_UNCULL_FLAGS_2;
-   @ObfuscatedName("bg")
+   @ObfuscatedName("bv")
    @Export("WALL_UNCULL_FLAGS_3")
    static final int[] WALL_UNCULL_FLAGS_3;
-   @ObfuscatedName("by")
+   @ObfuscatedName("ba")
    @Export("visibilityMaps")
    static boolean[][][][] visibilityMaps;
-   @ObfuscatedName("bz")
+   @ObfuscatedName("bl")
    @Export("renderArea")
    static boolean[][] renderArea;
-   @ObfuscatedName("bj")
-   static int field1998;
-   @ObfuscatedName("bd")
-   static int field2017;
-   @ObfuscatedName("bi")
-   static int field1988;
-   @ObfuscatedName("bo")
-   static int field1975;
-   @ObfuscatedName("bx")
-   static int field2020;
+   @ObfuscatedName("br")
+   static int field2033;
+   @ObfuscatedName("bh")
+   static int field2034;
+   @ObfuscatedName("bf")
+   static int field2035;
    @ObfuscatedName("bu")
-   static int field1986;
-   @ObfuscatedName("v")
+   static int field2036;
+   @ObfuscatedName("bp")
+   static int field2037;
+   @ObfuscatedName("bc")
+   static int field2014;
+   @ObfuscatedName("i")
    @Export("maxY")
    int maxY;
-   @ObfuscatedName("y")
+   @ObfuscatedName("o")
    @Export("maxX")
    int maxX;
-   @ObfuscatedName("r")
+   @ObfuscatedName("j")
    @Export("maxZ")
    int maxZ;
-   @ObfuscatedName("h")
+   @ObfuscatedName("k")
    @Export("tileHeights")
    int[][][] tileHeights;
-   @ObfuscatedName("d")
+   @ObfuscatedName("x")
    @ObfuscatedSignature(
-      signature = "[[[Lej;"
+      signature = "[[[Leg;"
    )
    @Export("tiles")
    Tile[][][] tiles;
-   @ObfuscatedName("s")
+   @ObfuscatedName("z")
    @Export("minLevel")
    int minLevel;
-   @ObfuscatedName("b")
+   @ObfuscatedName("p")
    @Export("entityCount")
    int entityCount;
-   @ObfuscatedName("e")
+   @ObfuscatedName("w")
    @ObfuscatedSignature(
-      signature = "[Lee;"
+      signature = "[Lep;"
    )
    @Export("objects")
    GameObject[] objects;
-   @ObfuscatedName("f")
+   @ObfuscatedName("r")
    @Export("tileCycles")
    int[][][] tileCycles;
-   @ObfuscatedName("bq")
+   @ObfuscatedName("bw")
    @Export("TILE_MASK_2D")
    int[][] TILE_MASK_2D;
-   @ObfuscatedName("bk")
+   @ObfuscatedName("bj")
    @Export("TILE_ROTATION_2D")
    int[][] TILE_ROTATION_2D;
 
@@ -192,7 +192,7 @@ public class Region {
       Scene_plane = 0;
       entityBuffer = new GameObject[100];
       checkClick = false;
-      field1991 = 0;
+      field2008 = 0;
       mouseX2 = 0;
       mouseY2 = 0;
       selectedRegionTileX = -1;
@@ -201,11 +201,11 @@ public class Region {
       MAX_OCCLUDER_LEVELS = 4;
       levelOccluderCount = new int[MAX_OCCLUDER_LEVELS];
       levelOccluders = new Occluder[MAX_OCCLUDER_LEVELS][500];
-      field2002 = 0;
-      field1961 = new Occluder[500];
+      field1982 = 0;
+      field2020 = new Occluder[500];
       tileDeque = new Deque();
-      field2005 = new int[]{19, 55, 38, 155, 255, 110, 137, 205, 76};
-      field2006 = new int[]{160, 192, 80, 96, 0, 144, 80, 48, 160};
+      field2022 = new int[]{19, 55, 38, 155, 255, 110, 137, 205, 76};
+      field1999 = new int[]{160, 192, 80, 96, 0, 144, 80, 48, 160};
       TILE_WALL_DRAW_FLAGS_1 = new int[]{76, 8, 137, 4, 0, 1, 38, 2, 19};
       WALL_UNCULL_FLAGS_0 = new int[]{0, 0, 2, 0, 0, 2, 1, 1, 0};
       WALL_UNCULL_FLAGS_1 = new int[]{2, 0, 0, 2, 0, 0, 0, 4, 4};
@@ -229,7 +229,7 @@ public class Region {
       this.reset();
    }
 
-   @ObfuscatedName("n")
+   @ObfuscatedName("c")
    @Export("reset")
    public void reset() {
       int var1;
@@ -262,7 +262,7 @@ public class Region {
 
    }
 
-   @ObfuscatedName("v")
+   @ObfuscatedName("i")
    @Export("setup")
    public void setup(int var1) {
       this.minLevel = var1;
@@ -277,7 +277,7 @@ public class Region {
 
    }
 
-   @ObfuscatedName("y")
+   @ObfuscatedName("o")
    @Export("setBridge")
    public void setBridge(int var1, int var2) {
       Tile var3 = this.tiles[0][var1][var2];
@@ -304,7 +304,7 @@ public class Region {
       this.tiles[3][var1][var2] = null;
    }
 
-   @ObfuscatedName("h")
+   @ObfuscatedName("k")
    @Export("setPhysicalLevel")
    public void setPhysicalLevel(int var1, int var2, int var3, int var4) {
       Tile var5 = this.tiles[var1][var2][var3];
@@ -313,7 +313,7 @@ public class Region {
       }
    }
 
-   @ObfuscatedName("d")
+   @ObfuscatedName("x")
    @Export("addTile")
    public void addTile(int var1, int var2, int var3, int var4, int var5, int var6, int var7, int var8, int var9, int var10, int var11, int var12, int var13, int var14, int var15, int var16, int var17, int var18, int var19, int var20) {
       SceneTilePaint var21;
@@ -351,9 +351,9 @@ public class Region {
       }
    }
 
-   @ObfuscatedName("s")
+   @ObfuscatedName("z")
    @ObfuscatedSignature(
-      signature = "(IIIILeo;II)V"
+      signature = "(IIIILek;II)V"
    )
    @Export("groundObjectSpawned")
    public void groundObjectSpawned(int var1, int var2, int var3, int var4, Renderable var5, int var6, int var7) {
@@ -373,9 +373,9 @@ public class Region {
       }
    }
 
-   @ObfuscatedName("b")
+   @ObfuscatedName("p")
    @ObfuscatedSignature(
-      signature = "(IIIILeo;ILeo;Leo;)V"
+      signature = "(IIIILek;ILek;Lek;)V"
    )
    @Export("addItemPile")
    public void addItemPile(int var1, int var2, int var3, int var4, Renderable var5, int var6, Renderable var7, Renderable var8) {
@@ -409,9 +409,9 @@ public class Region {
       this.tiles[var1][var2][var3].itemLayer = var9;
    }
 
-   @ObfuscatedName("e")
+   @ObfuscatedName("w")
    @ObfuscatedSignature(
-      signature = "(IIIILeo;Leo;IIII)V"
+      signature = "(IIIILek;Lek;IIII)V"
    )
    @Export("addBoundary")
    public void addBoundary(int var1, int var2, int var3, int var4, Renderable var5, Renderable var6, int var7, int var8, int var9, int var10) {
@@ -437,9 +437,9 @@ public class Region {
       }
    }
 
-   @ObfuscatedName("f")
+   @ObfuscatedName("r")
    @ObfuscatedSignature(
-      signature = "(IIIILeo;Leo;IIIIII)V"
+      signature = "(IIIILek;Lek;IIIIII)V"
    )
    @Export("addBoundaryDecoration")
    public void addBoundaryDecoration(int var1, int var2, int var3, int var4, Renderable var5, Renderable var6, int var7, int var8, int var9, int var10, int var11, int var12) {
@@ -467,11 +467,11 @@ public class Region {
       }
    }
 
-   @ObfuscatedName("u")
+   @ObfuscatedName("d")
    @ObfuscatedSignature(
-      signature = "(IIIIIILeo;III)Z"
+      signature = "(IIIIIILek;III)Z"
    )
-   public boolean method2756(int var1, int var2, int var3, int var4, int var5, int var6, Renderable var7, int var8, int var9, int var10) {
+   public boolean method2896(int var1, int var2, int var3, int var4, int var5, int var6, Renderable var7, int var8, int var9, int var10) {
       if(var7 == null) {
          return true;
       } else {
@@ -481,11 +481,11 @@ public class Region {
       }
    }
 
-   @ObfuscatedName("t")
+   @ObfuscatedName("a")
    @ObfuscatedSignature(
-      signature = "(IIIIILeo;IIZ)Z"
+      signature = "(IIIIILek;IIZ)Z"
    )
-   public boolean method2829(int var1, int var2, int var3, int var4, int var5, Renderable var6, int var7, int var8, boolean var9) {
+   public boolean method3006(int var1, int var2, int var3, int var4, int var5, Renderable var6, int var7, int var8, boolean var9) {
       if(var6 == null) {
          return true;
       } else {
@@ -519,17 +519,17 @@ public class Region {
       }
    }
 
-   @ObfuscatedName("o")
+   @ObfuscatedName("b")
    @ObfuscatedSignature(
-      signature = "(IIIIILeo;IIIIII)Z"
+      signature = "(IIIIILek;IIIIII)Z"
    )
-   public boolean method2758(int var1, int var2, int var3, int var4, int var5, Renderable var6, int var7, int var8, int var9, int var10, int var11, int var12) {
+   public boolean method2888(int var1, int var2, int var3, int var4, int var5, Renderable var6, int var7, int var8, int var9, int var10, int var11, int var12) {
       return var6 == null?true:this.addEntityMarker(var1, var9, var10, var11 - var9 + 1, var12 - var10 + 1, var2, var3, var4, var6, var7, true, var8, 0);
    }
 
-   @ObfuscatedName("a")
+   @ObfuscatedName("h")
    @ObfuscatedSignature(
-      signature = "(IIIIIIIILeo;IZII)Z"
+      signature = "(IIIIIIIILek;IZII)Z"
    )
    @Export("addEntityMarker")
    boolean addEntityMarker(int var1, int var2, int var3, int var4, int var5, int var6, int var7, int var8, Renderable var9, int var10, boolean var11, int var12, int var13) {
@@ -601,7 +601,7 @@ public class Region {
       return true;
    }
 
-   @ObfuscatedName("i")
+   @ObfuscatedName("n")
    @Export("clearEntities")
    public void clearEntities() {
       for(int var1 = 0; var1 < this.entityCount; ++var1) {
@@ -613,9 +613,9 @@ public class Region {
       this.entityCount = 0;
    }
 
-   @ObfuscatedName("m")
+   @ObfuscatedName("u")
    @ObfuscatedSignature(
-      signature = "(Lee;)V"
+      signature = "(Lep;)V"
    )
    @Export("removeEntity")
    void removeEntity(GameObject var1) {
@@ -649,8 +649,8 @@ public class Region {
 
    }
 
-   @ObfuscatedName("x")
-   public void method2801(int var1, int var2, int var3, int var4) {
+   @ObfuscatedName("q")
+   public void method2892(int var1, int var2, int var3, int var4) {
       Tile var5 = this.tiles[var1][var2][var3];
       if(var5 != null) {
          DecorativeObject var6 = var5.decorativeObject;
@@ -661,7 +661,7 @@ public class Region {
       }
    }
 
-   @ObfuscatedName("j")
+   @ObfuscatedName("g")
    @Export("removeBoundaryObject")
    public void removeBoundaryObject(int var1, int var2, int var3) {
       Tile var4 = this.tiles[var1][var2][var3];
@@ -670,7 +670,7 @@ public class Region {
       }
    }
 
-   @ObfuscatedName("g")
+   @ObfuscatedName("y")
    @Export("removeWallDecoration")
    public void removeWallDecoration(int var1, int var2, int var3) {
       Tile var4 = this.tiles[var1][var2][var3];
@@ -679,8 +679,8 @@ public class Region {
       }
    }
 
-   @ObfuscatedName("c")
-   public void method2765(int var1, int var2, int var3) {
+   @ObfuscatedName("s")
+   public void method2974(int var1, int var2, int var3) {
       Tile var4 = this.tiles[var1][var2][var3];
       if(var4 != null) {
          for(int var5 = 0; var5 < var4.entityCount; ++var5) {
@@ -694,7 +694,7 @@ public class Region {
       }
    }
 
-   @ObfuscatedName("k")
+   @ObfuscatedName("ac")
    @Export("removeFloorDecoration")
    public void removeFloorDecoration(int var1, int var2, int var3) {
       Tile var4 = this.tiles[var1][var2][var3];
@@ -703,7 +703,7 @@ public class Region {
       }
    }
 
-   @ObfuscatedName("q")
+   @ObfuscatedName("ap")
    @Export("removeGroundItemPile")
    public void removeGroundItemPile(int var1, int var2, int var3) {
       Tile var4 = this.tiles[var1][var2][var3];
@@ -712,29 +712,29 @@ public class Region {
       }
    }
 
-   @ObfuscatedName("ac")
+   @ObfuscatedName("al")
    @ObfuscatedSignature(
-      signature = "(III)Ler;"
+      signature = "(III)Lex;"
    )
-   public WallObject method2768(int var1, int var2, int var3) {
+   public WallObject method2996(int var1, int var2, int var3) {
       Tile var4 = this.tiles[var1][var2][var3];
       return var4 == null?null:var4.wallObject;
    }
 
-   @ObfuscatedName("aw")
+   @ObfuscatedName("ai")
    @ObfuscatedSignature(
-      signature = "(III)Lew;"
+      signature = "(III)Leu;"
    )
-   public DecorativeObject method2769(int var1, int var2, int var3) {
+   public DecorativeObject method2899(int var1, int var2, int var3) {
       Tile var4 = this.tiles[var1][var2][var3];
       return var4 == null?null:var4.decorativeObject;
    }
 
-   @ObfuscatedName("at")
+   @ObfuscatedName("ab")
    @ObfuscatedSignature(
-      signature = "(III)Lee;"
+      signature = "(III)Lep;"
    )
-   public GameObject method2853(int var1, int var2, int var3) {
+   public GameObject method2900(int var1, int var2, int var3) {
       Tile var4 = this.tiles[var1][var2][var3];
       if(var4 == null) {
          return null;
@@ -750,9 +750,9 @@ public class Region {
       }
    }
 
-   @ObfuscatedName("ag")
+   @ObfuscatedName("ak")
    @ObfuscatedSignature(
-      signature = "(III)Lds;"
+      signature = "(III)Ldb;"
    )
    @Export("getFloorDecoration")
    public GroundObject getFloorDecoration(int var1, int var2, int var3) {
@@ -760,20 +760,21 @@ public class Region {
       return var4 != null && var4.groundObject != null?var4.groundObject:null;
    }
 
-   @ObfuscatedName("ad")
-   public int method2762(int var1, int var2, int var3) {
+   @ObfuscatedName("as")
+   @Export("getWallObjectHash")
+   public int getWallObjectHash(int var1, int var2, int var3) {
       Tile var4 = this.tiles[var1][var2][var3];
       return var4 != null && var4.wallObject != null?var4.wallObject.hash:0;
    }
 
-   @ObfuscatedName("af")
-   public int method2773(int var1, int var2, int var3) {
+   @ObfuscatedName("aa")
+   public int method2903(int var1, int var2, int var3) {
       Tile var4 = this.tiles[var1][var2][var3];
       return var4 != null && var4.decorativeObject != null?var4.decorativeObject.hash:0;
    }
 
-   @ObfuscatedName("az")
-   public int method2774(int var1, int var2, int var3) {
+   @ObfuscatedName("ah")
+   public int method2904(int var1, int var2, int var3) {
       Tile var4 = this.tiles[var1][var2][var3];
       if(var4 == null) {
          return 0;
@@ -789,13 +790,14 @@ public class Region {
       }
    }
 
-   @ObfuscatedName("ae")
-   public int method2775(int var1, int var2, int var3) {
+   @ObfuscatedName("ao")
+   @Export("getGroundObjectHash")
+   public int getGroundObjectHash(int var1, int var2, int var3) {
       Tile var4 = this.tiles[var1][var2][var3];
       return var4 != null && var4.groundObject != null?var4.groundObject.hash:0;
    }
 
-   @ObfuscatedName("av")
+   @ObfuscatedName("am")
    @Export("getObjectFlags")
    public int getObjectFlags(int var1, int var2, int var3, int var4) {
       Tile var5 = this.tiles[var1][var2][var3];
@@ -818,7 +820,7 @@ public class Region {
       }
    }
 
-   @ObfuscatedName("am")
+   @ObfuscatedName("aq")
    @Export("applyLighting")
    public void applyLighting(int var1, int var2, int var3) {
       for(int var4 = 0; var4 < this.maxY; ++var4) {
@@ -830,31 +832,31 @@ public class Region {
                   ModelData var10;
                   if(var8 != null && var8.renderable1 instanceof ModelData) {
                      ModelData var9 = (ModelData)var8.renderable1;
-                     this.method2779(var9, var4, var5, var6, 1, 1);
+                     this.method3029(var9, var4, var5, var6, 1, 1);
                      if(var8.renderable2 instanceof ModelData) {
                         var10 = (ModelData)var8.renderable2;
-                        this.method2779(var10, var4, var5, var6, 1, 1);
-                        ModelData.method2492(var9, var10, 0, 0, 0, false);
-                        var8.renderable2 = var10.light(var10.field1734, var10.contrast, var1, var2, var3);
+                        this.method3029(var10, var4, var5, var6, 1, 1);
+                        ModelData.method2602(var9, var10, 0, 0, 0, false);
+                        var8.renderable2 = var10.light(var10.field1749, var10.contrast, var1, var2, var3);
                      }
 
-                     var8.renderable1 = var9.light(var9.field1734, var9.contrast, var1, var2, var3);
+                     var8.renderable1 = var9.light(var9.field1749, var9.contrast, var1, var2, var3);
                   }
 
                   for(int var12 = 0; var12 < var7.entityCount; ++var12) {
                      GameObject var14 = var7.objects[var12];
                      if(var14 != null && var14.renderable instanceof ModelData) {
                         ModelData var11 = (ModelData)var14.renderable;
-                        this.method2779(var11, var4, var5, var6, var14.offsetX - var14.relativeX + 1, var14.offsetY - var14.relativeY + 1);
-                        var14.renderable = var11.light(var11.field1734, var11.contrast, var1, var2, var3);
+                        this.method3029(var11, var4, var5, var6, var14.offsetX - var14.relativeX + 1, var14.offsetY - var14.relativeY + 1);
+                        var14.renderable = var11.light(var11.field1749, var11.contrast, var1, var2, var3);
                      }
                   }
 
                   GroundObject var13 = var7.groundObject;
                   if(var13 != null && var13.renderable instanceof ModelData) {
                      var10 = (ModelData)var13.renderable;
-                     this.method2778(var10, var4, var5, var6);
-                     var13.renderable = var10.light(var10.field1734, var10.contrast, var1, var2, var3);
+                     this.method2934(var10, var4, var5, var6);
+                     var13.renderable = var10.light(var10.field1749, var10.contrast, var1, var2, var3);
                   }
                }
             }
@@ -863,18 +865,18 @@ public class Region {
 
    }
 
-   @ObfuscatedName("ax")
+   @ObfuscatedName("ae")
    @ObfuscatedSignature(
-      signature = "(Ldh;III)V"
+      signature = "(Ldj;III)V"
    )
-   void method2778(ModelData var1, int var2, int var3, int var4) {
+   void method2934(ModelData var1, int var2, int var3, int var4) {
       Tile var5;
       ModelData var6;
       if(var3 < this.maxX) {
          var5 = this.tiles[var2][var3 + 1][var4];
          if(var5 != null && var5.groundObject != null && var5.groundObject.renderable instanceof ModelData) {
             var6 = (ModelData)var5.groundObject.renderable;
-            ModelData.method2492(var1, var6, 128, 0, 0, true);
+            ModelData.method2602(var1, var6, 128, 0, 0, true);
          }
       }
 
@@ -882,7 +884,7 @@ public class Region {
          var5 = this.tiles[var2][var3][var4 + 1];
          if(var5 != null && var5.groundObject != null && var5.groundObject.renderable instanceof ModelData) {
             var6 = (ModelData)var5.groundObject.renderable;
-            ModelData.method2492(var1, var6, 0, 0, 128, true);
+            ModelData.method2602(var1, var6, 0, 0, 128, true);
          }
       }
 
@@ -890,7 +892,7 @@ public class Region {
          var5 = this.tiles[var2][var3 + 1][var4 + 1];
          if(var5 != null && var5.groundObject != null && var5.groundObject.renderable instanceof ModelData) {
             var6 = (ModelData)var5.groundObject.renderable;
-            ModelData.method2492(var1, var6, 128, 0, 128, true);
+            ModelData.method2602(var1, var6, 128, 0, 128, true);
          }
       }
 
@@ -898,17 +900,17 @@ public class Region {
          var5 = this.tiles[var2][var3 + 1][var4 - 1];
          if(var5 != null && var5.groundObject != null && var5.groundObject.renderable instanceof ModelData) {
             var6 = (ModelData)var5.groundObject.renderable;
-            ModelData.method2492(var1, var6, 128, 0, -128, true);
+            ModelData.method2602(var1, var6, 128, 0, -128, true);
          }
       }
 
    }
 
-   @ObfuscatedName("ah")
+   @ObfuscatedName("af")
    @ObfuscatedSignature(
-      signature = "(Ldh;IIIII)V"
+      signature = "(Ldj;IIIII)V"
    )
-   void method2779(ModelData var1, int var2, int var3, int var4, int var5, int var6) {
+   void method3029(ModelData var1, int var2, int var3, int var4, int var5, int var6) {
       boolean var7 = true;
       int var8 = var3;
       int var9 = var3 + var5;
@@ -929,12 +931,12 @@ public class Region {
                               ModelData var18;
                               if(var17.renderable1 instanceof ModelData) {
                                  var18 = (ModelData)var17.renderable1;
-                                 ModelData.method2492(var1, var18, (1 - var5) * 64 + (var13 - var3) * 128, var16, (var14 - var4) * 128 + (1 - var6) * 64, var7);
+                                 ModelData.method2602(var1, var18, (1 - var5) * 64 + (var13 - var3) * 128, var16, (var14 - var4) * 128 + (1 - var6) * 64, var7);
                               }
 
                               if(var17.renderable2 instanceof ModelData) {
                                  var18 = (ModelData)var17.renderable2;
-                                 ModelData.method2492(var1, var18, (1 - var5) * 64 + (var13 - var3) * 128, var16, (var14 - var4) * 128 + (1 - var6) * 64, var7);
+                                 ModelData.method2602(var1, var18, (1 - var5) * 64 + (var13 - var3) * 128, var16, (var14 - var4) * 128 + (1 - var6) * 64, var7);
                               }
                            }
 
@@ -944,7 +946,7 @@ public class Region {
                                  ModelData var20 = (ModelData)var19.renderable;
                                  int var21 = var19.offsetX - var19.relativeX + 1;
                                  int var22 = var19.offsetY - var19.relativeY + 1;
-                                 ModelData.method2492(var1, var20, (var21 - var5) * 64 + (var19.relativeX - var3) * 128, var16, (var19.relativeY - var4) * 128 + (var22 - var6) * 64, var7);
+                                 ModelData.method2602(var1, var20, (var21 - var5) * 64 + (var19.relativeX - var3) * 128, var16, (var19.relativeY - var4) * 128 + (var22 - var6) * 64, var7);
                               }
                            }
                         }
@@ -960,8 +962,9 @@ public class Region {
 
    }
 
-   @ObfuscatedName("ab")
-   public void method2780(int[] var1, int var2, int var3, int var4, int var5, int var6) {
+   @ObfuscatedName("aw")
+   @Export("drawTile")
+   public void drawTile(int[] var1, int var2, int var3, int var4, int var5, int var6) {
       Tile var7 = this.tiles[var4][var5][var6];
       if(var7 != null) {
          SceneTilePaint var8 = var7.paint;
@@ -1024,12 +1027,12 @@ public class Region {
       }
    }
 
-   @ObfuscatedName("ao")
-   public void method2772(int var1, int var2, int var3, boolean var4) {
-      if(!method2785() || var4) {
+   @ObfuscatedName("ay")
+   public void method3046(int var1, int var2, int var3, boolean var4) {
+      if(!method2915() || var4) {
          checkClick = true;
          viewportWalking = var4;
-         field1991 = var1;
+         field2008 = var1;
          mouseX2 = var2;
          mouseY2 = var3;
          selectedRegionTileX = -1;
@@ -1037,18 +1040,18 @@ public class Region {
       }
    }
 
-   @ObfuscatedName("al")
-   public void method2784() {
+   @ObfuscatedName("ad")
+   public void method3061() {
       viewportWalking = true;
    }
 
-   @ObfuscatedName("ak")
-   @Export("draw")
+   @ObfuscatedName("az")
+   @Export("drawRegion")
    @Hook(
       value = "drawRegion",
       end = true
    )
-   public void draw(int var1, int var2, int var3, int var4, int var5, int var6) {
+   public void drawRegion(int var1, int var2, int var3, int var4, int var5, int var6) {
       if(var1 < 0) {
          var1 = 0;
       } else if(var1 >= this.maxX * 128) {
@@ -1059,6 +1062,12 @@ public class Region {
          var3 = 0;
       } else if(var3 >= this.maxZ * 128) {
          var3 = this.maxZ * 128 - 1;
+      }
+
+      if(var4 < 128) {
+         var4 = 128;
+      } else if(var4 > 383) {
+         var4 = 383;
       }
 
       ++cycle;
@@ -1107,7 +1116,11 @@ public class Region {
             for(var10 = minTileZ; var10 < maxTileZ; ++var10) {
                Tile var11 = var8[var9][var10];
                if(var11 != null) {
-                  if(var11.physicalLevel <= var6 && (renderArea[var9 - screenCenterX + 25][var10 - screenCenterZ + 25] || this.tileHeights[var7][var9][var10] - var2 >= 2000)) {
+                  if(var11.physicalLevel > var6 || !renderArea[var9 - screenCenterX + 25][var10 - screenCenterZ + 25] && this.tileHeights[var7][var9][var10] - var2 < 2000) {
+                     var11.draw = false;
+                     var11.visible = false;
+                     var11.wallCullDirection = 0;
+                  } else {
                      var11.draw = true;
                      var11.visible = true;
                      if(var11.entityCount > 0) {
@@ -1117,10 +1130,6 @@ public class Region {
                      }
 
                      ++tileUpdateCount;
-                  } else {
-                     var11.draw = false;
-                     var11.visible = false;
-                     var11.wallCullDirection = 0;
                   }
                }
             }
@@ -1237,9 +1246,9 @@ public class Region {
       checkClick = false;
    }
 
-   @ObfuscatedName("as")
+   @ObfuscatedName("aj")
    @ObfuscatedSignature(
-      signature = "(Lej;Z)V"
+      signature = "(Leg;Z)V"
    )
    @Export("draw")
    void draw(Tile var1, boolean var2) {
@@ -1357,7 +1366,7 @@ public class Region {
                                  if(var3.paint != null) {
                                     if(!this.isTileOccluded(var7, var4, var5)) {
                                        var20 = true;
-                                       if(var3.paint.neColor != 12345678 || checkClick && var6 <= field1991) {
+                                       if(var3.paint.neColor != 12345678 || checkClick && var6 <= field2008) {
                                           this.drawTileUnderlay(var3.paint, var7, pitchSin, pitchCos, yawSin, yawCos, var4, var5);
                                        }
                                     }
@@ -1383,12 +1392,12 @@ public class Region {
                                        var21 += 6;
                                     }
 
-                                    var11 = field2005[var21];
+                                    var11 = field2022[var21];
                                     var3.wallDrawFlags = TILE_WALL_DRAW_FLAGS_1[var21];
                                  }
 
                                  if(var31 != null) {
-                                    if((var31.orientationA & field2006[var21]) != 0) {
+                                    if((var31.orientationA & field1999[var21]) != 0) {
                                        if(var31.orientationA == 16) {
                                           var3.wallCullDirection = 3;
                                           var3.wallUncullDirection = WALL_UNCULL_FLAGS_0[var21];
@@ -1767,9 +1776,9 @@ public class Region {
       }
    }
 
-   @ObfuscatedName("au")
+   @ObfuscatedName("ar")
    @ObfuscatedSignature(
-      signature = "(Leg;IIIIIII)V"
+      signature = "(Len;IIIIIII)V"
    )
    @Export("drawTileUnderlay")
    void drawTileUnderlay(SceneTilePaint var1, int var2, int var3, int var4, int var5, int var6, int var7, int var8) {
@@ -1828,7 +1837,7 @@ public class Region {
                         Graphics3D.rasterClipEnable = true;
                      }
 
-                     if(checkClick && method2792(mouseX2, mouseY2, var27, var29, var25, var26, var28, var24)) {
+                     if(checkClick && method2991(mouseX2, mouseY2, var27, var29, var25, var26, var28, var24)) {
                         selectedRegionTileX = var7;
                         selectedRegionTileY = var8;
                      }
@@ -1845,7 +1854,7 @@ public class Region {
                         }
                      } else {
                         var30 = Graphics3D.textureLoader.getAverageTextureRGB(var1.texture);
-                        Graphics3D.rasterGouraud(var27, var29, var25, var26, var28, var24, method2791(var30, var1.neColor), method2791(var30, var1.nwColor), method2791(var30, var1.seColor));
+                        Graphics3D.rasterGouraud(var27, var29, var25, var26, var28, var24, method2921(var30, var1.neColor), method2921(var30, var1.nwColor), method2921(var30, var1.seColor));
                      }
                   }
 
@@ -1855,7 +1864,7 @@ public class Region {
                         Graphics3D.rasterClipEnable = true;
                      }
 
-                     if(checkClick && method2792(mouseX2, mouseY2, var23, var25, var29, var22, var24, var28)) {
+                     if(checkClick && method2991(mouseX2, mouseY2, var23, var25, var29, var22, var24, var28)) {
                         selectedRegionTileX = var7;
                         selectedRegionTileY = var8;
                      }
@@ -1868,7 +1877,7 @@ public class Region {
                         Graphics3D.rasterTexture(var23, var25, var29, var22, var24, var28, var1.swColor, var1.seColor, var1.nwColor, var10, var14, var9, var17, var18, var21, var12, var11, var15, var1.texture);
                      } else {
                         var30 = Graphics3D.textureLoader.getAverageTextureRGB(var1.texture);
-                        Graphics3D.rasterGouraud(var23, var25, var29, var22, var24, var28, method2791(var30, var1.swColor), method2791(var30, var1.seColor), method2791(var30, var1.nwColor));
+                        Graphics3D.rasterGouraud(var23, var25, var29, var22, var24, var28, method2921(var30, var1.swColor), method2921(var30, var1.seColor), method2921(var30, var1.nwColor));
                      }
                   }
 
@@ -1878,9 +1887,9 @@ public class Region {
       }
    }
 
-   @ObfuscatedName("an")
+   @ObfuscatedName("au")
    @ObfuscatedSignature(
-      signature = "(Ldl;IIIIII)V"
+      signature = "(Ldf;IIIIII)V"
    )
    @Export("drawTileOverlay")
    void drawTileOverlay(SceneTileModel var1, int var2, int var3, int var4, int var5, int var6, int var7) {
@@ -1915,12 +1924,12 @@ public class Region {
       }
 
       Graphics3D.rasterAlpha = 0;
-      var8 = var1.field1753.length;
+      var8 = var1.field1764.length;
 
       for(var9 = 0; var9 < var8; ++var9) {
-         var10 = var1.field1753[var9];
-         var11 = var1.field1754[var9];
-         var12 = var1.field1755[var9];
+         var10 = var1.field1764[var9];
+         var11 = var1.field1765[var9];
+         var12 = var1.field1766[var9];
          var13 = SceneTileModel.tmpScreenX[var10];
          int var14 = SceneTileModel.tmpScreenX[var11];
          int var15 = SceneTileModel.tmpScreenX[var12];
@@ -1933,7 +1942,7 @@ public class Region {
                Graphics3D.rasterClipEnable = true;
             }
 
-            if(checkClick && method2792(mouseX2, mouseY2, var16, var17, var18, var13, var14, var15)) {
+            if(checkClick && method2991(mouseX2, mouseY2, var16, var17, var18, var13, var14, var15)) {
                selectedRegionTileX = var6;
                selectedRegionTileY = var7;
             }
@@ -1947,7 +1956,7 @@ public class Region {
                   }
                } else {
                   int var19 = Graphics3D.textureLoader.getAverageTextureRGB(var1.triangleTextureId[var9]);
-                  Graphics3D.rasterGouraud(var16, var17, var18, var13, var14, var15, method2791(var19, var1.triangleColorA[var9]), method2791(var19, var1.triangleColorB[var9]), method2791(var19, var1.triangleColorC[var9]));
+                  Graphics3D.rasterGouraud(var16, var17, var18, var13, var14, var15, method2921(var19, var1.triangleColorA[var9]), method2921(var19, var1.triangleColorB[var9]), method2921(var19, var1.triangleColorC[var9]));
                }
             } else if(var1.triangleColorA[var9] != 12345678) {
                Graphics3D.rasterGouraud(var16, var17, var18, var13, var14, var15, var1.triangleColorA[var9], var1.triangleColorB[var9], var1.triangleColorC[var9]);
@@ -1957,12 +1966,12 @@ public class Region {
 
    }
 
-   @ObfuscatedName("ar")
+   @ObfuscatedName("bw")
    @Export("updateOccluders")
    void updateOccluders() {
       int var1 = levelOccluderCount[Scene_plane];
       Occluder[] var2 = levelOccluders[Scene_plane];
-      field2002 = 0;
+      field1982 = 0;
 
       for(int var3 = 0; var3 < var1; ++var3) {
          Occluder var4 = var2[var3];
@@ -2010,7 +2019,7 @@ public class Region {
                   var4.maxNormalX = (var4.maxZ - cameraZ2 << 8) / var9;
                   var4.minNormalY = (var4.minY - cameraY2 << 8) / var9;
                   var4.maxNormalY = (var4.maxY - cameraY2 << 8) / var9;
-                  field1961[field2002++] = var4;
+                  field2020[field1982++] = var4;
                }
             }
          } else if(var4.type == 2) {
@@ -2048,11 +2057,11 @@ public class Region {
                      var9 = -var9;
                   }
 
-                  var4.field2053 = (var4.minX - cameraX2 << 8) / var9;
-                  var4.field2059 = (var4.maxX - cameraX2 << 8) / var9;
+                  var4.field2071 = (var4.minX - cameraX2 << 8) / var9;
+                  var4.field2068 = (var4.maxX - cameraX2 << 8) / var9;
                   var4.minNormalY = (var4.minY - cameraY2 << 8) / var9;
                   var4.maxNormalY = (var4.maxY - cameraY2 << 8) / var9;
-                  field1961[field2002++] = var4;
+                  field2020[field1982++] = var4;
                }
             }
          } else if(var4.type == 4) {
@@ -2081,23 +2090,23 @@ public class Region {
 
                   boolean var10 = false;
 
-                  label146:
+                  label144:
                   for(int var11 = var8; var11 <= var9; ++var11) {
                      for(int var12 = var6; var12 <= var7; ++var12) {
                         if(renderArea[var11][var12]) {
                            var10 = true;
-                           break label146;
+                           break label144;
                         }
                      }
                   }
 
                   if(var10) {
                      var4.testDirection = 5;
-                     var4.field2053 = (var4.minX - cameraX2 << 8) / var5;
-                     var4.field2059 = (var4.maxX - cameraX2 << 8) / var5;
+                     var4.field2071 = (var4.minX - cameraX2 << 8) / var5;
+                     var4.field2068 = (var4.maxX - cameraX2 << 8) / var5;
                      var4.minNormalX = (var4.minZ - cameraZ2 << 8) / var5;
                      var4.maxNormalX = (var4.maxZ - cameraZ2 << 8) / var5;
-                     field1961[field2002++] = var4;
+                     field2020[field1982++] = var4;
                   }
                }
             }
@@ -2106,7 +2115,7 @@ public class Region {
 
    }
 
-   @ObfuscatedName("bg")
+   @ObfuscatedName("bj")
    @Export("isTileOccluded")
    boolean isTileOccluded(int var1, int var2, int var3) {
       int var4 = this.tileCycles[var1][var2][var3];
@@ -2127,7 +2136,7 @@ public class Region {
       }
    }
 
-   @ObfuscatedName("bq")
+   @ObfuscatedName("ba")
    @Export("isWallOccluded")
    boolean isWallOccluded(int var1, int var2, int var3, int var4) {
       if(!this.isTileOccluded(var1, var2, var3)) {
@@ -2273,7 +2282,7 @@ public class Region {
       }
    }
 
-   @ObfuscatedName("bk")
+   @ObfuscatedName("bl")
    @Export("isOccluded")
    boolean isOccluded(int var1, int var2, int var3, int var4) {
       if(!this.isTileOccluded(var1, var2, var3)) {
@@ -2285,7 +2294,7 @@ public class Region {
       }
    }
 
-   @ObfuscatedName("by")
+   @ObfuscatedName("br")
    @Export("isAreaOccluded")
    boolean isAreaOccluded(int var1, int var2, int var3, int var4, int var5, int var6) {
       int var7;
@@ -2330,11 +2339,11 @@ public class Region {
       }
    }
 
-   @ObfuscatedName("bz")
+   @ObfuscatedName("bh")
    @Export("isOccluded")
    boolean isOccluded(int var1, int var2, int var3) {
-      for(int var4 = 0; var4 < field2002; ++var4) {
-         Occluder var5 = field1961[var4];
+      for(int var4 = 0; var4 < field1982; ++var4) {
+         Occluder var5 = field2020[var4];
          int var6;
          int var7;
          int var8;
@@ -2365,8 +2374,8 @@ public class Region {
          } else if(var5.testDirection == 3) {
             var6 = var5.minZ - var3;
             if(var6 > 0) {
-               var7 = (var6 * var5.field2053 >> 8) + var5.minX;
-               var8 = (var6 * var5.field2059 >> 8) + var5.maxX;
+               var7 = (var6 * var5.field2071 >> 8) + var5.minX;
+               var8 = (var6 * var5.field2068 >> 8) + var5.maxX;
                var9 = (var6 * var5.minNormalY >> 8) + var5.minY;
                var10 = (var6 * var5.maxNormalY >> 8) + var5.maxY;
                if(var1 >= var7 && var1 <= var8 && var2 >= var9 && var2 <= var10) {
@@ -2376,8 +2385,8 @@ public class Region {
          } else if(var5.testDirection == 4) {
             var6 = var3 - var5.minZ;
             if(var6 > 0) {
-               var7 = (var6 * var5.field2053 >> 8) + var5.minX;
-               var8 = (var6 * var5.field2059 >> 8) + var5.maxX;
+               var7 = (var6 * var5.field2071 >> 8) + var5.minX;
+               var8 = (var6 * var5.field2068 >> 8) + var5.maxX;
                var9 = (var6 * var5.minNormalY >> 8) + var5.minY;
                var10 = (var6 * var5.maxNormalY >> 8) + var5.maxY;
                if(var1 >= var7 && var1 <= var8 && var2 >= var9 && var2 <= var10) {
@@ -2387,8 +2396,8 @@ public class Region {
          } else if(var5.testDirection == 5) {
             var6 = var2 - var5.minY;
             if(var6 > 0) {
-               var7 = (var6 * var5.field2053 >> 8) + var5.minX;
-               var8 = (var6 * var5.field2059 >> 8) + var5.maxX;
+               var7 = (var6 * var5.field2071 >> 8) + var5.minX;
+               var8 = (var6 * var5.field2068 >> 8) + var5.maxX;
                var9 = (var6 * var5.minNormalX >> 8) + var5.minZ;
                var10 = (var6 * var5.maxNormalX >> 8) + var5.maxZ;
                if(var1 >= var7 && var1 <= var8 && var3 >= var9 && var3 <= var10) {
@@ -2401,7 +2410,7 @@ public class Region {
       return false;
    }
 
-   @ObfuscatedName("r")
+   @ObfuscatedName("j")
    @Export("addOcclude")
    public static void addOcclude(int var0, int var1, int var2, int var3, int var4, int var5, int var6, int var7) {
       Occluder var8 = new Occluder();
@@ -2419,14 +2428,15 @@ public class Region {
       levelOccluders[var0][levelOccluderCount[var0]++] = var8;
    }
 
-   @ObfuscatedName("aj")
-   public static void method2781(int[] var0, int var1, int var2, int var3, int var4) {
-      field1988 = 0;
-      field1975 = 0;
-      field2020 = var3;
-      field1986 = var4;
-      field1998 = var3 / 2;
-      field2017 = var4 / 2;
+   @ObfuscatedName("ax")
+   @Export("buildVisibilityMaps")
+   public static void buildVisibilityMaps(int[] var0, int var1, int var2, int var3, int var4) {
+      field2035 = 0;
+      field2036 = 0;
+      field2037 = var3;
+      field2014 = var4;
+      field2033 = var3 / 2;
+      field2034 = var4 / 2;
       boolean[][][][] var5 = new boolean[9][32][53][53];
 
       int var6;
@@ -2451,7 +2461,7 @@ public class Region {
                   boolean var14 = false;
 
                   for(int var15 = -var1; var15 <= var2; var15 += 128) {
-                     if(method2782(var12, var0[var8] + var15, var13)) {
+                     if(method2912(var12, var0[var8] + var15, var13)) {
                         var14 = true;
                         break;
                      }
@@ -2502,34 +2512,34 @@ public class Region {
 
    }
 
-   @ObfuscatedName("aa")
-   static boolean method2782(int var0, int var1, int var2) {
+   @ObfuscatedName("ag")
+   static boolean method2912(int var0, int var1, int var2) {
       int var3 = var0 * yawCos + var2 * yawSin >> 16;
       int var4 = var2 * yawCos - var0 * yawSin >> 16;
       int var5 = var4 * pitchCos + pitchSin * var1 >> 16;
       int var6 = pitchCos * var1 - var4 * pitchSin >> 16;
       if(var5 >= 50 && var5 <= 3500) {
-         int var7 = var3 * 390 / var5 + field1998;
-         int var8 = var6 * 390 / var5 + field2017;
-         return var7 >= field1988 && var7 <= field2020 && var8 >= field1975 && var8 <= field1986;
+         int var7 = var3 * 390 / var5 + field2033;
+         int var8 = var6 * 390 / var5 + field2034;
+         return var7 >= field2035 && var7 <= field2037 && var8 >= field2036 && var8 <= field2014;
       } else {
          return false;
       }
    }
 
-   @ObfuscatedName("ay")
-   public static boolean method2785() {
+   @ObfuscatedName("at")
+   public static boolean method2915() {
       return viewportWalking && selectedRegionTileX != -1;
    }
 
-   @ObfuscatedName("aq")
-   public static void method2786() {
+   @ObfuscatedName("av")
+   public static void method3048() {
       selectedRegionTileX = -1;
       viewportWalking = false;
    }
 
-   @ObfuscatedName("ai")
-   static final int method2791(int var0, int var1) {
+   @ObfuscatedName("an")
+   static final int method2921(int var0, int var1) {
       var1 = (var0 & 127) * var1 >> 7;
       if(var1 < 2) {
          var1 = 2;
@@ -2540,8 +2550,8 @@ public class Region {
       return (var0 & 65408) + var1;
    }
 
-   @ObfuscatedName("ap")
-   static boolean method2792(int var0, int var1, int var2, int var3, int var4, int var5, int var6, int var7) {
+   @ObfuscatedName("bv")
+   static boolean method2991(int var0, int var1, int var2, int var3, int var4, int var5, int var6, int var7) {
       if(var1 < var2 && var1 < var3 && var1 < var4) {
          return false;
       } else if(var1 > var2 && var1 > var3 && var1 > var4) {
@@ -2558,8 +2568,8 @@ public class Region {
       }
    }
 
-   @ObfuscatedName("bj")
-   public static final int[] method2799(int var0, int var1, int var2) {
+   @ObfuscatedName("bf")
+   public static final int[] method2929(int var0, int var1, int var2) {
       int var3 = var0 * yawCos + var2 * yawSin >> 16;
       var2 = var2 * yawCos - var0 * yawSin >> 16;
       var0 = var3;

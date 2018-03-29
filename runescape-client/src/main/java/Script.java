@@ -4,64 +4,125 @@ import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("cv")
+@ObfuscatedName("cx")
 @Implements("Script")
 public class Script extends CacheableNode {
-   @ObfuscatedName("n")
+   @ObfuscatedName("c")
    @ObfuscatedSignature(
-      signature = "Lga;"
+      signature = "Lhj;"
    )
-   static NodeCache field1435;
-   @ObfuscatedName("v")
+   static NodeCache field1449;
+   @ObfuscatedName("i")
    @Export("instructions")
    int[] instructions;
-   @ObfuscatedName("y")
+   @ObfuscatedName("o")
    @Export("intOperands")
    int[] intOperands;
-   @ObfuscatedName("r")
+   @ObfuscatedName("j")
    @Export("stringOperands")
    String[] stringOperands;
-   @ObfuscatedName("h")
+   @ObfuscatedName("k")
    @ObfuscatedGetter(
-      intValue = -285464221
+      intValue = 2007836195
    )
    @Export("localIntCount")
    int localIntCount;
-   @ObfuscatedName("d")
+   @ObfuscatedName("x")
    @ObfuscatedGetter(
-      intValue = 179342557
+      intValue = -986383027
    )
    @Export("localStringCount")
    int localStringCount;
-   @ObfuscatedName("s")
+   @ObfuscatedName("z")
    @ObfuscatedGetter(
-      intValue = 1986593681
+      intValue = 155988455
    )
    @Export("intStackCount")
    int intStackCount;
-   @ObfuscatedName("b")
+   @ObfuscatedName("p")
    @ObfuscatedGetter(
-      intValue = 1606864021
+      intValue = 1556061907
    )
    @Export("stringStackCount")
    int stringStackCount;
-   @ObfuscatedName("e")
+   @ObfuscatedName("w")
    @ObfuscatedSignature(
-      signature = "[Lgb;"
+      signature = "[Lhz;"
    )
    @Export("switches")
    IterableHashTable[] switches;
 
    static {
-      field1435 = new NodeCache(128);
+      field1449 = new NodeCache(128);
    }
 
-   @ObfuscatedName("r")
+   @ObfuscatedName("o")
    @ObfuscatedSignature(
-      signature = "(II)[Lgb;",
-      garbageValue = "29958537"
+      signature = "(II)[Lhz;",
+      garbageValue = "1575567631"
    )
-   IterableHashTable[] method1866(int var1) {
+   IterableHashTable[] method2009(int var1) {
       return new IterableHashTable[var1];
+   }
+
+   @ObfuscatedName("k")
+   @ObfuscatedSignature(
+      signature = "(ILcx;ZS)I",
+      garbageValue = "-23132"
+   )
+   static int method2018(int var0, Script var1, boolean var2) {
+      int var3 = -1;
+      Widget var4;
+      if(var0 >= 2000) {
+         var0 -= 1000;
+         var3 = class81.intStack[--SceneTilePaint.intStackSize];
+         var4 = class3.getWidget(var3);
+      } else {
+         var4 = var2?class336.field4073:class61.field713;
+      }
+
+      if(var0 == 1000) {
+         SceneTilePaint.intStackSize -= 4;
+         var4.originalX = class81.intStack[SceneTilePaint.intStackSize];
+         var4.originalY = class81.intStack[SceneTilePaint.intStackSize + 1];
+         var4.dynamicX = class81.intStack[SceneTilePaint.intStackSize + 2];
+         var4.dynamicY = class81.intStack[SceneTilePaint.intStackSize + 3];
+         WorldMapType1.method274(var4);
+         BoundingBox.clientInstance.widgetMethod0(var4);
+         if(var3 != -1 && var4.type == 0) {
+            MapIcon.method578(class189.widgets[var3 >> 16], var4, false);
+         }
+
+         return 1;
+      } else if(var0 == 1001) {
+         SceneTilePaint.intStackSize -= 4;
+         var4.originalWidth = class81.intStack[SceneTilePaint.intStackSize];
+         var4.originalHeight = class81.intStack[SceneTilePaint.intStackSize + 1];
+         var4.dynamicWidth = class81.intStack[SceneTilePaint.intStackSize + 2];
+         var4.buttonType = class81.intStack[SceneTilePaint.intStackSize + 3];
+         WorldMapType1.method274(var4);
+         BoundingBox.clientInstance.widgetMethod0(var4);
+         if(var3 != -1 && var4.type == 0) {
+            MapIcon.method578(class189.widgets[var3 >> 16], var4, false);
+         }
+
+         return 1;
+      } else if(var0 == 1003) {
+         boolean var5 = class81.intStack[--SceneTilePaint.intStackSize] == 1;
+         if(var5 != var4.isHidden) {
+            var4.isHidden = var5;
+            WorldMapType1.method274(var4);
+         }
+
+         return 1;
+      } else if(var0 == 1005) {
+         var4.noClickThrough = class81.intStack[--SceneTilePaint.intStackSize] == 1;
+         return 1;
+      } else if(var0 == 1006) {
+         var4.noScrollThrough = class81.intStack[--SceneTilePaint.intStackSize] == 1;
+         return 1;
+      } else {
+         return 2;
+      }
    }
 }

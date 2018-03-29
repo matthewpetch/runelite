@@ -4,58 +4,44 @@ import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("a")
+@ObfuscatedName("b")
 @Implements("GrandExchangeOffer")
 public class GrandExchangeOffer {
-   @ObfuscatedName("p")
+   @ObfuscatedName("a")
    @ObfuscatedSignature(
-      signature = "Ljz;"
+      signature = "Liu;"
    )
-   public static Font field297;
+   public static Track1 field292;
    @ObfuscatedName("c")
-   static int[] field296;
-   @ObfuscatedName("bj")
-   @ObfuscatedSignature(
-      signature = "Lkh;"
-   )
-   @Export("jagexLoginType")
-   static JagexLoginType jagexLoginType;
-   @ObfuscatedName("io")
-   @ObfuscatedSignature(
-      signature = "Lbf;"
-   )
-   @Export("localPlayer")
-   static Player localPlayer;
-   @ObfuscatedName("n")
-   @Export("progress")
-   byte progress;
-   @ObfuscatedName("v")
+   @Export("state")
+   byte state;
+   @ObfuscatedName("i")
    @ObfuscatedGetter(
-      intValue = 814876475
+      intValue = 1681843795
    )
    @Export("itemId")
    public int itemId;
-   @ObfuscatedName("y")
+   @ObfuscatedName("o")
    @ObfuscatedGetter(
-      intValue = 1581347403
+      intValue = 1202645115
    )
    @Export("price")
    public int price;
-   @ObfuscatedName("r")
+   @ObfuscatedName("j")
    @ObfuscatedGetter(
-      intValue = -2044645577
+      intValue = 774757347
    )
    @Export("totalQuantity")
    public int totalQuantity;
-   @ObfuscatedName("h")
+   @ObfuscatedName("k")
    @ObfuscatedGetter(
-      intValue = -1724518865
+      intValue = -1825065405
    )
    @Export("quantitySold")
    public int quantitySold;
-   @ObfuscatedName("d")
+   @ObfuscatedName("x")
    @ObfuscatedGetter(
-      intValue = 825894885
+      intValue = 2074004771
    )
    @Export("spent")
    public int spent;
@@ -64,11 +50,11 @@ public class GrandExchangeOffer {
    }
 
    @ObfuscatedSignature(
-      signature = "(Lgv;Z)V",
+      signature = "(Lgp;Z)V",
       garbageValue = "0"
    )
    public GrandExchangeOffer(Buffer var1, boolean var2) {
-      this.progress = var1.readByte();
+      this.state = var1.readByte();
       this.itemId = var1.readUnsignedShort();
       this.price = var1.readInt();
       this.totalQuantity = var1.readInt();
@@ -76,60 +62,74 @@ public class GrandExchangeOffer {
       this.spent = var1.readInt();
    }
 
-   @ObfuscatedName("y")
+   @ObfuscatedName("i")
    @ObfuscatedSignature(
-      signature = "(B)I",
-      garbageValue = "-1"
+      signature = "(I)I",
+      garbageValue = "-2098724091"
    )
    @Export("status")
    public int status() {
-      return this.progress & 7;
+      return this.state & 7;
    }
 
-   @ObfuscatedName("r")
+   @ObfuscatedName("o")
    @ObfuscatedSignature(
-      signature = "(I)I",
-      garbageValue = "1813185538"
+      signature = "(B)I",
+      garbageValue = "64"
    )
    @Export("type")
    public int type() {
-      return (this.progress & 8) == 8?1:0;
+      return (this.state & 8) == 8?1:0;
    }
 
-   @ObfuscatedName("h")
+   @ObfuscatedName("j")
    @ObfuscatedSignature(
-      signature = "(II)V",
-      garbageValue = "-1219711832"
+      signature = "(IB)V",
+      garbageValue = "8"
    )
-   void method101(int var1) {
-      this.progress &= -8;
-      this.progress = (byte)(this.progress | var1 & 7);
+   void method114(int var1) {
+      this.state &= -8;
+      this.state = (byte)(this.state | var1 & 7);
    }
 
-   @ObfuscatedName("d")
+   @ObfuscatedName("k")
    @ObfuscatedSignature(
       signature = "(II)V",
-      garbageValue = "2051474544"
+      garbageValue = "83382116"
    )
-   void method104(int var1) {
-      this.progress &= -9;
+   void method115(int var1) {
+      this.state &= -9;
       if(var1 == 1) {
-         this.progress = (byte)(this.progress | 8);
+         this.state = (byte)(this.state | 8);
       }
 
    }
 
-   @ObfuscatedName("v")
+   @ObfuscatedName("hp")
    @ObfuscatedSignature(
-      signature = "(Lgb;III)I",
-      garbageValue = "714913308"
+      signature = "(B)V",
+      garbageValue = "50"
    )
-   static int method113(IterableHashTable var0, int var1, int var2) {
-      if(var0 == null) {
-         return var2;
-      } else {
-         IntegerNode var3 = (IntegerNode)var0.get((long)var1);
-         return var3 == null?var2:var3.value;
-      }
+   static void method124() {
+      class45.method670();
+      Client.menuOptions[0] = "Cancel";
+      Client.menuTargets[0] = "";
+      Client.menuTypes[0] = 1006;
+      Client.menuBooleanArray[0] = false;
+      Client.menuOptionCount = 1;
+   }
+
+   @ObfuscatedName("kj")
+   @ObfuscatedSignature(
+      signature = "(IIIZI)V",
+      garbageValue = "2066232354"
+   )
+   public static void method125(int var0, int var1, int var2, boolean var3) {
+      PacketNode var4 = FaceNormal.method3078(ClientPacket.field2373, Client.field902.field1475);
+      var4.packetBuffer.method3670(var3?Client.field1009:0);
+      var4.packetBuffer.method3544(var2);
+      var4.packetBuffer.method3554(var1);
+      var4.packetBuffer.method3554(var0);
+      Client.field902.method2036(var4);
    }
 }

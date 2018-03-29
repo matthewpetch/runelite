@@ -30,20 +30,18 @@ import com.google.inject.Inject;
 import com.google.inject.Provides;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
+import net.runelite.api.events.ConfigChanged;
 import net.runelite.api.events.ScriptEvent;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 
 @PluginDescriptor(
-	name = "Camera zoom unlimiter"
+	name = "Camera Zoom"
 )
 @Slf4j
 public class ZoomPlugin extends Plugin
 {
-	private static final int INCREASED_RESIZABLE_ZOOM_LIMIT = 70;
-	private static final int INCREASED_FIXED_ZOOM_LIMIT = 95;
-
 	@Inject
 	private Client client;
 
@@ -59,26 +57,73 @@ public class ZoomPlugin extends Plugin
 	@Subscribe
 	public void onScriptEvent(ScriptEvent event)
 	{
-		if (!zoomConfig.enabled())
+		int[] intStack = client.getIntStack();
+		int intStackSize = client.getIntStackSize();
+		if (zoomConfig.outerLimit())
 		{
-			return;
+			switch (event.getEventName())
+			{
+				case "fixedOuterZoomLimit":
+					intStack[intStackSize - 1] = 95;
+					break;
+				case "resizableOuterZoomLimit":
+					intStack[intStackSize - 1] = 70;
+					break;
+			}
 		}
-
-		switch (event.getEventName())
+		if (zoomConfig.innerLimit())
 		{
-			case "fixedOuterZoomLimit":
-				popAndReplace(INCREASED_FIXED_ZOOM_LIMIT);
-				break;
-			case "resizableOuterZoomLimit":
-				popAndReplace(INCREASED_RESIZABLE_ZOOM_LIMIT);
-				break;
+			switch (event.getEventName())
+			{
+				case "fixedInnerZoomLimit":
+					intStack[intStackSize - 1] = 2100;
+					break;
+				case "resizableInnerZoomLimit":
+					intStack[intStackSize - 1] = 2200;
+					break;
+			}
+		}
+		if (zoomConfig.outerLimit() || zoomConfig.innerLimit())
+		{
+			// This lets the options panel's slider have an exponential rate
+			final double exponent = 3.d;
+			switch (event.getEventName())
+			{
+				case "zoomLinToExp":
+				{
+					double range = intStack[intStackSize - 1];
+					double value = intStack[intStackSize - 2];
+					value = Math.pow(value / range, exponent) * range;
+					intStack[intStackSize - 2] = (int) value;
+					break;
+				}
+				case "zoomExpToLin":
+				{
+					double range = intStack[intStackSize - 1];
+					double value = intStack[intStackSize - 2];
+					value = Math.pow(value / range, 1.d / exponent) * range;
+					intStack[intStackSize - 2] = (int) value;
+					break;
+				}
+			}
 		}
 	}
 
-	private void popAndReplace(int newValue)
+	@Override
+	protected void startUp()
 	{
-		int[] intStack = client.getIntStack();
-		int intStackSize = client.getIntStackSize();
-		intStack[intStackSize - 1] = newValue;
+		client.setCameraPitchRelaxerEnabled(zoomConfig.relaxCameraPitch());
+	}
+
+	@Override
+	protected void shutDown()
+	{
+		client.setCameraPitchRelaxerEnabled(false);
+	}
+
+	@Subscribe
+	public void onConfigChanged(ConfigChanged ev)
+	{
+		client.setCameraPitchRelaxerEnabled(zoomConfig.relaxCameraPitch());
 	}
 }

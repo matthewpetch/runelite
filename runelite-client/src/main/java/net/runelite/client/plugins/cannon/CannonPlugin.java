@@ -25,61 +25,90 @@
 package net.runelite.client.plugins.cannon;
 
 import com.google.common.eventbus.Subscribe;
-import com.google.inject.Binder;
 import com.google.inject.Provides;
+import java.awt.Color;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.inject.Inject;
+import lombok.Getter;
 import net.runelite.api.AnimationID;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
 import net.runelite.api.GameObject;
+import net.runelite.api.ItemID;
 import static net.runelite.api.ObjectID.CANNON_BASE;
-import net.runelite.api.Perspective;
 import net.runelite.api.Player;
 import net.runelite.api.Projectile;
 import static net.runelite.api.ProjectileID.CANNONBALL;
 import static net.runelite.api.ProjectileID.GRANITE_CANNONBALL;
+import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.ChatMessage;
-import net.runelite.api.events.GameObjectsChanged;
+import net.runelite.api.events.ConfigChanged;
+import net.runelite.api.events.GameObjectSpawned;
 import net.runelite.api.events.ProjectileMoved;
 import net.runelite.client.Notifier;
+import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
+import net.runelite.client.game.ItemManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.task.Schedule;
 import net.runelite.client.ui.overlay.Overlay;
+import net.runelite.client.ui.overlay.infobox.InfoBoxManager;
 
 @PluginDescriptor(
-	name = "Cannon plugin"
+	name = "Cannon"
 )
 public class CannonPlugin extends Plugin
 {
-	private static final Pattern LOAD_CANNON_PATTERN = Pattern.compile("([0-9]+)");
+	private static final Pattern NUMBER_PATTERN = Pattern.compile("([0-9]+)");
 	private static final int MAX_CBALLS = 30;
 
-	int cballsLeft = 0;
+	private CannonCounter counter;
 
-	boolean cannonPlaced = false;
+	@Getter
+	private int cballsLeft;
 
-	net.runelite.api.Point myCannon;
+	@Getter
+	private boolean cannonPlaced;
+
+	@Getter
+	private WorldPoint cannonPosition;
+
+	@Getter
+	private GameObject cannon;
+
+	@Getter
+	private List<WorldPoint> spotPoints = new ArrayList<>();
 
 	@Inject
-	Notifier notifier;
+	private ItemManager itemManager;
 
 	@Inject
-	CannonOverlay cannonOverlay;
+	private InfoBoxManager infoBoxManager;
 
 	@Inject
-	CannonConfig config;
+	private Notifier notifier;
+
+	@Inject
+	private CannonOverlay cannonOverlay;
+
+	@Inject
+	private CannonSpotOverlay cannonSpotOverlay;
+
+	@Inject
+	private CannonConfig config;
 
 	@Inject
 	private Client client;
 
-	@Override
-	public void configure(Binder binder)
-	{
-		binder.bind(CannonOverlay.class);
-	}
+	@Inject
+	private ClientThread clientThread;
 
 	@Provides
 	CannonConfig provideConfig(ConfigManager configManager)
@@ -88,13 +117,65 @@ public class CannonPlugin extends Plugin
 	}
 
 	@Override
-	public Overlay getOverlay()
+	public Collection<Overlay> getOverlays()
 	{
-		return cannonOverlay;
+		return Arrays.asList(cannonOverlay, cannonSpotOverlay);
+	}
+
+	@Override
+	protected void shutDown() throws Exception
+	{
+		cannonPlaced = false;
+		cannonPosition = null;
+		cballsLeft = 0;
+		removeCounter();
 	}
 
 	@Subscribe
-	public void onGameObjectsChanged(GameObjectsChanged event)
+	public void onConfigChanged(ConfigChanged event)
+	{
+		if (event.getGroup().equals("cannon"))
+		{
+			if (!config.showInfobox())
+			{
+				removeCounter();
+			}
+			else
+			{
+				if (cannonPlaced)
+				{
+					clientThread.invokeLater(this::addCounter);
+				}
+			}
+		}
+
+	}
+
+	@Schedule(
+		period = 1,
+		unit = ChronoUnit.SECONDS
+	)
+	public void checkSpots()
+	{
+		if (!config.showCannonSpots())
+		{
+			return;
+		}
+
+		spotPoints.clear();
+		for (WorldPoint spot : CannonSpots.getCannonSpots())
+		{
+			if (spot.getPlane() != client.getPlane() || !spot.isInScene(client))
+			{
+				continue;
+			}
+
+			spotPoints.add(spot);
+		}
+	}
+
+	@Subscribe
+	public void onGameObjectSpawned(GameObjectSpawned event)
 	{
 		GameObject gameObject = event.getGameObject();
 
@@ -104,7 +185,8 @@ public class CannonPlugin extends Plugin
 			if (localPlayer.getWorldLocation().distanceTo(gameObject.getWorldLocation()) <= 2
 				&& localPlayer.getAnimation() == AnimationID.BURYING_BONES)
 			{
-				myCannon = gameObject.getWorldLocation();
+				cannonPosition = gameObject.getWorldLocation();
+				cannon = gameObject;
 			}
 		}
 	}
@@ -114,12 +196,12 @@ public class CannonPlugin extends Plugin
 	{
 		Projectile projectile = event.getProjectile();
 
-		if ((projectile.getId() == CANNONBALL || projectile.getId() == GRANITE_CANNONBALL) && myCannon != null)
+		if ((projectile.getId() == CANNONBALL || projectile.getId() == GRANITE_CANNONBALL) && cannonPosition != null)
 		{
-			net.runelite.api.Point projectileLoc = Perspective.localToWorld(client, new net.runelite.api.Point(projectile.getX1(), projectile.getY1()));
+			WorldPoint projectileLoc = WorldPoint.fromLocal(client, projectile.getX1(), projectile.getY1(), client.getPlane());
 
 			//Check to see if projectile x,y is 0 else it will continuously decrease while ball is flying.
-			if (projectileLoc.equals(myCannon) && projectile.getX() == 0 && projectile.getY() == 0)
+			if (projectileLoc.equals(cannonPosition) && projectile.getX() == 0 && projectile.getY() == 0)
 			{
 				cballsLeft--;
 			}
@@ -137,6 +219,7 @@ public class CannonPlugin extends Plugin
 		if (event.getMessage().equals("You add the furnace."))
 		{
 			cannonPlaced = true;
+			addCounter();
 			cballsLeft = 0;
 		}
 
@@ -144,15 +227,16 @@ public class CannonPlugin extends Plugin
 		{
 			cannonPlaced = false;
 			cballsLeft = 0;
+			removeCounter();
 		}
 
 		if (event.getMessage().startsWith("You load the cannon with"))
 		{
-			Matcher m = LOAD_CANNON_PATTERN.matcher(event.getMessage());
+			Matcher m = NUMBER_PATTERN.matcher(event.getMessage());
 			if (m.find())
 			{
 				int amt = Integer.valueOf(m.group());
-				
+
 				// make sure cballs doesn't go above MAX_CBALLS
 				if (amt + cballsLeft > MAX_CBALLS)
 				{
@@ -179,5 +263,62 @@ public class CannonPlugin extends Plugin
 				notifier.notify("Your cannon is out of ammo!");
 			}
 		}
+
+		if (event.getMessage().contains("You unload your cannon and receive Cannonball"))
+		{
+			Matcher m = NUMBER_PATTERN.matcher(event.getMessage());
+			if (m.find())
+			{
+				int unload = Integer.valueOf(m.group());
+
+				// make sure cballs doesn't go below 0
+				if (cballsLeft - unload < 0)
+				{
+					cballsLeft = 0;
+				}
+				else
+				{
+					cballsLeft -= unload;
+				}
+			}
+		}
+	}
+
+	Color getStateColor()
+	{
+		if (cballsLeft > 15)
+		{
+			return Color.green;
+		}
+		else if (cballsLeft > 5)
+		{
+			return Color.orange;
+		}
+
+		return Color.red;
+	}
+
+	private void addCounter()
+	{
+		if (!config.showInfobox() || counter != null)
+		{
+			return;
+		}
+
+		counter = new CannonCounter(itemManager.getImage(ItemID.CANNONBALL), this);
+		counter.setTooltip("Cannonballs");
+
+		infoBoxManager.addInfoBox(counter);
+	}
+
+	private void removeCounter()
+	{
+		if (counter == null)
+		{
+			return;
+		}
+
+		infoBoxManager.removeInfoBox(counter);
+		counter = null;
 	}
 }

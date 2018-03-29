@@ -1,131 +1,83 @@
-import java.io.InputStream;
-import java.io.OutputStreamWriter;
-import java.net.URL;
-import java.net.URLConnection;
-import net.runelite.mapping.Export;
-import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("eb")
-public enum class150 implements Enumerated {
-   @ObfuscatedName("n")
-   @ObfuscatedSignature(
-      signature = "Leb;"
-   )
-   field2111(0, 0),
-   @ObfuscatedName("v")
-   @ObfuscatedSignature(
-      signature = "Leb;"
-   )
-   field2106(2, 1),
-   @ObfuscatedName("y")
-   @ObfuscatedSignature(
-      signature = "Leb;"
-   )
-   field2107(1, 2),
-   @ObfuscatedName("r")
-   @ObfuscatedSignature(
-      signature = "Leb;"
-   )
-   field2108(3, 3);
+@ObfuscatedName("eo")
+public class class150 extends class297 {
+   @ObfuscatedName("c")
+   final boolean field2125;
 
-   @ObfuscatedName("du")
-   @ObfuscatedGetter(
-      intValue = 1621142415
-   )
-   @Export("port2")
-   static int port2;
-   @ObfuscatedName("h")
-   @ObfuscatedGetter(
-      intValue = 810031425
-   )
-   public final int field2109;
-   @ObfuscatedName("d")
-   @ObfuscatedGetter(
-      intValue = -1493067457
-   )
-   final int field2105;
-
-   class150(int var3, int var4) {
-      this.field2109 = var3;
-      this.field2105 = var4;
+   public class150(boolean var1) {
+      this.field2125 = var1;
    }
 
-   @ObfuscatedName("n")
+   @ObfuscatedName("c")
    @ObfuscatedSignature(
-      signature = "(I)I",
-      garbageValue = "2130441585"
+      signature = "(Lke;Lke;B)I",
+      garbageValue = "-68"
    )
-   public int rsOrdinal() {
-      return this.field2105;
+   int method3128(ChatPlayer var1, ChatPlayer var2) {
+      return Client.world == var1.world && var2.world == Client.world?(this.field2125?var1.method5260().method5441(var2.method5260()):var2.method5260().method5441(var1.method5260())):this.method5288(var1, var2);
    }
 
-   @ObfuscatedName("n")
-   @ObfuscatedSignature(
-      signature = "(B)J",
-      garbageValue = "105"
-   )
-   static long method2992() {
-      try {
-         URL var0 = new URL(Actor.method1573("services", false) + "m=accountappeal/login.ws");
-         URLConnection var1 = var0.openConnection();
-         var1.setRequestProperty("connection", "close");
-         var1.setDoInput(true);
-         var1.setDoOutput(true);
-         var1.setConnectTimeout(5000);
-         OutputStreamWriter var2 = new OutputStreamWriter(var1.getOutputStream());
-         var2.write("data1=req");
-         var2.flush();
-         InputStream var3 = var1.getInputStream();
-         Buffer var4 = new Buffer(new byte[1000]);
-
-         do {
-            int var5 = var3.read(var4.payload, var4.offset, 1000 - var4.offset);
-            if(var5 == -1) {
-               var4.offset = 0;
-               long var7 = var4.readLong();
-               return var7;
-            }
-
-            var4.offset += var5;
-         } while(var4.offset < 1000);
-
-         return 0L;
-      } catch (Exception var9) {
-         return 0L;
-      }
+   public int compare(Object var1, Object var2) {
+      return this.method3128((ChatPlayer)var1, (ChatPlayer)var2);
    }
 
-   @ObfuscatedName("v")
+   @ObfuscatedName("u")
    @ObfuscatedSignature(
-      signature = "(IB)Ljy;",
-      garbageValue = "0"
+      signature = "(ILcx;ZB)I",
+      garbageValue = "14"
    )
-   @Export("getOverlayDefinition")
-   public static Overlay getOverlayDefinition(int var0) {
-      Overlay var1 = (Overlay)Overlay.overlays.get((long)var0);
-      if(var1 != null) {
-         return var1;
+   static int method3133(int var0, Script var1, boolean var2) {
+      if(var0 == 3200) {
+         SceneTilePaint.intStackSize -= 3;
+         Permission.method4531(class81.intStack[SceneTilePaint.intStackSize], class81.intStack[SceneTilePaint.intStackSize + 1], class81.intStack[SceneTilePaint.intStackSize + 2]);
+         return 1;
+      } else if(var0 != 3201) {
+         if(var0 == 3202) {
+            SceneTilePaint.intStackSize -= 2;
+            class95.method2006(class81.intStack[SceneTilePaint.intStackSize], class81.intStack[SceneTilePaint.intStackSize + 1]);
+            return 1;
+         } else {
+            return 2;
+         }
       } else {
-         byte[] var2 = Overlay.overlay_ref.getConfigData(4, var0);
-         var1 = new Overlay();
-         if(var2 != null) {
-            var1.decode(new Buffer(var2), var0);
+         int var3 = class81.intStack[--SceneTilePaint.intStackSize];
+         if(var3 == -1 && !Client.field1090) {
+            class229.field2679.method4150();
+            class229.field2680 = 1;
+            class61.field714 = null;
+         } else if(var3 != -1 && var3 != Client.field1089 && Client.field1044 != 0 && !Client.field1090) {
+            CacheFile.method2509(2, class1.indexTrack1, var3, 0, Client.field1044, false);
          }
 
-         var1.post();
-         Overlay.overlays.put(var1, (long)var0);
-         return var1;
+         Client.field1089 = var3;
+         return 1;
       }
    }
 
-   @ObfuscatedName("r")
+   @ObfuscatedName("fc")
    @ObfuscatedSignature(
-      signature = "(I)[Lid;",
-      garbageValue = "-197419366"
+      signature = "(B)Lli;",
+      garbageValue = "23"
    )
-   public static JagexGame[] method2990() {
-      return new JagexGame[]{JagexGame.field3290, JagexGame.field3292, JagexGame.field3293, JagexGame.field3289, JagexGame.field3294, JagexGame.field3291};
+   static RenderOverview method3134() {
+      return ScriptState.renderOverview;
+   }
+
+   @ObfuscatedName("fn")
+   @ObfuscatedSignature(
+      signature = "(I)V",
+      garbageValue = "1874926418"
+   )
+   static final void method3132() {
+      if(Client.field903 > 0) {
+         FriendManager.method1722();
+      } else {
+         Client.field1050.method5211();
+         MapIconReference.setGameState(40);
+         ContextMenuRow.field1324 = Client.field902.getSocket();
+         Client.field902.method2038();
+      }
    }
 }

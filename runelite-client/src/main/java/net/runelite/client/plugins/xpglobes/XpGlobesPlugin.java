@@ -25,9 +25,9 @@
 package net.runelite.client.plugins.xpglobes;
 
 import com.google.common.eventbus.Subscribe;
-import com.google.inject.Binder;
 import com.google.inject.Provides;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -35,15 +35,16 @@ import javax.inject.Inject;
 import net.runelite.api.Client;
 import net.runelite.api.Experience;
 import net.runelite.api.Skill;
-import net.runelite.client.config.ConfigManager;
 import net.runelite.api.events.ExperienceChanged;
 import net.runelite.api.events.GameStateChanged;
+import net.runelite.client.config.ConfigManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.task.Schedule;
 import net.runelite.client.ui.overlay.Overlay;
 
 @PluginDescriptor(
-	name = "XP globes plugin"
+	name = "XP Globes"
 )
 public class XpGlobesPlugin extends Plugin
 {
@@ -54,19 +55,13 @@ public class XpGlobesPlugin extends Plugin
 	private final List<XpGlobe> xpGlobes = new ArrayList<>();
 
 	@Inject
-	Client client;
+	private Client client;
 
 	@Inject
-	XpGlobesConfig config;
+	private XpGlobesConfig config;
 
 	@Inject
-	XpGlobesOverlay overlay;
-
-	@Override
-	public void configure(Binder binder)
-	{
-		binder.bind(XpGlobesOverlay.class);
-	}
+	private XpGlobesOverlay overlay;
 
 	@Provides
 	XpGlobesConfig getConfig(ConfigManager configManager)
@@ -83,11 +78,6 @@ public class XpGlobesPlugin extends Plugin
 	@Subscribe
 	public void onExperienceChanged(ExperienceChanged event)
 	{
-		if (!config.enabled())
-		{
-			return;
-		}
-
 		Skill skill = event.getSkill();
 		int currentXp = client.getSkillExperience(skill);
 		int currentLevel = Experience.getLevelForXp(currentXp);
@@ -145,6 +135,10 @@ public class XpGlobesPlugin extends Plugin
 		return xpGlobes.size();
 	}
 
+	@Schedule(
+		period = 1,
+		unit = ChronoUnit.SECONDS
+	)
 	public void removeExpiredXpGlobes()
 	{
 		if (!xpGlobes.isEmpty())

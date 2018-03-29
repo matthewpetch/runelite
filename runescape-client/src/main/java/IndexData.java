@@ -5,130 +5,125 @@ import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("if")
+@ObfuscatedName("js")
 @Implements("IndexData")
 public class IndexData extends IndexDataBase {
-   @ObfuscatedName("q")
+   @ObfuscatedName("al")
    @Export("crc32")
    static CRC32 crc32;
-   @ObfuscatedName("gx")
-   @ObfuscatedGetter(
-      intValue = 791486435
-   )
-   static int field3340;
-   @ObfuscatedName("x")
+   @ObfuscatedName("q")
    @ObfuscatedSignature(
-      signature = "Lfv;"
+      signature = "Lfa;"
    )
    @Export("indexStore")
    IndexFile indexStore;
-   @ObfuscatedName("l")
+   @ObfuscatedName("g")
    @ObfuscatedSignature(
-      signature = "Lfv;"
+      signature = "Lfa;"
    )
    @Export("referenceStore")
    IndexFile referenceStore;
-   @ObfuscatedName("j")
+   @ObfuscatedName("y")
    @ObfuscatedGetter(
-      intValue = 1609893325
+      intValue = -354438501
    )
    @Export("index")
    int index;
-   @ObfuscatedName("g")
-   volatile boolean field3336;
-   @ObfuscatedName("c")
-   boolean field3334;
-   @ObfuscatedName("k")
+   @ObfuscatedName("s")
+   volatile boolean field3396;
+   @ObfuscatedName("ac")
+   boolean field3397;
+   @ObfuscatedName("ap")
    @Export("validArchives")
    volatile boolean[] validArchives;
-   @ObfuscatedName("ac")
+   @ObfuscatedName("ai")
    @ObfuscatedGetter(
-      intValue = -212414243
+      intValue = 541984573
    )
    @Export("crcValue")
    int crcValue;
-   @ObfuscatedName("aw")
+   @ObfuscatedName("ab")
    @ObfuscatedGetter(
-      intValue = 113742419
+      intValue = -2034816883
    )
    @Export("indexReferenceVersion")
    int indexReferenceVersion;
-   @ObfuscatedName("at")
+   @ObfuscatedName("ak")
    @ObfuscatedGetter(
-      intValue = -1812688073
+      intValue = 1163552289
    )
-   int field3342;
+   int field3402;
 
    static {
       crc32 = new CRC32();
    }
 
    @ObfuscatedSignature(
-      signature = "(Lfv;Lfv;IZZZ)V"
+      signature = "(Lfa;Lfa;IZZZ)V"
    )
    public IndexData(IndexFile var1, IndexFile var2, int var3, boolean var4, boolean var5, boolean var6) {
       super(var4, var5);
-      this.field3336 = false;
-      this.field3334 = false;
-      this.field3342 = -1;
+      this.field3396 = false;
+      this.field3397 = false;
+      this.field3402 = -1;
       this.indexStore = var1;
       this.referenceStore = var2;
       this.index = var3;
-      this.field3334 = var6;
-      FrameMap.method2743(this, this.index);
+      this.field3397 = var6;
+      AbstractSoundSystem.method2241(this, this.index);
    }
 
-   @ObfuscatedName("v")
+   @ObfuscatedName("i")
    @ObfuscatedSignature(
-      signature = "(IB)V",
-      garbageValue = "34"
+      signature = "(II)V",
+      garbageValue = "448107719"
    )
-   void vmethod4415(int var1) {
+   void vmethod4661(int var1) {
       int var2 = this.index;
       long var3 = (long)((var2 << 16) + var1);
-      FileRequest var5 = (FileRequest)class249.NetCache_pendingWrites.get(var3);
+      FileRequest var5 = (FileRequest)class264.NetCache_pendingWrites.get(var3);
       if(var5 != null) {
-         class249.NetCache_pendingWritesQueue.setHead(var5);
+         class264.NetCache_pendingWritesQueue.setHead(var5);
       }
 
    }
 
-   @ObfuscatedName("e")
+   @ObfuscatedName("w")
    @ObfuscatedSignature(
-      signature = "(II)I",
-      garbageValue = "643031408"
+      signature = "(IB)I",
+      garbageValue = "-6"
    )
    int archiveLoadPercent(int var1) {
-      return super.archives[var1] != null?100:(this.validArchives[var1]?100:class22.method163(this.index, var1));
+      return super.archives[var1] != null?100:(this.validArchives[var1]?100:ScriptVarType.method29(this.index, var1));
    }
 
-   @ObfuscatedName("o")
+   @ObfuscatedName("b")
    @ObfuscatedSignature(
-      signature = "(IB)V",
-      garbageValue = "43"
+      signature = "(II)V",
+      garbageValue = "-1509535835"
    )
    void loadArchive(int var1) {
       if(this.indexStore != null && this.validArchives != null && this.validArchives[var1]) {
-         GameSocket.method3180(var1, this.indexStore, this);
+         PlayerComposition.method4436(var1, this.indexStore, this);
       } else {
-         class56.requestNetFile(this, this.index, var1, super.archiveCrcs[var1], (byte)2, true);
+         Frames.requestNetFile(this, this.index, var1, super.archiveCrcs[var1], (byte)2, true);
       }
 
    }
 
-   @ObfuscatedName("cg")
+   @ObfuscatedName("dz")
    @ObfuscatedSignature(
       signature = "(B)I",
-      garbageValue = "40"
+      garbageValue = "1"
    )
    @Export("percentage")
    public int percentage() {
-      if(this.field3336) {
+      if(this.field3396) {
          return 100;
       } else if(super.archives != null) {
          return 99;
       } else {
-         int var1 = class22.method163(255, this.index);
+         int var1 = ScriptVarType.method29(255, this.index);
          if(var1 >= 100) {
             var1 = 99;
          }
@@ -137,37 +132,37 @@ public class IndexData extends IndexDataBase {
       }
    }
 
-   @ObfuscatedName("ca")
+   @ObfuscatedName("dn")
    @ObfuscatedSignature(
       signature = "(III)V",
-      garbageValue = "-1895764078"
+      garbageValue = "1641020422"
    )
    @Export("setInformation")
-   public void setInformation(int var1, int var2) {
+   void setInformation(int var1, int var2) {
       this.crcValue = var1;
       this.indexReferenceVersion = var2;
       if(this.referenceStore != null) {
-         GameSocket.method3180(this.index, this.referenceStore, this);
+         PlayerComposition.method4436(this.index, this.referenceStore, this);
       } else {
-         class56.requestNetFile(this, 255, this.index, this.crcValue, (byte)0, true);
+         Frames.requestNetFile(this, 255, this.index, this.crcValue, (byte)0, true);
       }
 
    }
 
-   @ObfuscatedName("cw")
+   @ObfuscatedName("dh")
    @ObfuscatedSignature(
-      signature = "(I[BZZB)V",
-      garbageValue = "22"
+      signature = "(I[BZZI)V",
+      garbageValue = "213768222"
    )
    @Export("write")
-   public void write(int var1, byte[] var2, boolean var3, boolean var4) {
+   void write(int var1, byte[] var2, boolean var3, boolean var4) {
       if(var3) {
-         if(this.field3336) {
+         if(this.field3396) {
             throw new RuntimeException();
          }
 
          if(this.referenceStore != null) {
-            ClientPacket.method3245(this.index, var2, this.referenceStore);
+            Widget.method4455(this.index, var2, this.referenceStore);
          }
 
          this.setIndexReference(var2);
@@ -176,38 +171,38 @@ public class IndexData extends IndexDataBase {
          var2[var2.length - 2] = (byte)(super.archiveRevisions[var1] >> 8);
          var2[var2.length - 1] = (byte)super.archiveRevisions[var1];
          if(this.indexStore != null) {
-            ClientPacket.method3245(var1, var2, this.indexStore);
+            Widget.method4455(var1, var2, this.indexStore);
             this.validArchives[var1] = true;
          }
 
          if(var4) {
-            super.archives[var1] = ClanMember.byteArrayToObject(var2, false);
+            super.archives[var1] = class61.byteArrayToObject(var2, false);
          }
       }
 
    }
 
-   @ObfuscatedName("co")
+   @ObfuscatedName("dl")
    @ObfuscatedSignature(
-      signature = "(Lfv;I[BZI)V",
-      garbageValue = "-1932977974"
+      signature = "(Lfa;I[BZI)V",
+      garbageValue = "641054848"
    )
    @Export("load")
-   void load(IndexFile var1, int var2, byte[] var3, boolean var4) {
+   public void load(IndexFile var1, int var2, byte[] var3, boolean var4) {
       int var5;
       if(var1 == this.referenceStore) {
-         if(this.field3336) {
+         if(this.field3396) {
             throw new RuntimeException();
          } else if(var3 == null) {
-            class56.requestNetFile(this, 255, this.index, this.crcValue, (byte)0, true);
+            Frames.requestNetFile(this, 255, this.index, this.crcValue, (byte)0, true);
          } else {
             crc32.reset();
             crc32.update(var3, 0, var3.length);
             var5 = (int)crc32.getValue();
             if(var5 != this.crcValue) {
-               class56.requestNetFile(this, 255, this.index, this.crcValue, (byte)0, true);
+               Frames.requestNetFile(this, 255, this.index, this.crcValue, (byte)0, true);
             } else {
-               Buffer var9 = new Buffer(CacheFile.decodeContainer(var3));
+               Buffer var9 = new Buffer(class5.decodeContainer(var3));
                int var7 = var9.readUnsignedByte();
                if(var7 != 5 && var7 != 6) {
                   throw new RuntimeException(var7 + "," + this.index + "," + var2);
@@ -218,7 +213,7 @@ public class IndexData extends IndexDataBase {
                   }
 
                   if(var8 != this.indexReferenceVersion) {
-                     class56.requestNetFile(this, 255, this.index, this.crcValue, (byte)0, true);
+                     Frames.requestNetFile(this, 255, this.index, this.crcValue, (byte)0, true);
                   } else {
                      this.setIndexReference(var3);
                      this.loadAllLocal();
@@ -227,8 +222,8 @@ public class IndexData extends IndexDataBase {
             }
          }
       } else {
-         if(!var4 && var2 == this.field3342) {
-            this.field3336 = true;
+         if(!var4 && var2 == this.field3402) {
+            this.field3396 = true;
          }
 
          if(var3 != null && var3.length > 2) {
@@ -239,30 +234,30 @@ public class IndexData extends IndexDataBase {
             if(var5 == super.archiveCrcs[var2] && var6 == super.archiveRevisions[var2]) {
                this.validArchives[var2] = true;
                if(var4) {
-                  super.archives[var2] = ClanMember.byteArrayToObject(var3, false);
+                  super.archives[var2] = class61.byteArrayToObject(var3, false);
                }
 
             } else {
                this.validArchives[var2] = false;
-               if(this.field3334 || var4) {
-                  class56.requestNetFile(this, this.index, var2, super.archiveCrcs[var2], (byte)2, var4);
+               if(this.field3397 || var4) {
+                  Frames.requestNetFile(this, this.index, var2, super.archiveCrcs[var2], (byte)2, var4);
                }
 
             }
          } else {
             this.validArchives[var2] = false;
-            if(this.field3334 || var4) {
-               class56.requestNetFile(this, this.index, var2, super.archiveCrcs[var2], (byte)2, var4);
+            if(this.field3397 || var4) {
+               Frames.requestNetFile(this, this.index, var2, super.archiveCrcs[var2], (byte)2, var4);
             }
 
          }
       }
    }
 
-   @ObfuscatedName("dq")
+   @ObfuscatedName("dm")
    @ObfuscatedSignature(
-      signature = "(B)V",
-      garbageValue = "0"
+      signature = "(S)V",
+      garbageValue = "180"
    )
    @Export("loadAllLocal")
    void loadAllLocal() {
@@ -274,28 +269,46 @@ public class IndexData extends IndexDataBase {
       }
 
       if(this.indexStore == null) {
-         this.field3336 = true;
+         this.field3396 = true;
       } else {
-         this.field3342 = -1;
+         this.field3402 = -1;
 
          for(var1 = 0; var1 < this.validArchives.length; ++var1) {
             if(super.archiveNumberOfFiles[var1] > 0) {
-               class163.method3168(var1, this.indexStore, this);
-               this.field3342 = var1;
+               class228.method4120(var1, this.indexStore, this);
+               this.field3402 = var1;
             }
          }
 
-         if(this.field3342 == -1) {
-            this.field3336 = true;
+         if(this.field3402 == -1) {
+            this.field3396 = true;
          }
 
       }
    }
 
-   @ObfuscatedName("dj")
+   @ObfuscatedName("dv")
+   @ObfuscatedSignature(
+      signature = "(II)Z",
+      garbageValue = "1121534647"
+   )
+   public boolean method4675(int var1) {
+      return this.validArchives[var1];
+   }
+
+   @ObfuscatedName("dr")
+   @ObfuscatedSignature(
+      signature = "(IB)Z",
+      garbageValue = "1"
+   )
+   public boolean method4690(int var1) {
+      return this.getChilds(var1) != null;
+   }
+
+   @ObfuscatedName("ds")
    @ObfuscatedSignature(
       signature = "(I)I",
-      garbageValue = "-159741000"
+      garbageValue = "-5165968"
    )
    @Export("loadPercent")
    public int loadPercent() {
@@ -316,5 +329,19 @@ public class IndexData extends IndexDataBase {
          var3 = var2 * 100 / var1;
          return var3;
       }
+   }
+
+   @ObfuscatedName("c")
+   public static double method4664(double var0) {
+      return Math.exp(-var0 * var0 / 2.0D) / Math.sqrt(6.283185307179586D);
+   }
+
+   @ObfuscatedName("u")
+   @ObfuscatedSignature(
+      signature = "(I)V",
+      garbageValue = "-877036130"
+   )
+   static final void method4694() {
+      class47.method743("You can\'t add yourself to your own ignore list");
    }
 }

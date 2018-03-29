@@ -24,7 +24,7 @@
  */
 grammar rs2asm;
 
-prog: (header NEWLINE)* (line NEWLINE)+ ;
+prog: (header NEWLINE+)* (line NEWLINE+)+ ;
 
 header: id | int_stack_count | string_stack_count | int_var_count | string_var_count ;
 
@@ -57,7 +57,7 @@ switch_lookup: switch_key ':' switch_value ;
 switch_key: INT ;
 switch_value: 'LABEL' INT ;
 
-NEWLINE: '\n'+ ;
+NEWLINE: ( '\r' | '\n' )+ ;
 INT: '-'? [0-9]+ ;
 QSTRING: '"' (~('"' | '\\' | '\r' | '\n') | '\\' ('"' | '\\'))* '"' ;
 INSTRUCTION: [a-z0-9_]+ ;

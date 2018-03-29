@@ -27,11 +27,11 @@ package net.runelite.client.plugins.xptracker;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.io.IOException;
-import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -39,7 +39,9 @@ import javax.swing.SwingUtilities;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.Skill;
+import net.runelite.client.game.SkillIconManager;
 import net.runelite.client.ui.PluginPanel;
+import net.runelite.client.util.StackFormatter;
 
 @Slf4j
 class XpPanel extends PluginPanel
@@ -48,8 +50,7 @@ class XpPanel extends PluginPanel
 	private final JLabel totalXpGained = new JLabel();
 	private final JLabel totalXpHr = new JLabel();
 
-
-	XpPanel(Client client)
+	XpPanel(XpTrackerPlugin xpTrackerPlugin, Client client, SkillIconManager iconManager)
 	{
 		super();
 
@@ -78,7 +79,7 @@ class XpPanel extends PluginPanel
 		layoutPanel.add(totalPanel, BorderLayout.NORTH);
 
 		final JPanel infoBoxPanel = new JPanel();
-		infoBoxPanel.setLayout(new GridLayout(0, 1, 0, 3));
+		infoBoxPanel.setLayout(new BoxLayout(infoBoxPanel, BoxLayout.Y_AXIS));
 		layoutPanel.add(infoBoxPanel, BorderLayout.CENTER);
 
 		try
@@ -90,7 +91,7 @@ class XpPanel extends PluginPanel
 					break;
 				}
 
-				infoBoxes.put(skill, new XpInfoBox(client, infoBoxPanel, new SkillXPInfo(skill)));
+				infoBoxes.put(skill, new XpInfoBox(client, infoBoxPanel, xpTrackerPlugin.getSkillXpInfo(skill), iconManager));
 			}
 		}
 		catch (IOException e)
@@ -139,7 +140,17 @@ class XpPanel extends PluginPanel
 
 	static String formatLine(double number, String description)
 	{
+		String numberStr;
+		if (number < 100000)
+		{
+			numberStr = StackFormatter.formatNumber(number);
+		}
+		else
+		{
+			int num = (int) (Math.log(number) / Math.log(1000));
+			numberStr = String.format("%.1f%c", number / Math.pow(1000, num), "KMB".charAt(num - 1));
+		}
 
-		return NumberFormat.getInstance().format(number) + " " + description;
+		return numberStr + " " + description;
 	}
 }

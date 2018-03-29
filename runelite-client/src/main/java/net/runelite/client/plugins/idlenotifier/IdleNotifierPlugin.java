@@ -25,14 +25,23 @@
  */
 package net.runelite.client.plugins.idlenotifier;
 
+import com.google.common.eventbus.Subscribe;
+import com.google.inject.Provides;
+import java.time.Duration;
+import java.time.Instant;
+import javax.inject.Inject;
+import net.runelite.api.Actor;
 import static net.runelite.api.AnimationID.COOKING_FIRE;
 import static net.runelite.api.AnimationID.COOKING_RANGE;
 import static net.runelite.api.AnimationID.CRAFTING_GLASSBLOWING;
 import static net.runelite.api.AnimationID.CRAFTING_SPINNING;
+import static net.runelite.api.AnimationID.FISHING_BARBTAIL_HARPOON;
 import static net.runelite.api.AnimationID.FISHING_CAGE;
+import static net.runelite.api.AnimationID.FISHING_DRAGON_HARPOON;
 import static net.runelite.api.AnimationID.FISHING_HARPOON;
 import static net.runelite.api.AnimationID.FISHING_KARAMBWAN;
 import static net.runelite.api.AnimationID.FISHING_NET;
+import static net.runelite.api.AnimationID.FISHING_OILY_ROD;
 import static net.runelite.api.AnimationID.FISHING_POLE_CAST;
 import static net.runelite.api.AnimationID.FLETCHING_BOW_CUTTING;
 import static net.runelite.api.AnimationID.FLETCHING_STRING_MAGIC_LONGBOW;
@@ -90,12 +99,6 @@ import static net.runelite.api.AnimationID.WOODCUTTING_IRON;
 import static net.runelite.api.AnimationID.WOODCUTTING_MITHRIL;
 import static net.runelite.api.AnimationID.WOODCUTTING_RUNE;
 import static net.runelite.api.AnimationID.WOODCUTTING_STEEL;
-import com.google.common.eventbus.Subscribe;
-import com.google.inject.Provides;
-import java.time.Duration;
-import java.time.Instant;
-import javax.inject.Inject;
-import net.runelite.api.Actor;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
 import net.runelite.api.Player;
@@ -107,10 +110,9 @@ import net.runelite.client.Notifier;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
-import net.runelite.client.ui.ClientUI;
 
 @PluginDescriptor(
-	name = "Idle notifier plugin"
+	name = "Idle Notifier"
 )
 public class IdleNotifierPlugin extends Plugin
 {
@@ -118,22 +120,17 @@ public class IdleNotifierPlugin extends Plugin
 	private static final Duration SIX_HOUR_LOGOUT_WARNING_AFTER_DURATION = Duration.ofMinutes(340);
 
 	@Inject
-	Notifier notifier;
+	private Notifier notifier;
 
 	@Inject
-	ClientUI gui;
+	private Client client;
 
 	@Inject
-	Client client;
-
-	@Inject
-	IdleNotifierConfig config;
+	private IdleNotifierConfig config;
 
 	private Actor lastOpponent;
 	private Instant lastAnimating;
 	private Instant lastInteracting;
-	private Instant lastHitpoints;
-	private Instant lastPrayer;
 	private boolean notifyIdle = false;
 	private boolean notifyHitpoints = true;
 	private boolean notifyPrayer = true;
@@ -152,7 +149,7 @@ public class IdleNotifierPlugin extends Plugin
 	@Subscribe
 	public void onAnimationChanged(AnimationChanged event)
 	{
-		if (!config.isEnabled() || client.getGameState() != GameState.LOGGED_IN)
+		if (client.getGameState() != GameState.LOGGED_IN)
 		{
 			return;
 		}
@@ -210,8 +207,11 @@ public class IdleNotifierPlugin extends Plugin
 			/* Fishing */
 			case FISHING_NET:
 			case FISHING_HARPOON:
+			case FISHING_BARBTAIL_HARPOON:
+			case FISHING_DRAGON_HARPOON:
 			case FISHING_CAGE:
 			case FISHING_POLE_CAST:
+			case FISHING_OILY_ROD:
 			case FISHING_KARAMBWAN:
 			/* Mining(Normal) */
 			case MINING_BRONZE_PICKAXE:
@@ -274,51 +274,51 @@ public class IdleNotifierPlugin extends Plugin
 	public void onGameTick(GameTick event)
 	{
 		final Player local = client.getLocalPlayer();
-		final Duration waitDuration = Duration.ofMillis(config.getTimeout());
+		final Duration waitDuration = Duration.ofMillis(config.getIdleNotificationDelay());
 
-		if (!config.isEnabled() || client.getGameState() != GameState.LOGGED_IN || local == null)
+		if (client.getGameState() != GameState.LOGGED_IN || local == null)
 		{
 			return;
 		}
 
 		if (checkIdleLogout())
 		{
-			sendNotification("[" + local.getName() + "] is about to log out from idling too long!");
+			notifier.notify("[" + local.getName() + "] is about to log out from idling too long!");
 		}
 
 		if (check6hrLogout())
 		{
-			sendNotification("[" + local.getName() + "] is about to log out from being online for 6 hours!");
+			notifier.notify("[" + local.getName() + "] is about to log out from being online for 6 hours!");
 		}
 
-		if (checkAnimationIdle(waitDuration, local))
+		if (config.animationIdle() && checkAnimationIdle(waitDuration, local))
 		{
-			sendNotification("[" + local.getName() + "] is now idle!");
+			notifier.notify("[" + local.getName() + "] is now idle!");
 		}
 
-		if (checkOutOfCombat(waitDuration, local))
+		if (config.combatIdle() && checkOutOfCombat(waitDuration, local))
 		{
-			sendNotification("[" + local.getName() + "] is now out of combat!");
+			notifier.notify("[" + local.getName() + "] is now out of combat!");
 		}
 
-		if (checkLowHitpoints(waitDuration))
+		if (checkLowHitpoints())
 		{
-			sendNotification("[" + local.getName() + "] has low hitpoints!");
+			notifier.notify("[" + local.getName() + "] has low hitpoints!");
 		}
 
-		if (checkLowPrayer(waitDuration))
+		if (checkLowPrayer())
 		{
-			sendNotification("[" + local.getName() + "] has low prayer!");
+			notifier.notify("[" + local.getName() + "] has low prayer!");
 		}
 	}
 
-	private boolean checkLowHitpoints(Duration waitDuration)
+	private boolean checkLowHitpoints()
 	{
 		if (client.getRealSkillLevel(Skill.HITPOINTS) > config.getHitpointsThreshold())
 		{
 			if (client.getBoostedSkillLevel(Skill.HITPOINTS) <= config.getHitpointsThreshold())
 			{
-				if (!notifyHitpoints && Instant.now().compareTo(lastHitpoints.plus(waitDuration)) >= 0)
+				if (!notifyHitpoints)
 				{
 					notifyHitpoints = true;
 					return true;
@@ -326,7 +326,6 @@ public class IdleNotifierPlugin extends Plugin
 			}
 			else
 			{
-				lastHitpoints = Instant.now();
 				notifyHitpoints = false;
 			}
 		}
@@ -334,13 +333,13 @@ public class IdleNotifierPlugin extends Plugin
 		return false;
 	}
 
-	private boolean checkLowPrayer(Duration waitDuration)
+	private boolean checkLowPrayer()
 	{
 		if (client.getRealSkillLevel(Skill.PRAYER) > config.getPrayerThreshold())
 		{
 			if (client.getBoostedSkillLevel(Skill.PRAYER) <= config.getPrayerThreshold())
 			{
-				if (!notifyPrayer && Instant.now().compareTo(lastPrayer.plus(waitDuration)) >= 0)
+				if (!notifyPrayer)
 				{
 					notifyPrayer = true;
 					return true;
@@ -348,7 +347,6 @@ public class IdleNotifierPlugin extends Plugin
 			}
 			else
 			{
-				lastPrayer = Instant.now();
 				notifyPrayer = false;
 			}
 		}
@@ -363,8 +361,7 @@ public class IdleNotifierPlugin extends Plugin
 
 		if (opponent != null
 			&& !isPlayer
-			&& opponent.getCombatLevel() > 0
-			&& opponent.getHealth() != -1)
+			&& opponent.getCombatLevel() > 0)
 		{
 			resetTimers();
 			lastOpponent = opponent;
@@ -409,6 +406,11 @@ public class IdleNotifierPlugin extends Plugin
 
 	private boolean check6hrLogout()
 	{
+		if (sixHourWarningTime == null)
+		{
+			return false;
+		}
+
 		if (Instant.now().compareTo(sixHourWarningTime) >= 0)
 		{
 			if (notify6HourLogout)
@@ -445,22 +447,6 @@ public class IdleNotifierPlugin extends Plugin
 		}
 
 		return false;
-	}
-
-	private void sendNotification(String message)
-	{
-		if (!config.alertWhenFocused() && gui.isFocused())
-		{
-			return;
-		}
-		if (config.requestFocus())
-		{
-			gui.requestFocus();
-		}
-		if (config.sendTrayNotification())
-		{
-			notifier.notify(message);
-		}
 	}
 
 	private void resetTimers()

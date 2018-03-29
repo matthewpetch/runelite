@@ -25,7 +25,11 @@
 package net.runelite.client.callback;
 
 import com.google.common.eventbus.EventBus;
-import net.runelite.api.Script;
+import java.awt.Graphics;
+import net.runelite.api.MainBufferProvider;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
 import org.slf4j.Logger;
 
 /**
@@ -39,7 +43,62 @@ public class Hooks
 
 	public static EventBus eventBus;
 
-	public static int runeliteExecute(int opcode, Script script, boolean isOne)
+	public static void draw(MainBufferProvider mainBufferProvider, Graphics graphics, int x, int y)
+	{
+		throw new IllegalStateException();
+	}
+
+	public static MouseEvent mousePressed(MouseEvent mouseEvent)
+	{
+		throw new RuntimeException();
+	}
+
+	public static MouseEvent mouseReleased(MouseEvent mouseEvent)
+	{
+		throw new RuntimeException();
+	}
+
+	public static MouseEvent mouseClicked(MouseEvent mouseEvent)
+	{
+		throw new RuntimeException();
+	}
+
+	public static MouseEvent mouseEntered(MouseEvent mouseEvent)
+	{
+		throw new RuntimeException();
+	}
+
+	public static MouseEvent mouseExited(MouseEvent mouseEvent)
+	{
+		throw new RuntimeException();
+	}
+
+	public static MouseEvent mouseDragged(MouseEvent mouseEvent)
+	{
+		throw new RuntimeException();
+	}
+
+	public static MouseEvent mouseMoved(MouseEvent mouseEvent)
+	{
+		throw new RuntimeException();
+	}
+
+	public static MouseWheelEvent mouseWheelMoved(MouseWheelEvent event)
+	{
+		throw new RuntimeException();
+	}
+
+	public static void keyPressed(KeyEvent keyEvent)
+	{
+		throw new RuntimeException();
+	}
+
+	public static void keyReleased(KeyEvent keyEvent)
+	{
+		throw new RuntimeException();
+	}
+
+	public static void keyTyped(KeyEvent keyEvent)
 	{
 		throw new RuntimeException();
 	}

@@ -6,33 +6,35 @@ import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("fv")
+@ObfuscatedName("fa")
 @Implements("IndexFile")
 public final class IndexFile {
-   @ObfuscatedName("n")
+   @ObfuscatedName("c")
    @Export("IndexStore_buffer")
    static byte[] IndexStore_buffer;
-   @ObfuscatedName("v")
-   @ObfuscatedSignature(
-      signature = "Ldm;"
-   )
-   @Export("dataFile")
-   CacheFile dataFile;
-   @ObfuscatedName("y")
-   @ObfuscatedSignature(
-      signature = "Ldm;"
-   )
-   @Export("indexFile")
-   CacheFile indexFile;
-   @ObfuscatedName("r")
+   @ObfuscatedName("ai")
+   static java.awt.Font field2249;
+   @ObfuscatedName("i")
    @ObfuscatedGetter(
-      intValue = 1405209691
+      intValue = 2044766501
    )
    @Export("index")
    int index;
-   @ObfuscatedName("h")
+   @ObfuscatedName("o")
+   @ObfuscatedSignature(
+      signature = "Ldq;"
+   )
+   @Export("dataFile")
+   CacheFile dataFile;
+   @ObfuscatedName("j")
+   @ObfuscatedSignature(
+      signature = "Ldq;"
+   )
+   @Export("indexFile")
+   CacheFile indexFile;
+   @ObfuscatedName("k")
    @ObfuscatedGetter(
-      intValue = -1066874589
+      intValue = -254096491
    )
    @Export("maxSize")
    int maxSize;
@@ -42,7 +44,7 @@ public final class IndexFile {
    }
 
    @ObfuscatedSignature(
-      signature = "(ILdm;Ldm;I)V"
+      signature = "(ILdq;Ldq;I)V"
    )
    public IndexFile(int var1, CacheFile var2, CacheFile var3, int var4) {
       this.dataFile = null;
@@ -54,10 +56,10 @@ public final class IndexFile {
       this.maxSize = var4;
    }
 
-   @ObfuscatedName("n")
+   @ObfuscatedName("c")
    @ObfuscatedSignature(
       signature = "(II)[B",
-      garbageValue = "1665933302"
+      garbageValue = "674251084"
    )
    @Export("read")
    public byte[] read(int var1) {
@@ -130,10 +132,10 @@ public final class IndexFile {
       }
    }
 
-   @ObfuscatedName("v")
+   @ObfuscatedName("i")
    @ObfuscatedSignature(
-      signature = "(I[BIS)Z",
-      garbageValue = "-12727"
+      signature = "(I[BII)Z",
+      garbageValue = "278561773"
    )
    @Export("write")
    public boolean write(int var1, byte[] var2, int var3) {
@@ -152,10 +154,10 @@ public final class IndexFile {
       }
    }
 
-   @ObfuscatedName("y")
+   @ObfuscatedName("o")
    @ObfuscatedSignature(
-      signature = "(I[BIZI)Z",
-      garbageValue = "-1174181074"
+      signature = "(I[BIZB)Z",
+      garbageValue = "67"
    )
    @Export("write0")
    boolean write0(int var1, byte[] var2, int var3, boolean var4) {
@@ -197,7 +199,7 @@ public final class IndexFile {
 
             while(true) {
                if(var7 < var3) {
-                  label144: {
+                  label146: {
                      int var9 = 0;
                      int var14;
                      if(var4) {
@@ -206,7 +208,7 @@ public final class IndexFile {
                         try {
                            this.dataFile.read(IndexStore_buffer, 0, 8);
                         } catch (EOFException var16) {
-                           break label144;
+                           break label146;
                         }
 
                         var14 = (IndexStore_buffer[1] & 255) + ((IndexStore_buffer[0] & 255) << 8);
@@ -231,7 +233,7 @@ public final class IndexFile {
                            ++var9;
                         }
 
-                        if(var6 == var9) {
+                        if(var9 == var6) {
                            ++var9;
                         }
                      }

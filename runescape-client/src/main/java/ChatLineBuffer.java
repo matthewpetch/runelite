@@ -4,29 +4,35 @@ import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("ci")
+@ObfuscatedName("cp")
 @Implements("ChatLineBuffer")
 public class ChatLineBuffer {
-   @ObfuscatedName("om")
+   @ObfuscatedName("a")
    @ObfuscatedGetter(
-      intValue = -1201383133
+      intValue = -1651933103
    )
-   static int field1456;
-   @ObfuscatedName("jv")
+   static int field1470;
+   @ObfuscatedName("ga")
+   @ObfuscatedGetter(
+      intValue = -2123886963
+   )
+   @Export("cameraY")
+   static int cameraY;
+   @ObfuscatedName("kx")
    @ObfuscatedSignature(
-      signature = "Lcf;"
+      signature = "Lcc;"
    )
    @Export("topContextMenuRow")
    static ContextMenuRow topContextMenuRow;
-   @ObfuscatedName("v")
+   @ObfuscatedName("i")
    @ObfuscatedSignature(
-      signature = "[Lbs;"
+      signature = "[Lbk;"
    )
    @Export("lines")
    MessageNode[] lines;
-   @ObfuscatedName("y")
+   @ObfuscatedName("o")
    @ObfuscatedGetter(
-      intValue = -1772453129
+      intValue = -860360207
    )
    @Export("length")
    int length;
@@ -35,10 +41,10 @@ public class ChatLineBuffer {
       this.lines = new MessageNode[100];
    }
 
-   @ObfuscatedName("n")
+   @ObfuscatedName("c")
    @ObfuscatedSignature(
-      signature = "(ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;B)Lbs;",
-      garbageValue = "-50"
+      signature = "(ILjava/lang/String;Ljava/lang/String;Ljava/lang/String;I)Lbk;",
+      garbageValue = "-406297879"
    )
    @Export("addMessage")
    MessageNode addMessage(int var1, String var2, String var3, String var4) {
@@ -66,23 +72,33 @@ public class ChatLineBuffer {
       return var5;
    }
 
-   @ObfuscatedName("v")
+   @ObfuscatedName("i")
    @ObfuscatedSignature(
-      signature = "(II)Lbs;",
-      garbageValue = "520563005"
+      signature = "(IB)Lbk;",
+      garbageValue = "2"
    )
    @Export("getMessage")
    MessageNode getMessage(int var1) {
       return var1 >= 0 && var1 < this.length?this.lines[var1]:null;
    }
 
-   @ObfuscatedName("y")
+   @ObfuscatedName("o")
    @ObfuscatedSignature(
       signature = "(I)I",
-      garbageValue = "1295127078"
+      garbageValue = "948241019"
    )
    @Export("size")
    int size() {
       return this.length;
+   }
+
+   @ObfuscatedName("b")
+   @ObfuscatedSignature(
+      signature = "(IIIB)I",
+      garbageValue = "4"
+   )
+   static final int method2023(int var0, int var1, int var2) {
+      int var3 = 256 - var2;
+      return ((var1 & 16711935) * var2 + var3 * (var0 & 16711935) & -16711936) + ((var0 & 65280) * var3 + (var1 & 65280) * var2 & 16711680) >> 8;
    }
 }

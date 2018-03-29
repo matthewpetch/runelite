@@ -4,46 +4,51 @@ import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("id")
+@ObfuscatedName("ic")
 @Implements("JagexGame")
 public enum JagexGame implements Enumerated {
-   @ObfuscatedName("n")
+   @ObfuscatedName("c")
    @ObfuscatedSignature(
-      signature = "Lid;"
+      signature = "Lic;"
    )
-   field3294("runescape", "RuneScape", 0),
-   @ObfuscatedName("v")
+   field3348("runescape", "RuneScape", 0),
+   @ObfuscatedName("i")
    @ObfuscatedSignature(
-      signature = "Lid;"
+      signature = "Lic;"
    )
-   field3291("stellardawn", "Stellar Dawn", 1),
-   @ObfuscatedName("y")
+   field3349("stellardawn", "Stellar Dawn", 1),
+   @ObfuscatedName("o")
    @ObfuscatedSignature(
-      signature = "Lid;"
+      signature = "Lic;"
    )
-   field3289("game3", "Game 3", 2),
-   @ObfuscatedName("r")
+   field3354("game3", "Game 3", 2),
+   @ObfuscatedName("j")
    @ObfuscatedSignature(
-      signature = "Lid;"
+      signature = "Lic;"
    )
-   field3292("game4", "Game 4", 3),
-   @ObfuscatedName("h")
+   field3350("game4", "Game 4", 3),
+   @ObfuscatedName("k")
    @ObfuscatedSignature(
-      signature = "Lid;"
+      signature = "Lic;"
    )
-   field3293("game5", "Game 5", 4),
-   @ObfuscatedName("d")
+   field3351("game5", "Game 5", 4),
+   @ObfuscatedName("x")
    @ObfuscatedSignature(
-      signature = "Lid;"
+      signature = "Lic;"
    )
-   field3290("oldscape", "RuneScape 2007", 5);
+   field3352("oldscape", "RuneScape 2007", 5);
 
-   @ObfuscatedName("s")
+   @ObfuscatedName("bj")
+   @ObfuscatedSignature(
+      signature = "Liv;"
+   )
+   static BuildType field3355;
+   @ObfuscatedName("z")
    @Export("name")
    public final String name;
-   @ObfuscatedName("b")
+   @ObfuscatedName("p")
    @ObfuscatedGetter(
-      intValue = 1209982667
+      intValue = 1985086691
    )
    @Export("id")
    final int id;
@@ -53,10 +58,10 @@ public enum JagexGame implements Enumerated {
       this.id = var5;
    }
 
-   @ObfuscatedName("n")
+   @ObfuscatedName("c")
    @ObfuscatedSignature(
       signature = "(I)I",
-      garbageValue = "2130441585"
+      garbageValue = "-1780726447"
    )
    public int rsOrdinal() {
       return this.id;

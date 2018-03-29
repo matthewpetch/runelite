@@ -4,85 +4,91 @@ import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("kh")
+@ObfuscatedName("lo")
 @Implements("JagexLoginType")
 public class JagexLoginType {
-   @ObfuscatedName("n")
+   @ObfuscatedName("qp")
    @ObfuscatedSignature(
-      signature = "Lkh;"
+      signature = "Lle;"
    )
-   public static final JagexLoginType field3935;
-   @ObfuscatedName("v")
+   @Export("platformInfo")
+   static MachineInfo platformInfo;
+   @ObfuscatedName("c")
    @ObfuscatedSignature(
-      signature = "Lkh;"
+      signature = "Llo;"
    )
-   static final JagexLoginType field3927;
-   @ObfuscatedName("y")
+   public static final JagexLoginType field4071;
+   @ObfuscatedName("i")
    @ObfuscatedSignature(
-      signature = "Lkh;"
+      signature = "Llo;"
    )
-   static final JagexLoginType field3926;
-   @ObfuscatedName("r")
+   static final JagexLoginType field4061;
+   @ObfuscatedName("o")
    @ObfuscatedSignature(
-      signature = "Lkh;"
+      signature = "Llo;"
    )
-   static final JagexLoginType field3934;
-   @ObfuscatedName("h")
+   static final JagexLoginType field4062;
+   @ObfuscatedName("j")
    @ObfuscatedSignature(
-      signature = "Lkh;"
+      signature = "Llo;"
    )
-   static final JagexLoginType field3930;
-   @ObfuscatedName("d")
+   static final JagexLoginType field4063;
+   @ObfuscatedName("k")
    @ObfuscatedSignature(
-      signature = "Lkh;"
+      signature = "Llo;"
    )
-   static final JagexLoginType field3931;
-   @ObfuscatedName("s")
+   static final JagexLoginType field4064;
+   @ObfuscatedName("x")
    @ObfuscatedSignature(
-      signature = "Lkh;"
+      signature = "Llo;"
    )
-   static final JagexLoginType field3932;
-   @ObfuscatedName("b")
-   @ObfuscatedSignature(
-      signature = "Lkh;"
-   )
-   static final JagexLoginType field3928;
-   @ObfuscatedName("e")
-   @ObfuscatedSignature(
-      signature = "Lkh;"
-   )
-   public static final JagexLoginType field3933;
-   @ObfuscatedName("f")
-   @ObfuscatedGetter(
-      intValue = -1038038059
-   )
-   public final int field3929;
+   static final JagexLoginType field4065;
    @ObfuscatedName("z")
+   @ObfuscatedSignature(
+      signature = "Llo;"
+   )
+   static final JagexLoginType field4069;
+   @ObfuscatedName("p")
+   @ObfuscatedSignature(
+      signature = "Llo;"
+   )
+   static final JagexLoginType field4067;
+   @ObfuscatedName("w")
+   @ObfuscatedSignature(
+      signature = "Llo;"
+   )
+   public static final JagexLoginType field4068;
+   @ObfuscatedName("r")
+   @ObfuscatedGetter(
+      intValue = -1284733899
+   )
+   public final int field4070;
+   @ObfuscatedName("d")
    @Export("identifier")
    final String identifier;
 
    static {
-      field3935 = new JagexLoginType(0, 0, "", "");
-      field3927 = new JagexLoginType(7, 1, "", "");
-      field3926 = new JagexLoginType(5, 2, "", "");
-      field3934 = new JagexLoginType(4, 3, "", "");
-      field3930 = new JagexLoginType(3, 4, "", "");
-      field3931 = new JagexLoginType(8, 5, "", "");
-      field3932 = new JagexLoginType(6, 6, "", "");
-      field3928 = new JagexLoginType(1, 7, "", "");
-      field3933 = new JagexLoginType(2, -1, "", "", true, new JagexLoginType[]{field3935, field3927, field3926, field3930, field3934});
+      field4071 = new JagexLoginType(3, 0, "", "");
+      field4061 = new JagexLoginType(2, 1, "", "");
+      field4062 = new JagexLoginType(5, 2, "", "");
+      field4063 = new JagexLoginType(4, 3, "", "");
+      field4064 = new JagexLoginType(8, 4, "", "");
+      field4065 = new JagexLoginType(7, 5, "", "");
+      field4069 = new JagexLoginType(1, 6, "", "");
+      field4067 = new JagexLoginType(0, 7, "", "");
+      field4068 = new JagexLoginType(6, -1, "", "", true, new JagexLoginType[]{field4071, field4061, field4062, field4064, field4063});
    }
 
    JagexLoginType(int var1, int var2, String var3, String var4) {
-      this.field3929 = var1;
+      this.field4070 = var1;
       this.identifier = var4;
    }
 
    @ObfuscatedSignature(
-      signature = "(IILjava/lang/String;Ljava/lang/String;Z[Lkh;)V"
+      signature = "(IILjava/lang/String;Ljava/lang/String;Z[Llo;)V"
    )
    JagexLoginType(int var1, int var2, String var3, String var4, boolean var5, JagexLoginType[] var6) {
-      this.field3929 = var1;
+      this.field4070 = var1;
       this.identifier = var4;
    }
 

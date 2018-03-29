@@ -25,7 +25,6 @@
 package net.runelite.client.plugins.barbarianassault;
 
 import com.google.common.eventbus.Subscribe;
-import com.google.inject.Binder;
 import com.google.inject.Provides;
 import java.awt.Font;
 import java.awt.Image;
@@ -40,11 +39,8 @@ import net.runelite.api.MenuEntry;
 import net.runelite.api.Varbits;
 import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.GameTick;
-import net.runelite.api.events.MenuEntryAdded;
 import net.runelite.api.events.VarbitChanged;
 import net.runelite.api.kit.KitType;
-import net.runelite.api.widgets.Widget;
-import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
@@ -52,7 +48,7 @@ import net.runelite.client.ui.FontManager;
 import net.runelite.client.ui.overlay.Overlay;
 
 @PluginDescriptor(
-	name = "Barbarian Assault Plugin"
+	name = "Barbarian Assault"
 )
 public class BarbarianAssaultPlugin extends Plugin
 {
@@ -65,13 +61,13 @@ public class BarbarianAssaultPlugin extends Plugin
 	private int inGameBit = 0;
 
 	@Inject
-	Client client;
+	private Client client;
 
 	@Inject
-	BarbarianAssaultConfig config;
+	private BarbarianAssaultConfig config;
 
 	@Inject
-	BarbarianAssaultOverlay overlay;
+	private BarbarianAssaultOverlay overlay;
 
 	@Provides
 	BarbarianAssaultConfig provideConfig(ConfigManager configManager)
@@ -80,17 +76,15 @@ public class BarbarianAssaultPlugin extends Plugin
 	}
 
 	@Override
-	public void configure(Binder binder)
-	{
-		binder.bind(BarbarianAssaultOverlay.class);
-	}
-
-	@Override
 	protected void startUp() throws Exception
 	{
 		font = FontManager.getRunescapeFont()
 			.deriveFont(Font.BOLD, 24);
-		clockImage = ImageIO.read(getClass().getResourceAsStream("clock.png"));
+
+		synchronized (ImageIO.class)
+		{
+			clockImage = ImageIO.read(getClass().getResourceAsStream("clock.png"));
+		}
 	}
 
 	@Subscribe
@@ -114,39 +108,6 @@ public class BarbarianAssaultPlugin extends Plugin
 				case ItemID.HEALER_ICON:
 					overlay.setCurrentRound(new Round(Role.HEALER));
 					break;
-			}
-		}
-	}
-
-	@Subscribe
-	public void onMenuOpen(MenuEntryAdded event)
-	{
-		if (config.removeWrong() && overlay.getCurrentRound() != null && event.getTarget().endsWith("horn"))
-		{
-			MenuEntry[] menuEntries = client.getMenuEntries();
-			WidgetInfo callInfo = overlay.getCurrentRound().getRoundRole().getCall();
-			Widget callWidget = client.getWidget(callInfo);
-			String call = Calls.getOption(callWidget.getText());
-			MenuEntry correctCall = null;
-
-			entries.clear();
-			for (MenuEntry entry : menuEntries)
-			{
-				String option = entry.getOption();
-				if (option.equals(call))
-				{
-					correctCall = entry;
-				}
-				else if (!option.startsWith("Tell-"))
-				{
-					entries.add(entry);
-				}
-			}
-
-			if (correctCall != null)
-			{
-				entries.add(correctCall);
-				client.setMenuEntries(entries.toArray(new MenuEntry[entries.size()]));
 			}
 		}
 	}

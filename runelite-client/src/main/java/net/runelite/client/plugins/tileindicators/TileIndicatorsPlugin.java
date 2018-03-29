@@ -33,15 +33,16 @@ import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.Overlay;
 
 @PluginDescriptor(
-	name = "Tile Indicators plugin"
+	name = "Tile Indicators",
+	enabledByDefault = false
 )
 public class TileIndicatorsPlugin extends Plugin
 {
 	@Inject
-	Client client;
+	private Client client;
 
 	@Inject
-	TileIndicatorsConfig config;
+	private TileIndicatorsConfig config;
 
 	private TileIndicatorsOverlay tileIndicatorsOverlay;
 

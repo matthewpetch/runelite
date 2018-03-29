@@ -27,7 +27,6 @@ package net.runelite.client.plugins.timers;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.InputStream;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import javax.imageio.ImageIO;
@@ -62,9 +61,14 @@ public enum GameTimer
 	IMBUEDHEART("imbuedheart", "Imbued heart", GraphicID.IMBUED_HEART, 420, ChronoUnit.SECONDS),
 	VENGEANCE("vengeance", "Vengeance", GraphicID.VENGEANCE, 30, ChronoUnit.SECONDS),
 	ANTIDOTEPLUS("antidoteplus", "Antidote+", 518, ChronoUnit.SECONDS),
-	ANTIVENOM("antivenom", "Anto-venom", 12, ChronoUnit.MINUTES),
+	ANTIVENOM("antivenom", "Anti-venom", 12, ChronoUnit.MINUTES),
 	EXSUPERANTIFIRE("exsuperantifire", "Extended Super AntiFire", 6, ChronoUnit.MINUTES),
-	SANFEW("sanfew", "Sanfew serum", 6, ChronoUnit.MINUTES);
+	SANFEW("sanfew", "Sanfew serum", 6, ChronoUnit.MINUTES),
+	OVERLOAD_RAID("overloadraid", "Overload", 5, ChronoUnit.MINUTES),
+	PRAYER_ENHANCE("prayerenhance", "Prayer enhance", 290, ChronoUnit.SECONDS),
+	GOD_WARS_ALTAR("altar", "God wars altar", 10, ChronoUnit.MINUTES),
+	ANTIPOISON("antipoison", "Antipoison", 90, ChronoUnit.SECONDS),
+	SUPERANTIPOISON("superantipoison", "Superantipoison", 346, ChronoUnit.SECONDS);
 
 	@Getter
 	private final String imageResource;
@@ -97,10 +101,12 @@ public enum GameTimer
 			return image;
 		}
 
-		InputStream in = GameTimer.class.getResourceAsStream(imageResource + ".png");
 		try
 		{
-			image = ImageIO.read(in);
+			synchronized (ImageIO.class)
+			{
+				image = ImageIO.read(GameTimer.class.getResourceAsStream(imageResource + ".png"));
+			}
 		}
 		catch (IOException ex)
 		{

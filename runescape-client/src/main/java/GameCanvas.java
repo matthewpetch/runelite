@@ -1,27 +1,41 @@
 import java.awt.Canvas;
 import java.awt.Component;
 import java.awt.Graphics;
+import java.util.Iterator;
 import net.runelite.mapping.Export;
 import net.runelite.mapping.Implements;
 import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("bq")
+@ObfuscatedName("bj")
 @Implements("GameCanvas")
 public final class GameCanvas extends Canvas {
-   @ObfuscatedName("pi")
-   @ObfuscatedGetter(
-      intValue = 995527087
-   )
-   static int field628;
-   @ObfuscatedName("db")
+   @ObfuscatedName("pr")
    @ObfuscatedSignature(
-      signature = "Lif;"
+      signature = "Lcs;"
    )
-   @Export("indexWorldMap")
-   static IndexData indexWorldMap;
-   @ObfuscatedName("n")
+   static class100 field632;
+   @ObfuscatedName("rc")
+   @ObfuscatedSignature(
+      signature = "Lfa;"
+   )
+   @Export("indexStore255")
+   static IndexFile indexStore255;
+   @ObfuscatedName("j")
+   @Export("indexedSpriteOffsetXs")
+   static int[] indexedSpriteOffsetXs;
+   @ObfuscatedName("p")
+   @Export("colorsToReplace")
+   public static short[][] colorsToReplace;
+   @ObfuscatedName("t")
+   @ObfuscatedGetter(
+      intValue = -1541534323
+   )
+   static int field630;
+   @ObfuscatedName("bp")
+   static String field627;
+   @ObfuscatedName("c")
    @Export("component")
    Component component;
 
@@ -29,171 +43,341 @@ public final class GameCanvas extends Canvas {
       this.component = var1;
    }
 
-   public final void paint(Graphics var1) {
-      this.component.paint(var1);
-   }
-
    public final void update(Graphics var1) {
       this.component.update(var1);
    }
 
-   @ObfuscatedName("r")
-   @ObfuscatedSignature(
-      signature = "(Lil;III)Lkg;",
-      garbageValue = "-1997700749"
-   )
-   public static SpritePixels method772(IndexDataBase var0, int var1, int var2) {
-      return !class288.method5126(var0, var1, var2)?null:class31.method270();
+   public final void paint(Graphics var1) {
+      this.component.paint(var1);
    }
 
-   @ObfuscatedName("b")
+   @ObfuscatedName("i")
    @ObfuscatedSignature(
-      signature = "(I)V",
-      garbageValue = "-881545333"
+      signature = "(III)V",
+      garbageValue = "-163812348"
    )
-   public static void method774() {
-      KitDefinition.identKits.reset();
+   public static void method819(int var0, int var1) {
+      Varbit var2 = class290.method5206(var0);
+      int var3 = var2.configId;
+      int var4 = var2.leastSignificantBit;
+      int var5 = var2.mostSignificantBit;
+      int var6 = class237.varpsMasks[var5 - var4];
+      if(var1 < 0 || var1 > var6) {
+         var1 = 0;
+      }
+
+      var6 <<= var4;
+      class237.clientVarps[var3] = class237.clientVarps[var3] & ~var6 | var1 << var4 & var6;
    }
 
-   @ObfuscatedName("gn")
+   @ObfuscatedName("z")
    @ObfuscatedSignature(
       signature = "(I)V",
-      garbageValue = "-1555558158"
+      garbageValue = "231267082"
    )
-   static final void method778() {
-      int var0 = SoundTaskDataProvider.field624 * 128 + 64;
-      int var1 = ChatLineBuffer.field1456 * 128 + 64;
-      int var2 = MouseInput.getTileHeight(var0, var1, class7.plane) - Friend.field782;
-      if(GameEngine.cameraX < var0) {
-         GameEngine.cameraX = (var0 - GameEngine.cameraX) * class20.field327 / 1000 + GameEngine.cameraX + class82.field1272;
-         if(GameEngine.cameraX > var0) {
-            GameEngine.cameraX = var0;
-         }
-      }
+   static void method824() {
+      Iterator var0 = class95.messages.iterator();
 
-      if(GameEngine.cameraX > var0) {
-         GameEngine.cameraX -= class20.field327 * (GameEngine.cameraX - var0) / 1000 + class82.field1272;
-         if(GameEngine.cameraX < var0) {
-            GameEngine.cameraX = var0;
-         }
-      }
-
-      if(ScriptEvent.cameraZ < var2) {
-         ScriptEvent.cameraZ = (var2 - ScriptEvent.cameraZ) * class20.field327 / 1000 + ScriptEvent.cameraZ + class82.field1272;
-         if(ScriptEvent.cameraZ > var2) {
-            ScriptEvent.cameraZ = var2;
-         }
-      }
-
-      if(ScriptEvent.cameraZ > var2) {
-         ScriptEvent.cameraZ -= class20.field327 * (ScriptEvent.cameraZ - var2) / 1000 + class82.field1272;
-         if(ScriptEvent.cameraZ < var2) {
-            ScriptEvent.cameraZ = var2;
-         }
-      }
-
-      if(MouseInput.cameraY < var1) {
-         MouseInput.cameraY = (var1 - MouseInput.cameraY) * class20.field327 / 1000 + MouseInput.cameraY + class82.field1272;
-         if(MouseInput.cameraY > var1) {
-            MouseInput.cameraY = var1;
-         }
-      }
-
-      if(MouseInput.cameraY > var1) {
-         MouseInput.cameraY -= class20.field327 * (MouseInput.cameraY - var1) / 1000 + class82.field1272;
-         if(MouseInput.cameraY < var1) {
-            MouseInput.cameraY = var1;
-         }
-      }
-
-      var0 = WorldMapType3.field377 * 128 + 64;
-      var1 = ClanMember.field871 * 128 + 64;
-      var2 = MouseInput.getTileHeight(var0, var1, class7.plane) - FriendLoginUpdate.field786;
-      int var3 = var0 - GameEngine.cameraX;
-      int var4 = var2 - ScriptEvent.cameraZ;
-      int var5 = var1 - MouseInput.cameraY;
-      int var6 = (int)Math.sqrt((double)(var3 * var3 + var5 * var5));
-      int var7 = (int)(Math.atan2((double)var4, (double)var6) * 325.949D) & 2047;
-      int var8 = (int)(Math.atan2((double)var3, (double)var5) * -325.949D) & 2047;
-      if(var7 < 128) {
-         var7 = 128;
-      }
-
-      if(var7 > 383) {
-         var7 = 383;
-      }
-
-      if(SoundTask.cameraPitch < var7) {
-         SoundTask.cameraPitch = (var7 - SoundTask.cameraPitch) * field628 / 1000 + SoundTask.cameraPitch + Timer.field2191;
-         if(SoundTask.cameraPitch > var7) {
-            SoundTask.cameraPitch = var7;
-         }
-      }
-
-      if(SoundTask.cameraPitch > var7) {
-         SoundTask.cameraPitch -= field628 * (SoundTask.cameraPitch - var7) / 1000 + Timer.field2191;
-         if(SoundTask.cameraPitch < var7) {
-            SoundTask.cameraPitch = var7;
-         }
-      }
-
-      int var9 = var8 - class2.cameraYaw;
-      if(var9 > 1024) {
-         var9 -= 2048;
-      }
-
-      if(var9 < -1024) {
-         var9 += 2048;
-      }
-
-      if(var9 > 0) {
-         class2.cameraYaw = var9 * field628 / 1000 + class2.cameraYaw + Timer.field2191;
-         class2.cameraYaw &= 2047;
-      }
-
-      if(var9 < 0) {
-         class2.cameraYaw -= -var9 * field628 / 1000 + Timer.field2191;
-         class2.cameraYaw &= 2047;
-      }
-
-      int var10 = var8 - class2.cameraYaw;
-      if(var10 > 1024) {
-         var10 -= 2048;
-      }
-
-      if(var10 < -1024) {
-         var10 += 2048;
-      }
-
-      if(var10 < 0 && var9 > 0 || var10 > 0 && var9 < 0) {
-         class2.cameraYaw = var8;
+      while(var0.hasNext()) {
+         MessageNode var1 = (MessageNode)var0.next();
+         var1.method1131();
       }
 
    }
 
-   @ObfuscatedName("it")
+   @ObfuscatedName("hb")
    @ObfuscatedSignature(
-      signature = "(I)V",
-      garbageValue = "1202181042"
+      signature = "(IIIIIIII)V",
+      garbageValue = "-1618084644"
    )
-   static void method779() {
-      for(int var0 = 0; var0 < Client.menuOptionCount; ++var0) {
-         int var2 = Client.menuTypes[var0];
-         boolean var1 = var2 == 57 || var2 == 58 || var2 == 1007 || var2 == 25 || var2 == 30;
-         if(var1) {
-            if(var0 < Client.menuOptionCount - 1) {
-               for(int var3 = var0; var3 < Client.menuOptionCount - 1; ++var3) {
-                  Client.menuOptions[var3] = Client.menuOptions[var3 + 1];
-                  Client.menuTargets[var3] = Client.menuTargets[var3 + 1];
-                  Client.menuTypes[var3] = Client.menuTypes[var3 + 1];
-                  Client.menuIdentifiers[var3] = Client.menuIdentifiers[var3 + 1];
-                  Client.menuActionParams0[var3] = Client.menuActionParams0[var3 + 1];
-                  Client.menuActionParams1[var3] = Client.menuActionParams1[var3 + 1];
-                  Client.menuBooleanArray[var3] = Client.menuBooleanArray[var3 + 1];
+   static final void method826(int var0, int var1, int var2, int var3, int var4, int var5, int var6) {
+      if(var2 >= 1 && var3 >= 1 && var2 <= 102 && var3 <= 102) {
+         if(Client.lowMemory && var0 != class237.plane) {
+            return;
+         }
+
+         int var7 = 0;
+         boolean var8 = true;
+         boolean var9 = false;
+         boolean var10 = false;
+         if(var1 == 0) {
+            var7 = class308.region.getWallObjectHash(var0, var2, var3);
+         }
+
+         if(var1 == 1) {
+            var7 = class308.region.method2903(var0, var2, var3);
+         }
+
+         if(var1 == 2) {
+            var7 = class308.region.method2904(var0, var2, var3);
+         }
+
+         if(var1 == 3) {
+            var7 = class308.region.getGroundObjectHash(var0, var2, var3);
+         }
+
+         int var11;
+         if(var7 != 0) {
+            var11 = class308.region.getObjectFlags(var0, var2, var3, var7);
+            int var34 = var7 >> 14 & 32767;
+            int var35 = var11 & 31;
+            int var36 = var11 >> 6 & 3;
+            ObjectComposition var12;
+            if(var1 == 0) {
+               class308.region.removeBoundaryObject(var0, var2, var3);
+               var12 = FileRequest.getObjectDefinition(var34);
+               if(var12.clipType != 0) {
+                  Client.collisionMaps[var0].removeWall(var2, var3, var35, var36, var12.blocksProjectile);
                }
             }
 
-            --Client.menuOptionCount;
+            if(var1 == 1) {
+               class308.region.removeWallDecoration(var0, var2, var3);
+            }
+
+            if(var1 == 2) {
+               class308.region.method2974(var0, var2, var3);
+               var12 = FileRequest.getObjectDefinition(var34);
+               if(var2 + var12.width > 103 || var3 + var12.width > 103 || var2 + var12.length > 103 || var3 + var12.length > 103) {
+                  return;
+               }
+
+               if(var12.clipType != 0) {
+                  Client.collisionMaps[var0].removeObject(var2, var3, var12.width, var12.length, var36, var12.blocksProjectile);
+               }
+            }
+
+            if(var1 == 3) {
+               class308.region.removeFloorDecoration(var0, var2, var3);
+               var12 = FileRequest.getObjectDefinition(var34);
+               if(var12.clipType == 1) {
+                  Client.collisionMaps[var0].method3376(var2, var3);
+               }
+            }
+         }
+
+         if(var4 >= 0) {
+            var11 = var0;
+            if(var0 < 3 && (class62.tileSettings[1][var2][var3] & 2) == 2) {
+               var11 = var0 + 1;
+            }
+
+            Region var37 = class308.region;
+            CollisionData var13 = Client.collisionMaps[var0];
+            ObjectComposition var14 = FileRequest.getObjectDefinition(var4);
+            int var15;
+            int var16;
+            if(var5 != 1 && var5 != 3) {
+               var15 = var14.width;
+               var16 = var14.length;
+            } else {
+               var15 = var14.length;
+               var16 = var14.width;
+            }
+
+            int var17;
+            int var18;
+            if(var15 + var2 <= 104) {
+               var17 = (var15 >> 1) + var2;
+               var18 = var2 + (var15 + 1 >> 1);
+            } else {
+               var17 = var2;
+               var18 = var2 + 1;
+            }
+
+            int var19;
+            int var20;
+            if(var3 + var16 <= 104) {
+               var19 = var3 + (var16 >> 1);
+               var20 = var3 + (var16 + 1 >> 1);
+            } else {
+               var19 = var3;
+               var20 = var3 + 1;
+            }
+
+            int[][] var21 = class62.tileHeights[var11];
+            int var22 = var21[var18][var20] + var21[var17][var20] + var21[var18][var19] + var21[var17][var19] >> 2;
+            int var23 = (var2 << 7) + (var15 << 6);
+            int var24 = (var3 << 7) + (var16 << 6);
+            int var25 = (var3 << 7) + var2 + (var4 << 14) + 1073741824;
+            if(var14.int1 == 0) {
+               var25 -= Integer.MIN_VALUE;
+            }
+
+            int var26 = (var5 << 6) + var6;
+            if(var14.supportItems == 1) {
+               var26 += 256;
+            }
+
+            Object var27;
+            if(var6 == 22) {
+               if(var14.animationId == -1 && var14.impostorIds == null) {
+                  var27 = var14.method5005(22, var5, var21, var23, var22, var24);
+               } else {
+                  var27 = new DynamicObject(var4, 22, var5, var11, var2, var3, var14.animationId, true, (Renderable)null);
+               }
+
+               var37.groundObjectSpawned(var0, var2, var3, var22, (Renderable)var27, var25, var26);
+               if(var14.clipType == 1) {
+                  var13.method3399(var2, var3);
+               }
+            } else if(var6 != 10 && var6 != 11) {
+               if(var6 >= 12) {
+                  if(var14.animationId == -1 && var14.impostorIds == null) {
+                     var27 = var14.method5005(var6, var5, var21, var23, var22, var24);
+                  } else {
+                     var27 = new DynamicObject(var4, var6, var5, var11, var2, var3, var14.animationId, true, (Renderable)null);
+                  }
+
+                  var37.method2896(var0, var2, var3, var22, 1, 1, (Renderable)var27, 0, var25, var26);
+                  if(var14.clipType != 0) {
+                     var13.addObject(var2, var3, var15, var16, var14.blocksProjectile);
+                  }
+               } else if(var6 == 0) {
+                  if(var14.animationId == -1 && var14.impostorIds == null) {
+                     var27 = var14.method5005(0, var5, var21, var23, var22, var24);
+                  } else {
+                     var27 = new DynamicObject(var4, 0, var5, var11, var2, var3, var14.animationId, true, (Renderable)null);
+                  }
+
+                  var37.addBoundary(var0, var2, var3, var22, (Renderable)var27, (Renderable)null, class62.field727[var5], 0, var25, var26);
+                  if(var14.clipType != 0) {
+                     var13.method3385(var2, var3, var6, var5, var14.blocksProjectile);
+                  }
+               } else if(var6 == 1) {
+                  if(var14.animationId == -1 && var14.impostorIds == null) {
+                     var27 = var14.method5005(1, var5, var21, var23, var22, var24);
+                  } else {
+                     var27 = new DynamicObject(var4, 1, var5, var11, var2, var3, var14.animationId, true, (Renderable)null);
+                  }
+
+                  var37.addBoundary(var0, var2, var3, var22, (Renderable)var27, (Renderable)null, class62.field731[var5], 0, var25, var26);
+                  if(var14.clipType != 0) {
+                     var13.method3385(var2, var3, var6, var5, var14.blocksProjectile);
+                  }
+               } else {
+                  Object var29;
+                  int var32;
+                  if(var6 == 2) {
+                     var32 = var5 + 1 & 3;
+                     Object var28;
+                     if(var14.animationId == -1 && var14.impostorIds == null) {
+                        var28 = var14.method5005(2, var5 + 4, var21, var23, var22, var24);
+                        var29 = var14.method5005(2, var32, var21, var23, var22, var24);
+                     } else {
+                        var28 = new DynamicObject(var4, 2, var5 + 4, var11, var2, var3, var14.animationId, true, (Renderable)null);
+                        var29 = new DynamicObject(var4, 2, var32, var11, var2, var3, var14.animationId, true, (Renderable)null);
+                     }
+
+                     var37.addBoundary(var0, var2, var3, var22, (Renderable)var28, (Renderable)var29, class62.field727[var5], class62.field727[var32], var25, var26);
+                     if(var14.clipType != 0) {
+                        var13.method3385(var2, var3, var6, var5, var14.blocksProjectile);
+                     }
+                  } else if(var6 == 3) {
+                     if(var14.animationId == -1 && var14.impostorIds == null) {
+                        var27 = var14.method5005(3, var5, var21, var23, var22, var24);
+                     } else {
+                        var27 = new DynamicObject(var4, 3, var5, var11, var2, var3, var14.animationId, true, (Renderable)null);
+                     }
+
+                     var37.addBoundary(var0, var2, var3, var22, (Renderable)var27, (Renderable)null, class62.field731[var5], 0, var25, var26);
+                     if(var14.clipType != 0) {
+                        var13.method3385(var2, var3, var6, var5, var14.blocksProjectile);
+                     }
+                  } else if(var6 == 9) {
+                     if(var14.animationId == -1 && var14.impostorIds == null) {
+                        var27 = var14.method5005(var6, var5, var21, var23, var22, var24);
+                     } else {
+                        var27 = new DynamicObject(var4, var6, var5, var11, var2, var3, var14.animationId, true, (Renderable)null);
+                     }
+
+                     var37.method2896(var0, var2, var3, var22, 1, 1, (Renderable)var27, 0, var25, var26);
+                     if(var14.clipType != 0) {
+                        var13.addObject(var2, var3, var15, var16, var14.blocksProjectile);
+                     }
+                  } else if(var6 == 4) {
+                     if(var14.animationId == -1 && var14.impostorIds == null) {
+                        var27 = var14.method5005(4, var5, var21, var23, var22, var24);
+                     } else {
+                        var27 = new DynamicObject(var4, 4, var5, var11, var2, var3, var14.animationId, true, (Renderable)null);
+                     }
+
+                     var37.addBoundaryDecoration(var0, var2, var3, var22, (Renderable)var27, (Renderable)null, class62.field727[var5], 0, 0, 0, var25, var26);
+                  } else {
+                     int var33;
+                     if(var6 == 5) {
+                        var32 = 16;
+                        var33 = var37.getWallObjectHash(var0, var2, var3);
+                        if(var33 != 0) {
+                           var32 = FileRequest.getObjectDefinition(var33 >> 14 & 32767).decorDisplacement;
+                        }
+
+                        if(var14.animationId == -1 && var14.impostorIds == null) {
+                           var29 = var14.method5005(4, var5, var21, var23, var22, var24);
+                        } else {
+                           var29 = new DynamicObject(var4, 4, var5, var11, var2, var3, var14.animationId, true, (Renderable)null);
+                        }
+
+                        var37.addBoundaryDecoration(var0, var2, var3, var22, (Renderable)var29, (Renderable)null, class62.field727[var5], 0, var32 * class62.field730[var5], var32 * class62.field726[var5], var25, var26);
+                     } else if(var6 == 6) {
+                        var32 = 8;
+                        var33 = var37.getWallObjectHash(var0, var2, var3);
+                        if(var33 != 0) {
+                           var32 = FileRequest.getObjectDefinition(var33 >> 14 & 32767).decorDisplacement / 2;
+                        }
+
+                        if(var14.animationId == -1 && var14.impostorIds == null) {
+                           var29 = var14.method5005(4, var5 + 4, var21, var23, var22, var24);
+                        } else {
+                           var29 = new DynamicObject(var4, 4, var5 + 4, var11, var2, var3, var14.animationId, true, (Renderable)null);
+                        }
+
+                        var37.addBoundaryDecoration(var0, var2, var3, var22, (Renderable)var29, (Renderable)null, 256, var5, var32 * class62.field723[var5], var32 * class62.field732[var5], var25, var26);
+                     } else if(var6 == 7) {
+                        var33 = var5 + 2 & 3;
+                        if(var14.animationId == -1 && var14.impostorIds == null) {
+                           var27 = var14.method5005(4, var33 + 4, var21, var23, var22, var24);
+                        } else {
+                           var27 = new DynamicObject(var4, 4, var33 + 4, var11, var2, var3, var14.animationId, true, (Renderable)null);
+                        }
+
+                        var37.addBoundaryDecoration(var0, var2, var3, var22, (Renderable)var27, (Renderable)null, 256, var33, 0, 0, var25, var26);
+                     } else if(var6 == 8) {
+                        var32 = 8;
+                        var33 = var37.getWallObjectHash(var0, var2, var3);
+                        if(var33 != 0) {
+                           var32 = FileRequest.getObjectDefinition(var33 >> 14 & 32767).decorDisplacement / 2;
+                        }
+
+                        int var31 = var5 + 2 & 3;
+                        Object var30;
+                        if(var14.animationId == -1 && var14.impostorIds == null) {
+                           var29 = var14.method5005(4, var5 + 4, var21, var23, var22, var24);
+                           var30 = var14.method5005(4, var31 + 4, var21, var23, var22, var24);
+                        } else {
+                           var29 = new DynamicObject(var4, 4, var5 + 4, var11, var2, var3, var14.animationId, true, (Renderable)null);
+                           var30 = new DynamicObject(var4, 4, var31 + 4, var11, var2, var3, var14.animationId, true, (Renderable)null);
+                        }
+
+                        var37.addBoundaryDecoration(var0, var2, var3, var22, (Renderable)var29, (Renderable)var30, 256, var5, var32 * class62.field723[var5], var32 * class62.field732[var5], var25, var26);
+                     }
+                  }
+               }
+            } else {
+               if(var14.animationId == -1 && var14.impostorIds == null) {
+                  var27 = var14.method5005(10, var5, var21, var23, var22, var24);
+               } else {
+                  var27 = new DynamicObject(var4, 10, var5, var11, var2, var3, var14.animationId, true, (Renderable)null);
+               }
+
+               if(var27 != null) {
+                  var37.method2896(var0, var2, var3, var22, var15, var16, (Renderable)var27, var6 == 11?256:0, var25, var26);
+               }
+
+               if(var14.clipType != 0) {
+                  var13.addObject(var2, var3, var15, var16, var14.blocksProjectile);
+               }
+            }
          }
       }
 

@@ -26,19 +26,15 @@ package net.runelite.mixins;
 
 import java.awt.Graphics2D;
 import java.awt.Polygon;
-import java.util.ArrayList;
-import java.util.List;
-import net.runelite.api.Model;
 import net.runelite.api.Perspective;
-import static net.runelite.api.Perspective.LOCAL_COORD_BITS;
 import net.runelite.api.Point;
 import net.runelite.api.TileObject;
+import net.runelite.api.coords.LocalPoint;
+import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.mixins.Inject;
 import net.runelite.api.mixins.Mixin;
 import net.runelite.api.mixins.Mixins;
 import net.runelite.api.mixins.Shadow;
-import net.runelite.api.model.Jarvis;
-import net.runelite.api.model.Vertex;
 import net.runelite.rs.api.RSClient;
 import net.runelite.rs.api.RSDecorativeObject;
 import net.runelite.rs.api.RSGameObject;
@@ -68,25 +64,16 @@ public abstract class TileObjectMixin implements TileObject
 
 	@Override
 	@Inject
-	public Point getWorldLocation()
+	public WorldPoint getWorldLocation()
 	{
-		Point localLocation = getLocalLocation();
-		return Perspective.localToWorld(client, localLocation);
+		return WorldPoint.fromLocal(client, getX(), getY(), getPlane());
 	}
 
 	@Override
 	@Inject
-	public Point getLocalLocation()
+	public LocalPoint getLocalLocation()
 	{
-		return new Point(getX(), getY());
-	}
-
-	@Override
-	@Inject
-	public Point getRegionLocation()
-	{
-		Point localLocation = getLocalLocation();
-		return new Point(localLocation.getX() >>> LOCAL_COORD_BITS, localLocation.getY() >>> LOCAL_COORD_BITS);
+		return new LocalPoint(getX(), getY());
 	}
 
 	@Override
@@ -100,8 +87,7 @@ public abstract class TileObjectMixin implements TileObject
 	@Inject
 	public Point getCanvasLocation(int zOffset)
 	{
-		Point localLocation = getLocalLocation();
-		return Perspective.worldToCanvas(client, localLocation.getX(), localLocation.getY(), 0, zOffset);
+		return Perspective.worldToCanvas(client, getX(), getY(), 0, zOffset);
 	}
 
 	@Override
@@ -123,59 +109,5 @@ public abstract class TileObjectMixin implements TileObject
 	public Point getMinimapLocation()
 	{
 		return Perspective.worldToMiniMap(client, getX(), getY());
-	}
-
-	@Override
-	@Inject
-	public Polygon getConvexHull(Model model, int orientation)
-	{
-		int localX = getX();
-		int localY = getY();
-
-		// models are orientated north (1024) and there are 2048 angles total
-		orientation = (orientation + 1024) % 2048;
-
-		List<Vertex> vertices = model.getVertices();
-
-		if (orientation != 0)
-		{
-			// rotate vertices
-			for (int i = 0; i < vertices.size(); ++i)
-			{
-				Vertex v = vertices.get(i);
-				vertices.set(i, v.rotate(orientation));
-			}
-		}
-
-		List<Point> points = new ArrayList<Point>();
-
-		for (Vertex v : vertices)
-		{
-			// Compute canvas location of vertex
-			Point p = Perspective.worldToCanvas(client,
-				localX - v.getX(),
-				localY - v.getZ(),
-				-v.getY());
-			if (p != null)
-			{
-				points.add(p);
-			}
-		}
-
-		// Run Jarvis march algorithm
-		points = Jarvis.convexHull(points);
-		if (points == null)
-		{
-			return null;
-		}
-
-		// Convert to a polygon
-		Polygon p = new Polygon();
-		for (Point point : points)
-		{
-			p.addPoint(point.getX(), point.getY());
-		}
-
-		return p;
 	}
 }

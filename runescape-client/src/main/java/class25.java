@@ -3,55 +3,63 @@ import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("q")
+@ObfuscatedName("s")
 public class class25 {
-   @ObfuscatedName("k")
+   @ObfuscatedName("x")
+   @Export("indexSpriteWidths")
+   static int[] indexSpriteWidths;
+   @ObfuscatedName("d")
    @ObfuscatedGetter(
-      intValue = -9955195
+      intValue = -400098911
    )
-   @Export("canvasHeight")
-   protected static int canvasHeight;
-   @ObfuscatedName("cr")
+   static int field357;
+   @ObfuscatedName("bp")
    @ObfuscatedSignature(
-      signature = "Lfl;"
+      signature = "[Lla;"
    )
-   @Export("rssocket")
-   static class159 rssocket;
-   @ObfuscatedName("n")
+   static SpritePixels[] field356;
+   @ObfuscatedName("c")
    @ObfuscatedGetter(
-      intValue = 80291903
+      intValue = -424882495
    )
-   int field356;
-   @ObfuscatedName("v")
+   int field355;
+   @ObfuscatedName("i")
    @ObfuscatedSignature(
-      signature = "Lht;"
+      signature = "Lim;"
    )
-   Coordinates field358;
+   Coordinates field354;
 
    @ObfuscatedSignature(
-      signature = "(ILht;)V"
+      signature = "(ILim;)V"
    )
    class25(int var1, Coordinates var2) {
-      this.field356 = var1;
-      this.field358 = var2;
+      this.field355 = var1;
+      this.field354 = var2;
    }
 
-   @ObfuscatedName("h")
+   @ObfuscatedName("j")
+   @ObfuscatedSignature(
+      signature = "(IZIZI)V",
+      garbageValue = "-1708710488"
+   )
+   static void method201(int var0, boolean var1, int var2, boolean var3) {
+      if(FaceNormal.worldList != null) {
+         MapIcon.method568(0, FaceNormal.worldList.length - 1, var0, var1, var2, var3);
+      }
+
+   }
+
+   @ObfuscatedName("k")
    @ObfuscatedSignature(
       signature = "(I)V",
-      garbageValue = "-1629164964"
+      garbageValue = "1929042985"
    )
-   static void method174() {
-      Object var0 = IndexStoreActionHandler.IndexStoreActionHandler_lock;
-      synchronized(IndexStoreActionHandler.IndexStoreActionHandler_lock) {
-         if(IndexStoreActionHandler.field3328 == 0) {
-            IndexStoreActionHandler.IndexStoreActionHandler_thread = new Thread(new IndexStoreActionHandler());
-            IndexStoreActionHandler.IndexStoreActionHandler_thread.setDaemon(true);
-            IndexStoreActionHandler.IndexStoreActionHandler_thread.start();
-            IndexStoreActionHandler.IndexStoreActionHandler_thread.setPriority(5);
-         }
-
-         IndexStoreActionHandler.field3328 = 600;
+   static void method200() {
+      if(class90.Login_isUsernameRemembered && class90.username != null && class90.username.length() > 0) {
+         class90.field1367 = 1;
+      } else {
+         class90.field1367 = 0;
       }
+
    }
 }

@@ -4,37 +4,40 @@ import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("cr")
+@ObfuscatedName("cv")
 @Implements("AttackOption")
 public enum AttackOption implements Enumerated {
-   @ObfuscatedName("n")
+   @ObfuscatedName("c")
    @ObfuscatedSignature(
-      signature = "Lcr;"
+      signature = "Lcv;"
    )
    @Export("AttackOption_dependsOnCombatLevels")
    AttackOption_dependsOnCombatLevels(0),
-   @ObfuscatedName("v")
+   @ObfuscatedName("i")
    @ObfuscatedSignature(
-      signature = "Lcr;"
+      signature = "Lcv;"
    )
    @Export("AttackOption_alwaysRightClick")
    AttackOption_alwaysRightClick(1),
-   @ObfuscatedName("y")
+   @ObfuscatedName("o")
    @ObfuscatedSignature(
-      signature = "Lcr;"
+      signature = "Lcv;"
    )
    @Export("AttackOption_leftClickWhereAvailable")
    AttackOption_leftClickWhereAvailable(2),
-   @ObfuscatedName("r")
+   @ObfuscatedName("j")
    @ObfuscatedSignature(
-      signature = "Lcr;"
+      signature = "Lcv;"
    )
    @Export("AttackOption_hidden")
    AttackOption_hidden(3);
 
-   @ObfuscatedName("h")
+   @ObfuscatedName("r")
+   @Export("floorHues")
+   static int[] floorHues;
+   @ObfuscatedName("k")
    @ObfuscatedGetter(
-      intValue = -1499999509
+      intValue = 1538586325
    )
    @Export("id")
    final int id;
@@ -43,72 +46,57 @@ public enum AttackOption implements Enumerated {
       this.id = var3;
    }
 
-   @ObfuscatedName("n")
+   @ObfuscatedName("c")
    @ObfuscatedSignature(
       signature = "(I)I",
-      garbageValue = "2130441585"
+      garbageValue = "-1780726447"
    )
    public int rsOrdinal() {
       return this.id;
    }
 
-   @ObfuscatedName("n")
+   @ObfuscatedName("z")
    @ObfuscatedSignature(
-      signature = "(Lil;I)V",
-      garbageValue = "277000562"
+      signature = "(Lgf;I)V",
+      garbageValue = "1184301367"
    )
-   public static void method1748(IndexDataBase var0) {
-      InvType.field3374 = var0;
-   }
-
-   @ObfuscatedName("v")
-   @ObfuscatedSignature(
-      signature = "([BIII)Ljava/lang/String;",
-      garbageValue = "142924289"
-   )
-   static String method1749(byte[] var0, int var1, int var2) {
-      StringBuilder var3 = new StringBuilder();
-
-      for(int var4 = var1; var4 < var2 + var1; var4 += 3) {
-         int var5 = var0[var4] & 255;
-         var3.append(class280.field3755[var5 >>> 2]);
-         if(var4 < var2 - 1) {
-            int var6 = var0[var4 + 1] & 255;
-            var3.append(class280.field3755[(var5 & 3) << 4 | var6 >>> 4]);
-            if(var4 < var2 - 2) {
-               int var7 = var0[var4 + 2] & 255;
-               var3.append(class280.field3755[(var6 & 15) << 2 | var7 >>> 6]).append(class280.field3755[var7 & 63]);
-            } else {
-               var3.append(class280.field3755[(var6 & 15) << 2]).append("=");
-            }
-         } else {
-            var3.append(class280.field3755[(var5 & 3) << 4]).append("==");
+   static final void method1860(PacketBuffer var0) {
+      for(int var1 = 0; var1 < class93.field1421; ++var1) {
+         int var2 = class93.field1422[var1];
+         Player var3 = Client.cachedPlayers[var2];
+         int var4 = var0.readUnsignedByte();
+         if((var4 & 32) != 0) {
+            var4 += var0.readUnsignedByte() << 8;
          }
+
+         InvType.method4730(var0, var2, var3, var4);
       }
 
-      return var3.toString();
    }
 
-   @ObfuscatedName("m")
+   @ObfuscatedName("gq")
    @ObfuscatedSignature(
-      signature = "(Lch;I)V",
-      garbageValue = "1650388458"
+      signature = "(II)V",
+      garbageValue = "999965596"
    )
-   static void method1747(World var0) {
-      if(var0.method1592() != Client.isMembers) {
-         Client.isMembers = var0.method1592();
-         boolean var1 = var0.method1592();
-         if(var1 != ItemComposition.isMembersWorld) {
-            Frames.method2942();
-            ItemComposition.isMembersWorld = var1;
-         }
+   static void method1859(int var0) {
+      Client.field1068 = 0L;
+      if(var0 >= 2) {
+         Client.isResized = true;
+      } else {
+         Client.isResized = false;
       }
 
-      class161.host = var0.address;
-      Client.world = var0.id;
-      Client.flags = var0.mask;
-      Frames.port1 = Client.socketType == 0?43594:var0.id + 40000;
-      class150.port2 = Client.socketType == 0?443:var0.id + 50000;
-      class179.myWorldPort = Frames.port1;
+      int var1 = Client.isResized?2:1;
+      if(var1 == 1) {
+         BoundingBox.clientInstance.method899(765, 503);
+      } else {
+         BoundingBox.clientInstance.method899(7680, 2160);
+      }
+
+      if(Client.gameState >= 25) {
+         Permission.method4535();
+      }
+
    }
 }

@@ -25,6 +25,7 @@
 package net.runelite.client.config;
 
 import java.awt.Dimension;
+import net.runelite.api.Constants;
 
 @ConfigGroup(
 	keyName = "runelite",
@@ -40,26 +41,78 @@ public interface RuneLiteConfig extends Config
 	)
 	default Dimension gameSize()
 	{
-		return new Dimension(765, 503);
+		return Constants.GAME_FIXED_SIZE;
 	}
 
 	@ConfigItem(
-		keyName = "chatCommandsRecolorEnabled",
-		name = "Enable chat commands recolor",
-		description = "Determines if recoloring of custom RuneLite chat commands is enabled"
+		keyName = "lockWindowSize",
+		name = "Lock window size",
+		description = "Determines if the window resizing is allowed or not"
 	)
-	default boolean chatCommandsRecolorEnabled()
+	default boolean lockWindowSize()
 	{
-		return true;
+		return false;
 	}
 
 	@ConfigItem(
 		keyName = "uiEnableCustomChrome",
 		name = "Enable custom window chrome",
 		description = "Use Runelite's custom window title and borders.",
-		confirmationWarining = "Please restart your client after changing this setting"
+		confirmationWarining = "Please restart your client after changing this setting",
+		warnOnEnable = true,
+		warnOnDisable = true
 	)
 	default boolean enableCustomChrome()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "gameAlwaysOnTop",
+		name = "Enable client always on top",
+		description = "The game will always be on the top of the screen"
+	)
+	default boolean gameAlwaysOnTop()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		keyName = "notificationTray",
+		name = "Enable tray notifications",
+		description = "Enables tray notifications"
+	)
+	default boolean enableTrayNotifications()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "notificationSound",
+		name = "Enable sound on notifications",
+		description = "Enables the playing of a beep sound when notifications are displayed"
+	)
+	default boolean enableNotificationSound()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "notificationFocused",
+		name = "Send notifications when focused",
+		description = "Toggles idle notifications for when the client is focused"
+	)
+	default boolean sendNotificationsWhenFocused()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		keyName = "notificationRequestFocus",
+		name = "Request focus on notification",
+		description = "Toggles window focus request"
+	)
+	default boolean requestFocusOnNotification()
 	{
 		return true;
 	}

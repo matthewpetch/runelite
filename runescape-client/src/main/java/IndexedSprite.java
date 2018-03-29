@@ -2,57 +2,57 @@ import net.runelite.mapping.Export;
 import net.runelite.mapping.Implements;
 import net.runelite.mapping.ObfuscatedName;
 
-@ObfuscatedName("km")
+@ObfuscatedName("lq")
 @Implements("IndexedSprite")
 public final class IndexedSprite extends Rasterizer2D {
-   @ObfuscatedName("n")
+   @ObfuscatedName("c")
    @Export("pixels")
    public byte[] pixels;
-   @ObfuscatedName("v")
+   @ObfuscatedName("i")
    @Export("palette")
    public int[] palette;
-   @ObfuscatedName("y")
-   @Export("originalWidth")
-   public int originalWidth;
-   @ObfuscatedName("r")
-   @Export("height")
-   public int height;
-   @ObfuscatedName("h")
-   @Export("offsetX")
-   public int offsetX;
-   @ObfuscatedName("d")
-   @Export("offsetY")
-   public int offsetY;
-   @ObfuscatedName("s")
+   @ObfuscatedName("o")
    @Export("width")
    public int width;
-   @ObfuscatedName("b")
+   @ObfuscatedName("j")
+   @Export("height")
+   public int height;
+   @ObfuscatedName("k")
+   @Export("offsetX")
+   public int offsetX;
+   @ObfuscatedName("x")
+   @Export("offsetY")
+   public int offsetY;
+   @ObfuscatedName("z")
+   @Export("originalWidth")
+   public int originalWidth;
+   @ObfuscatedName("p")
    @Export("originalHeight")
    public int originalHeight;
 
-   @ObfuscatedName("n")
+   @ObfuscatedName("c")
    @Export("normalize")
    public void normalize() {
-      if(this.originalWidth != this.width || this.height != this.originalHeight) {
-         byte[] var1 = new byte[this.width * this.originalHeight];
+      if(this.width != this.originalWidth || this.height != this.originalHeight) {
+         byte[] var1 = new byte[this.originalWidth * this.originalHeight];
          int var2 = 0;
 
          for(int var3 = 0; var3 < this.height; ++var3) {
-            for(int var4 = 0; var4 < this.originalWidth; ++var4) {
-               var1[var4 + (var3 + this.offsetY) * this.width + this.offsetX] = this.pixels[var2++];
+            for(int var4 = 0; var4 < this.width; ++var4) {
+               var1[var4 + (var3 + this.offsetY) * this.originalWidth + this.offsetX] = this.pixels[var2++];
             }
          }
 
          this.pixels = var1;
-         this.originalWidth = this.width;
+         this.width = this.originalWidth;
          this.height = this.originalHeight;
          this.offsetX = 0;
          this.offsetY = 0;
       }
    }
 
-   @ObfuscatedName("v")
-   public void method5259(int var1, int var2, int var3) {
+   @ObfuscatedName("i")
+   public void method5857(int var1, int var2, int var3) {
       for(int var4 = 0; var4 < this.palette.length; ++var4) {
          int var5 = this.palette[var4] >> 16 & 255;
          var5 += var1;
@@ -83,14 +83,14 @@ public final class IndexedSprite extends Rasterizer2D {
 
    }
 
-   @ObfuscatedName("y")
-   public void method5253(int var1, int var2) {
+   @ObfuscatedName("o")
+   public void method5842(int var1, int var2) {
       var1 += this.offsetX;
       var2 += this.offsetY;
       int var3 = var1 + var2 * Rasterizer2D.graphicsPixelsWidth;
       int var4 = 0;
       int var5 = this.height;
-      int var6 = this.originalWidth;
+      int var6 = this.width;
       int var7 = Rasterizer2D.graphicsPixelsWidth - var6;
       int var8 = 0;
       int var9;
@@ -124,17 +124,17 @@ public final class IndexedSprite extends Rasterizer2D {
       }
 
       if(var6 > 0 && var5 > 0) {
-         method5254(Rasterizer2D.graphicsPixels, this.pixels, this.palette, var4, var3, var6, var5, var7, var8);
+         method5851(Rasterizer2D.graphicsPixels, this.pixels, this.palette, var4, var3, var6, var5, var7, var8);
       }
    }
 
-   @ObfuscatedName("h")
-   public void method5255(int var1, int var2, int var3, int var4) {
-      int var5 = this.originalWidth;
+   @ObfuscatedName("k")
+   public void method5844(int var1, int var2, int var3, int var4) {
+      int var5 = this.width;
       int var6 = this.height;
       int var7 = 0;
       int var8 = 0;
-      int var9 = this.width;
+      int var9 = this.originalWidth;
       int var10 = this.originalHeight;
       int var11 = (var9 << 16) / var3;
       int var12 = (var10 << 16) / var4;
@@ -187,11 +187,11 @@ public final class IndexedSprite extends Rasterizer2D {
          var14 += var15;
       }
 
-      method5260(Rasterizer2D.graphicsPixels, this.pixels, this.palette, var7, var8, var13, var14, var3, var4, var11, var12, var5);
+      method5845(Rasterizer2D.graphicsPixels, this.pixels, this.palette, var7, var8, var13, var14, var3, var4, var11, var12, var5);
    }
 
-   @ObfuscatedName("r")
-   static void method5254(int[] var0, byte[] var1, int[] var2, int var3, int var4, int var5, int var6, int var7, int var8) {
+   @ObfuscatedName("j")
+   static void method5851(int[] var0, byte[] var1, int[] var2, int var3, int var4, int var5, int var6, int var7, int var8) {
       int var9 = -(var5 >> 2);
       var5 = -(var5 & 3);
 
@@ -243,8 +243,8 @@ public final class IndexedSprite extends Rasterizer2D {
 
    }
 
-   @ObfuscatedName("d")
-   static void method5260(int[] var0, byte[] var1, int[] var2, int var3, int var4, int var5, int var6, int var7, int var8, int var9, int var10, int var11) {
+   @ObfuscatedName("x")
+   static void method5845(int[] var0, byte[] var1, int[] var2, int var3, int var4, int var5, int var6, int var7, int var8, int var9, int var10, int var11) {
       int var12 = var3;
 
       for(int var13 = -var8; var13 < 0; ++var13) {

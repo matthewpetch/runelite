@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016-2018, Seth <Sethtroll3@gmail.com>
+ * Copyright (c) 2018, Seth <Sethtroll3@gmail.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -30,21 +30,11 @@ import net.runelite.client.config.ConfigItem;
 
 @ConfigGroup(
 	keyName = "motherlode",
-	name = "Motherlode",
+	name = "Motherlode Mine",
 	description = "Configuration for the motherlode plugin"
 )
 public interface MotherlodeConfig extends Config
 {
-	@ConfigItem(
-		keyName = "enabled",
-		name = "Enable",
-		description = "Configures whether or not the motherlode plugin is displayed"
-	)
-	default boolean enabled()
-	{
-		return false;
-	}
-
 	@ConfigItem(
 		keyName = "showRocks",
 		name = "Show Pay-dirt mining spots",

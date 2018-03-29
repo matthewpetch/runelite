@@ -24,29 +24,36 @@
  */
 package net.runelite.client.plugins.devtools;
 
-import com.google.inject.Binder;
+import com.google.inject.Provides;
 import java.awt.Font;
+import java.awt.image.BufferedImage;
+import java.util.Arrays;
+import java.util.Collection;
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
 import net.runelite.api.widgets.Widget;
+import net.runelite.client.config.ConfigManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
-import net.runelite.client.ui.ClientUI;
 import net.runelite.client.ui.FontManager;
 import net.runelite.client.ui.NavigationButton;
+import net.runelite.client.ui.PluginToolbar;
 import net.runelite.client.ui.overlay.Overlay;
 
 @PluginDescriptor(
-	name = "Developer tools plugin",
+	name = "Developer Tools",
 	developerPlugin = true
 )
 public class DevToolsPlugin extends Plugin
 {
 	@Inject
-	ClientUI ui;
+	private PluginToolbar pluginToolbar;
 
 	@Inject
-	DevToolsOverlay overlay;
+	private DevToolsOverlay overlay;
+
+	@Inject
+	private LocationOverlay locationOverlay;
 
 	private boolean togglePlayers;
 	private boolean toggleNpcs;
@@ -57,6 +64,7 @@ public class DevToolsPlugin extends Plugin
 	private boolean toggleDecor;
 	private boolean toggleInventory;
 	private boolean toggleProjectiles;
+	private boolean toggleLocation;
 
 	Widget currentWidget;
 	int itemIndex = -1;
@@ -64,23 +72,30 @@ public class DevToolsPlugin extends Plugin
 	private Font font;
 	private NavigationButton navButton;
 
-	@Override
-	public void configure(Binder binder)
+	@Provides
+	DevToolsConfig provideConfig(ConfigManager configManager)
 	{
-		binder.bind(DevToolsOverlay.class);
-		binder.bind(DevToolsPanel.class);
+		return configManager.getConfig(DevToolsConfig.class);
 	}
 
 	@Override
 	protected void startUp() throws Exception
 	{
 		final DevToolsPanel panel = injector.getInstance(DevToolsPanel.class);
-		navButton = new NavigationButton(
-			"Developer Tools",
-			ImageIO.read(getClass().getResourceAsStream("devtools_icon.png")),
-			() -> panel);
 
-		ui.getPluginToolbar().addNavigation(navButton);
+		BufferedImage icon;
+		synchronized (ImageIO.class)
+		{
+			icon = ImageIO.read(getClass().getResourceAsStream("devtools_icon.png"));
+		}
+
+		navButton = NavigationButton.builder()
+			.name("Developer Tools")
+			.icon(icon)
+			.panel(panel)
+			.build();
+
+		pluginToolbar.addNavigation(navButton);
 
 		font = FontManager.getRunescapeFont()
 			.deriveFont(Font.BOLD, 16);
@@ -89,13 +104,13 @@ public class DevToolsPlugin extends Plugin
 	@Override
 	protected void shutDown() throws Exception
 	{
-		ui.getPluginToolbar().removeNavigation(navButton);
+		pluginToolbar.removeNavigation(navButton);
 	}
 
 	@Override
-	public Overlay getOverlay()
+	public Collection<Overlay> getOverlays()
 	{
-		return overlay;
+		return Arrays.asList(overlay, locationOverlay);
 	}
 
 	Font getFont()
@@ -148,6 +163,11 @@ public class DevToolsPlugin extends Plugin
 		toggleProjectiles = !toggleProjectiles;
 	}
 
+	void toggleLocation()
+	{
+		toggleLocation = !toggleLocation;
+	}
+
 	boolean isTogglePlayers()
 	{
 		return togglePlayers;
@@ -191,5 +211,10 @@ public class DevToolsPlugin extends Plugin
 	boolean isToggleProjectiles()
 	{
 		return toggleProjectiles;
+	}
+
+	boolean isToggleLocation()
+	{
+		return toggleLocation;
 	}
 }

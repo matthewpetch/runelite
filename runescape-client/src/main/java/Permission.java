@@ -3,118 +3,109 @@ import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("in")
+@ObfuscatedName("is")
 @Implements("Permission")
 public enum Permission implements Enumerated {
-   @ObfuscatedName("n")
+   @ObfuscatedName("c")
    @ObfuscatedSignature(
-      signature = "Lin;"
+      signature = "Lis;"
    )
-   field3275(0, -1, true, false, true),
-   @ObfuscatedName("v")
+   field3336(0, -1, true, false, true),
+   @ObfuscatedName("i")
    @ObfuscatedSignature(
-      signature = "Lin;"
+      signature = "Lis;"
    )
-   field3273(1, 0, true, true, true),
-   @ObfuscatedName("y")
+   field3328(1, 0, true, true, true),
+   @ObfuscatedName("o")
    @ObfuscatedSignature(
-      signature = "Lin;"
+      signature = "Lis;"
    )
-   field3278(2, 1, true, true, false),
-   @ObfuscatedName("r")
+   field3330(2, 1, true, true, false),
+   @ObfuscatedName("j")
    @ObfuscatedSignature(
-      signature = "Lin;"
+      signature = "Lis;"
    )
-   field3272(3, 2, false, false, true),
-   @ObfuscatedName("h")
+   field3337(3, 2, false, false, true),
+   @ObfuscatedName("k")
    @ObfuscatedSignature(
-      signature = "Lin;"
+      signature = "Lis;"
    )
-   field3276(4, 3, false, false, true),
-   @ObfuscatedName("d")
+   field3331(4, 3, false, false, true),
+   @ObfuscatedName("x")
    @ObfuscatedSignature(
-      signature = "Lin;"
+      signature = "Lis;"
    )
-   field3282(5, 10, false, false, true);
+   field3332(5, 10, false, false, true);
 
-   @ObfuscatedName("s")
+   @ObfuscatedName("z")
    @ObfuscatedGetter(
-      intValue = -738693793
+      intValue = -363914307
    )
-   final int field3277;
-   @ObfuscatedName("b")
+   final int field3333;
+   @ObfuscatedName("p")
    @ObfuscatedGetter(
-      intValue = 1280221939
+      intValue = -966770069
    )
-   public final int field3279;
-   @ObfuscatedName("e")
-   public final boolean field3280;
-   @ObfuscatedName("f")
-   public final boolean field3281;
+   public final int field3334;
+   @ObfuscatedName("w")
+   public final boolean field3335;
+   @ObfuscatedName("r")
+   public final boolean field3327;
 
    Permission(int var3, int var4, boolean var5, boolean var6, boolean var7) {
-      this.field3277 = var3;
-      this.field3279 = var4;
-      this.field3280 = var6;
-      this.field3281 = var7;
+      this.field3333 = var3;
+      this.field3334 = var4;
+      this.field3335 = var6;
+      this.field3327 = var7;
    }
 
-   @ObfuscatedName("n")
+   @ObfuscatedName("c")
    @ObfuscatedSignature(
       signature = "(I)I",
-      garbageValue = "2130441585"
+      garbageValue = "-1780726447"
    )
    public int rsOrdinal() {
-      return this.field3277;
+      return this.field3333;
    }
 
-   @ObfuscatedName("n")
+   @ObfuscatedName("j")
    @ObfuscatedSignature(
-      signature = "(II)Lix;",
-      garbageValue = "696147550"
+      signature = "(I)[Ljd;",
+      garbageValue = "1287517039"
    )
-   public static class254 method4285(int var0) {
-      class254 var1 = (class254)class254.field3405.get((long)var0);
-      if(var1 != null) {
-         return var1;
-      } else {
-         byte[] var2 = class254.field3408.getConfigData(19, var0);
-         var1 = new class254();
-         if(var2 != null) {
-            var1.method4511(new Buffer(var2));
-         }
-
-         class254.field3405.put(var1, (long)var0);
-         return var1;
-      }
+   static VerticalAlignment[] method4534() {
+      return new VerticalAlignment[]{VerticalAlignment.field3435, VerticalAlignment.field3434, VerticalAlignment.field3432};
    }
 
-   @ObfuscatedName("v")
+   @ObfuscatedName("gg")
    @ObfuscatedSignature(
-      signature = "(IIB)I",
-      garbageValue = "25"
+      signature = "(IIII)V",
+      garbageValue = "-1793022329"
    )
-   static int method4283(int var0, int var1) {
-      if(var0 == -2) {
-         return 12345678;
-      } else if(var0 == -1) {
-         if(var1 < 0) {
-            var1 = 0;
-         } else if(var1 > 127) {
-            var1 = 127;
-         }
-
-         var1 = 127 - var1;
-         return var1;
-      } else {
-         var1 = (var0 & 127) * var1 / 128;
-         if(var1 < 2) {
-            var1 = 2;
-         } else if(var1 > 126) {
-            var1 = 126;
-         }
-
-         return (var0 & 65408) + var1;
+   static void method4531(int var0, int var1, int var2) {
+      if(Client.field1091 != 0 && var1 != 0 && Client.queuedSoundEffectCount < 50) {
+         Client.queuedSoundEffectIDs[Client.queuedSoundEffectCount] = var0;
+         Client.unknownSoundValues1[Client.queuedSoundEffectCount] = var1;
+         Client.unknownSoundValues2[Client.queuedSoundEffectCount] = var2;
+         Client.audioEffects[Client.queuedSoundEffectCount] = null;
+         Client.soundLocations[Client.queuedSoundEffectCount] = 0;
+         ++Client.queuedSoundEffectCount;
       }
+
+   }
+
+   @ObfuscatedName("gm")
+   @ObfuscatedSignature(
+      signature = "(B)V",
+      garbageValue = "61"
+   )
+   static void method4535() {
+      PacketNode var0 = FaceNormal.method3078(ClientPacket.field2407, Client.field902.field1475);
+      PacketBuffer var1 = var0.packetBuffer;
+      int var2 = Client.isResized?2:1;
+      var1.putByte(var2);
+      var0.packetBuffer.putShort(Sequence.canvasWidth);
+      var0.packetBuffer.putShort(class45.canvasHeight);
+      Client.field902.method2036(var0);
    }
 }

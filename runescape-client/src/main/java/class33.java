@@ -1,109 +1,121 @@
+import java.io.IOException;
 import net.runelite.mapping.Export;
-import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("ae")
-public class class33 {
-   @ObfuscatedName("k")
-   static int[] field451;
-   @ObfuscatedName("ct")
-   @ObfuscatedGetter(
-      longValue = -6566925207704575115L
-   )
-   static long field452;
-   @ObfuscatedName("ix")
-   @ObfuscatedGetter(
-      intValue = 1511626629
-   )
-   static int field448;
-   @ObfuscatedName("n")
-   String field446;
-   @ObfuscatedName("v")
-   @ObfuscatedGetter(
-      intValue = 4017207
-   )
-   int field447;
-   @ObfuscatedName("y")
-   @ObfuscatedGetter(
-      intValue = -404324197
-   )
-   int field450;
-   @ObfuscatedName("r")
+@ObfuscatedName("aa")
+public final class class33 {
+   @ObfuscatedName("oh")
    @ObfuscatedSignature(
-      signature = "Lk;"
+      signature = "Lki;"
    )
-   Size field449;
+   @Export("clanMemberManager")
+   static ClanMemberManager clanMemberManager;
+   @ObfuscatedName("c")
+   @ObfuscatedSignature(
+      signature = "Ljm;"
+   )
+   static IndexDataBase field441;
+   @ObfuscatedName("i")
+   final int[] field444;
 
-   @ObfuscatedSignature(
-      signature = "(Ljava/lang/String;IILk;)V"
-   )
-   class33(String var1, int var2, int var3, Size var4) {
-      this.field446 = var1;
-      this.field447 = var2;
-      this.field450 = var3;
-      this.field449 = var4;
+   class33() {
+      this.field444 = new int[4096];
    }
 
-   @ObfuscatedName("e")
+   @ObfuscatedName("c")
    @ObfuscatedSignature(
-      signature = "(Lil;IB)Lkm;",
-      garbageValue = "6"
+      signature = "(Lad;I)V",
+      garbageValue = "-1673673141"
    )
-   public static IndexedSprite method346(IndexDataBase var0, int var1) {
-      if(!ItemContainer.method1098(var0, var1)) {
-         return null;
-      } else {
-         IndexedSprite var3 = new IndexedSprite();
-         var3.width = class299.field3868;
-         var3.originalHeight = class299.field3867;
-         var3.offsetX = class299.field3870[0];
-         var3.offsetY = class299.offsetsY[0];
-         var3.originalWidth = class54.field635[0];
-         var3.height = UrlRequester.field2099[0];
-         var3.palette = class299.field3869;
-         var3.pixels = class188.spritePixels[0];
-         class139.method2922();
-         return var3;
-      }
-   }
-
-   @ObfuscatedName("gt")
-   @ObfuscatedSignature(
-      signature = "(I)V",
-      garbageValue = "642107592"
-   )
-   static void method344() {
-      if(Client.field974 >= 0 && Client.cachedPlayers[Client.field974] != null) {
-         ItemContainer.method1097(Client.cachedPlayers[Client.field974], false);
+   final void method377(class44 var1) {
+      for(int var2 = 0; var2 < 64; ++var2) {
+         for(int var3 = 0; var3 < 64; ++var3) {
+            this.field444[var2 * 64 + var3] = var1.method659(var2, var3) | -16777216;
+         }
       }
 
    }
 
-   @ObfuscatedName("kz")
+   @ObfuscatedName("i")
    @ObfuscatedSignature(
-      signature = "(Ljava/lang/String;B)Z",
-      garbageValue = "-79"
+      signature = "(III)I",
+      garbageValue = "-37520770"
    )
-   @Export("isIgnored")
-   static boolean isIgnored(String var0) {
-      if(var0 == null) {
-         return false;
-      } else {
-         String var1 = WorldMapData.cleanUsername(var0, GrandExchangeOffer.jagexLoginType);
+   final int method376(int var1, int var2) {
+      return this.field444[var1 * 64 + var2];
+   }
 
-         for(int var2 = 0; var2 < Client.ignoreCount; ++var2) {
-            Ignore var3 = Client.ignores[var2];
-            if(var1.equalsIgnoreCase(WorldMapData.cleanUsername(var3.name, GrandExchangeOffer.jagexLoginType))) {
-               return true;
-            }
+   @ObfuscatedName("j")
+   @ObfuscatedSignature(
+      signature = "(I)[B",
+      garbageValue = "1218769080"
+   )
+   public static byte[] method378() {
+      byte[] var0 = new byte[24];
 
-            if(var1.equalsIgnoreCase(WorldMapData.cleanUsername(var3.previousName, GrandExchangeOffer.jagexLoginType))) {
-               return true;
-            }
+      try {
+         class167.randomDat.seek(0L);
+         class167.randomDat.read(var0);
+
+         int var1;
+         for(var1 = 0; var1 < 24 && var0[var1] == 0; ++var1) {
+            ;
          }
 
-         return false;
+         if(var1 >= 24) {
+            throw new IOException();
+         }
+      } catch (Exception var4) {
+         for(int var2 = 0; var2 < 24; ++var2) {
+            var0[var2] = -1;
+         }
+      }
+
+      return var0;
+   }
+
+   @ObfuscatedName("r")
+   @ObfuscatedSignature(
+      signature = "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;I)V",
+      garbageValue = "1637554704"
+   )
+   static void method385(String var0, String var1, String var2) {
+      class90.loginMessage1 = var0;
+      class90.loginMessage2 = var1;
+      class90.loginMessage3 = var2;
+   }
+
+   @ObfuscatedName("fd")
+   @ObfuscatedSignature(
+      signature = "(I)V",
+      garbageValue = "-1404896621"
+   )
+   static final void method384() {
+      if(Tile.soundSystem1 != null) {
+         Tile.soundSystem1.method2222();
+      }
+
+      if(OwnWorldComparator.soundSystem0 != null) {
+         OwnWorldComparator.soundSystem0.method2222();
+      }
+
+   }
+
+   @ObfuscatedName("ip")
+   @ObfuscatedSignature(
+      signature = "(IB)V",
+      garbageValue = "19"
+   )
+   static final void method379(int var0) {
+      if(var0 >= 0) {
+         int var1 = Client.menuActionParams0[var0];
+         int var2 = Client.menuActionParams1[var0];
+         int var3 = Client.menuTypes[var0];
+         int var4 = Client.menuIdentifiers[var0];
+         String var5 = Client.menuOptions[var0];
+         String var6 = Client.menuTargets[var0];
+         class177.menuAction(var1, var2, var3, var4, var5, var6, MouseInput.mouseLastPressedX, MouseInput.mouseLastPressedY);
       }
    }
 }

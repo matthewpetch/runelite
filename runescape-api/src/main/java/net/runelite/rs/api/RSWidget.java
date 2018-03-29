@@ -33,6 +33,7 @@ public interface RSWidget extends Widget
 	int[][] getDynamicValues();
 
 	@Import("children")
+	@Override
 	RSWidget[] getChildren();
 
 	@Import("id")
@@ -41,6 +42,12 @@ public interface RSWidget extends Widget
 
 	@Import("parentId")
 	int getRSParentId();
+
+	@Import("clickMask")
+	int setClickMask();
+
+	@Import("clickMask")
+	void setClickMask(int mask);
 
 	@Import("boundsIndex")
 	int getBoundsIndex();
@@ -64,10 +71,10 @@ public interface RSWidget extends Widget
 	@Import("text")
 	String getRSText();
 
-	@Import("name")
+	@Import("opBase")
 	String getRSName();
 
-	@Import("name")
+	@Import("opBase")
 	void setRSName(String name);
 
 	@Import("text")
@@ -118,7 +125,8 @@ public interface RSWidget extends Widget
 	void setHeight(int height);
 
 	@Import("isHidden")
-	boolean isRSHidden();
+	@Override
+	boolean isSelfHidden();
 
 	@Import("isHidden")
 	void setHidden(boolean hidden);
@@ -217,4 +225,6 @@ public interface RSWidget extends Widget
 	@Import("paddingY")
 	@Override
 	void setPaddingY(int paddingY);
+
+	void broadcastHidden(boolean hidden);
 }

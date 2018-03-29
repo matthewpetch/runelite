@@ -24,26 +24,25 @@
  */
 package net.runelite.client.plugins.playerindicators;
 
+import com.google.common.collect.Sets;
 import com.google.inject.Provides;
+import java.util.Collection;
 import javax.inject.Inject;
-import net.runelite.api.Client;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.Overlay;
 
 @PluginDescriptor(
-	name = "Player names plugin"
+	name = "Player Indicators"
 )
 public class PlayerIndicatorsPlugin extends Plugin
 {
 	@Inject
-	Client client;
+	private PlayerIndicatorsOverlay playerIndicatorsOverlay;
 
 	@Inject
-	PlayerIndicatorsConfig config;
-
-	PlayerIndicatorsOverlay playerIndicatorsOverlay;
+	private PlayerIndicatorsMinimapOverlay playerIndicatorsMinimapOverlay;
 
 	@Provides
 	PlayerIndicatorsConfig provideConfig(ConfigManager configManager)
@@ -52,14 +51,8 @@ public class PlayerIndicatorsPlugin extends Plugin
 	}
 
 	@Override
-	protected void startUp() throws Exception
+	public Collection<Overlay> getOverlays()
 	{
-		playerIndicatorsOverlay = new PlayerIndicatorsOverlay(client, config);
-	}
-
-	@Override
-	public Overlay getOverlay()
-	{
-		return playerIndicatorsOverlay;
+		return Sets.newHashSet(playerIndicatorsOverlay, playerIndicatorsMinimapOverlay);
 	}
 }

@@ -4,50 +4,57 @@ import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("eg")
+@ObfuscatedName("en")
 @Implements("SceneTilePaint")
 public final class SceneTilePaint {
-   @ObfuscatedName("ej")
+   @ObfuscatedName("p")
    @ObfuscatedGetter(
-      longValue = 8778909200186975023L
+      intValue = 1347687077
    )
-   static long field1945;
-   @ObfuscatedName("n")
+   @Export("intStackSize")
+   static int intStackSize;
+   @ObfuscatedName("fq")
+   @ObfuscatedSignature(
+      signature = "[Lla;"
+   )
+   @Export("mapDots")
+   static SpritePixels[] mapDots;
+   @ObfuscatedName("c")
    @ObfuscatedGetter(
-      intValue = -1205436467
+      intValue = -18770937
    )
    @Export("swColor")
    int swColor;
-   @ObfuscatedName("v")
+   @ObfuscatedName("i")
    @ObfuscatedGetter(
-      intValue = 223131607
+      intValue = -448684097
    )
    @Export("seColor")
    int seColor;
-   @ObfuscatedName("y")
+   @ObfuscatedName("o")
    @ObfuscatedGetter(
-      intValue = -48624337
+      intValue = -319993733
    )
    @Export("neColor")
    int neColor;
-   @ObfuscatedName("r")
+   @ObfuscatedName("j")
    @ObfuscatedGetter(
-      intValue = 1347512629
+      intValue = 940147599
    )
    @Export("nwColor")
    int nwColor;
-   @ObfuscatedName("h")
+   @ObfuscatedName("k")
    @ObfuscatedGetter(
-      intValue = 1886351167
+      intValue = 1768517335
    )
    @Export("texture")
    int texture;
-   @ObfuscatedName("d")
+   @ObfuscatedName("x")
    @Export("flatShade")
    boolean flatShade;
-   @ObfuscatedName("s")
+   @ObfuscatedName("z")
    @ObfuscatedGetter(
-      intValue = 450993421
+      intValue = 897907373
    )
    @Export("rgb")
    int rgb;
@@ -63,44 +70,28 @@ public final class SceneTilePaint {
       this.flatShade = var7;
    }
 
-   @ObfuscatedName("r")
+   @ObfuscatedName("c")
    @ObfuscatedSignature(
-      signature = "(IZI)Ljava/lang/String;",
-      garbageValue = "2099683278"
+      signature = "(I)I",
+      garbageValue = "-178352703"
    )
-   public static String method2741(int var0, boolean var1) {
-      if(var0 < 0) {
-         return Integer.toString(var0);
-      } else {
-         int var3 = var0;
-         String var2;
-         if(var0 < 0) {
-            var2 = Integer.toString(var0, 10);
-         } else {
-            int var4 = 2;
+   static int method2872() {
+      return ++class95.field1435 - 1;
+   }
 
-            for(int var5 = var0 / 10; var5 != 0; ++var4) {
-               var5 /= 10;
-            }
+   @ObfuscatedName("z")
+   @ObfuscatedSignature(
+      signature = "(Ljava/lang/CharSequence;I)I",
+      garbageValue = "1551059774"
+   )
+   public static int method2873(CharSequence var0) {
+      int var1 = var0.length();
+      int var2 = 0;
 
-            char[] var6 = new char[var4];
-            var6[0] = '+';
-
-            for(int var7 = var4 - 1; var7 > 0; --var7) {
-               int var8 = var3;
-               var3 /= 10;
-               int var9 = var8 - var3 * 10;
-               if(var9 >= 10) {
-                  var6[var7] = (char)(var9 + 87);
-               } else {
-                  var6[var7] = (char)(var9 + 48);
-               }
-            }
-
-            var2 = new String(var6);
-         }
-
-         return var2;
+      for(int var3 = 0; var3 < var1; ++var3) {
+         var2 = (var2 << 5) - var2 + var0.charAt(var3);
       }
+
+      return var2;
    }
 }

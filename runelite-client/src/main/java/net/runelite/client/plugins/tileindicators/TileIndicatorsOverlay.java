@@ -24,13 +24,12 @@
  */
 package net.runelite.client.plugins.tileindicators;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
 import net.runelite.api.Client;
 import net.runelite.api.Perspective;
-import net.runelite.api.Point;
+import net.runelite.api.coords.LocalPoint;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
@@ -47,32 +46,27 @@ public class TileIndicatorsOverlay extends Overlay
 		this.client = client;
 		this.config = config;
 		setPosition(OverlayPosition.DYNAMIC);
+		setLayer(OverlayLayer.ABOVE_SCENE);
 		setPriority(OverlayPriority.LOW);
-		setLayer(OverlayLayer.UNDER_WIDGETS);
 	}
 
 	@Override
-	public Dimension render(Graphics2D graphics, java.awt.Point parent)
+	public Dimension render(Graphics2D graphics)
 	{
-		if (config.highlightDestination()
-			&& client.getSceneDestinationLocation().getX() >= 0
-			&& client.getSceneDestinationLocation().getY() >= 0)
+		LocalPoint dest = client.getLocalDestinationLocation();
+		if (dest == null)
 		{
-			drawRegionTile(graphics, client.getSceneDestinationLocation(), config.highlightDestinationColor());
+			return null;
 		}
+
+		Polygon poly = Perspective.getCanvasTilePoly(client, dest);
+		if (poly == null)
+		{
+			return null;
+		}
+		
+		OverlayUtil.renderPolygon(graphics, poly, config.highlightDestinationColor());
 
 		return null;
-	}
-
-	private void drawRegionTile(Graphics2D graphics, Point tile, Color color)
-	{
-		Point localTile = Perspective.regionToLocal(client, tile);
-		localTile = new Point(localTile.getX() + Perspective.LOCAL_TILE_SIZE / 2, localTile.getY() + Perspective.LOCAL_TILE_SIZE / 2);
-		Polygon poly = Perspective.getCanvasTilePoly(client, localTile);
-
-		if (poly != null)
-		{
-			OverlayUtil.renderPolygon(graphics, poly, color);
-		}
 	}
 }

@@ -36,8 +36,8 @@ public class Instructions
 	public void init()
 	{
 		add(LOAD_INT, "load_int", 0, 1);
-		add(GET_SETTINGS, "get_settings", 0, 1);
-		add(PUT_SETTINGS, "put_settings", 0, 1);
+		add(GET_VARP, "get_varp", 0, 1);
+		add(PUT_VARP, "put_varp", 0, 1);
 		add(LOAD_STRING, "load_string", 0, 0, 0, 1);
 		add(JUMP, "jump", 0, 0);
 		add(IF_ICMPNE, "if_icmpne", 2, 0);
@@ -482,6 +482,7 @@ public class Instructions
 		add(6507, 4, 0);
 		add(GET_WORLD_BY_INDEX, "get_world_by_index", 1, 4, 0, 2);
 		add(6512, 1, 0);
+		add(GET_IS_MOBILE, "get_is_mobile", 0, 1);
 		// 6600-6700
 		add(6600, 0, 0);
 		add(6601, 1, 0, 0, 1);

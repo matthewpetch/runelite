@@ -4,33 +4,33 @@ import net.runelite.mapping.Implements;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("hy")
+@ObfuscatedName("hh")
 @Implements("HashTableIterator")
 public class HashTableIterator implements Iterator {
-   @ObfuscatedName("n")
+   @ObfuscatedName("c")
    @ObfuscatedSignature(
-      signature = "Lgb;"
+      signature = "Lhz;"
    )
    @Export("table")
    IterableHashTable table;
-   @ObfuscatedName("v")
+   @ObfuscatedName("i")
    @ObfuscatedSignature(
-      signature = "Lgw;"
+      signature = "Lhg;"
    )
    @Export("tail")
    Node tail;
-   @ObfuscatedName("y")
+   @ObfuscatedName("o")
    @Export("index")
    int index;
-   @ObfuscatedName("r")
+   @ObfuscatedName("j")
    @ObfuscatedSignature(
-      signature = "Lgw;"
+      signature = "Lhg;"
    )
    @Export("head")
    Node head;
 
    @ObfuscatedSignature(
-      signature = "(Lgb;)V"
+      signature = "(Lhz;)V"
    )
    HashTableIterator(IterableHashTable var1) {
       this.head = null;
@@ -38,7 +38,7 @@ public class HashTableIterator implements Iterator {
       this.reset();
    }
 
-   @ObfuscatedName("b")
+   @ObfuscatedName("z")
    @Export("reset")
    void reset() {
       this.tail = this.table.buckets[0].next;
@@ -63,15 +63,6 @@ public class HashTableIterator implements Iterator {
       }
    }
 
-   public void remove() {
-      if(this.head == null) {
-         throw new IllegalStateException();
-      } else {
-         this.head.unlink();
-         this.head = null;
-      }
-   }
-
    public Object next() {
       Node var1;
       if(this.table.buckets[this.index - 1] != this.tail) {
@@ -91,6 +82,15 @@ public class HashTableIterator implements Iterator {
          this.tail = var1.next;
          this.head = var1;
          return var1;
+      }
+   }
+
+   public void remove() {
+      if(this.head == null) {
+         throw new IllegalStateException();
+      } else {
+         this.head.unlink();
+         this.head = null;
       }
    }
 }

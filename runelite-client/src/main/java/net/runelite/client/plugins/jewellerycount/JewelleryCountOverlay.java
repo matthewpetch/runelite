@@ -39,6 +39,7 @@ import net.runelite.api.widgets.WidgetInfo;
 import net.runelite.api.widgets.WidgetItem;
 import net.runelite.client.ui.FontManager;
 import net.runelite.client.ui.overlay.Overlay;
+import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.components.TextComponent;
 import net.runelite.client.util.QueryRunner;
@@ -46,24 +47,18 @@ import net.runelite.client.util.QueryRunner;
 class JewelleryCountOverlay extends Overlay
 {
 	private final QueryRunner queryRunner;
-	private final JewelleryCountConfig config;
 
 	@Inject
-	JewelleryCountOverlay(QueryRunner queryRunner, JewelleryCountConfig config)
+	JewelleryCountOverlay(QueryRunner queryRunner)
 	{
 		setPosition(OverlayPosition.DYNAMIC);
+		setLayer(OverlayLayer.ABOVE_WIDGETS);
 		this.queryRunner = queryRunner;
-		this.config = config;
 	}
 
 	@Override
-	public Dimension render(Graphics2D graphics, Point parent)
+	public Dimension render(Graphics2D graphics)
 	{
-		if (!config.enabled())
-		{
-			return null;
-		}
-
 		graphics.setFont(FontManager.getRunescapeSmallFont());
 
 		for (WidgetItem item : getJewelleryWidgetItems())
@@ -79,7 +74,7 @@ class JewelleryCountOverlay extends Overlay
 			final TextComponent textComponent = new TextComponent();
 			textComponent.setPosition(new Point(bounds.x, bounds.y + 16));
 			textComponent.setText(String.valueOf(charges.getCharges()));
-			textComponent.render(graphics, parent);
+			textComponent.render(graphics);
 		}
 
 		return null;
@@ -93,7 +88,8 @@ class JewelleryCountOverlay extends Overlay
 		Query equipmentQuery = new EquipmentItemQuery().slotEquals(
 			WidgetInfo.EQUIPMENT_AMULET,
 			WidgetInfo.EQUIPMENT_RING,
-			WidgetInfo.EQUIPMENT_GLOVES
+			WidgetInfo.EQUIPMENT_GLOVES,
+			WidgetInfo.EQUIPMENT_WEAPON
 		);
 		WidgetItem[] equipmentWidgetItems = queryRunner.runQuery(equipmentQuery);
 

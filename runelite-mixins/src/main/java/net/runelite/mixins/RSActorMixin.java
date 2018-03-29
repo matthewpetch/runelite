@@ -30,16 +30,17 @@ import java.awt.image.BufferedImage;
 import net.runelite.api.Actor;
 import net.runelite.api.NPC;
 import net.runelite.api.Perspective;
-import static net.runelite.api.Perspective.LOCAL_COORD_BITS;
 import net.runelite.api.Player;
 import net.runelite.api.Point;
 import net.runelite.api.SpritePixels;
+import net.runelite.api.coords.LocalPoint;
+import net.runelite.api.coords.WorldPoint;
+import net.runelite.api.events.AnimationChanged;
 import net.runelite.api.events.GraphicChanged;
 import net.runelite.api.mixins.FieldHook;
 import net.runelite.api.mixins.Inject;
 import net.runelite.api.mixins.Mixin;
 import net.runelite.api.mixins.Shadow;
-import net.runelite.api.events.AnimationChanged;
 import static net.runelite.client.callback.Hooks.eventBus;
 import net.runelite.rs.api.RSActor;
 import net.runelite.rs.api.RSClient;
@@ -47,6 +48,7 @@ import net.runelite.rs.api.RSCombatInfo1;
 import net.runelite.rs.api.RSCombatInfo2;
 import net.runelite.rs.api.RSCombatInfoList;
 import net.runelite.rs.api.RSCombatInfoListHolder;
+import net.runelite.rs.api.RSModel;
 import net.runelite.rs.api.RSNode;
 
 @Mixin(RSActor.class)
@@ -123,24 +125,16 @@ public abstract class RSActorMixin implements RSActor
 
 	@Override
 	@Inject
-	public Point getWorldLocation()
+	public WorldPoint getWorldLocation()
 	{
-		Point localLocation = getLocalLocation();
-		return Perspective.localToWorld(client, localLocation);
+		return WorldPoint.fromLocal(client, getX(), getY(), client.getPlane());
 	}
 
 	@Inject
 	@Override
-	public Point getRegionLocation()
+	public LocalPoint getLocalLocation()
 	{
-		return new Point(getX() >>> LOCAL_COORD_BITS, getY() >>> LOCAL_COORD_BITS);// divided by 128
-	}
-
-	@Inject
-	@Override
-	public Point getLocalLocation()
-	{
-		return new Point(getX(), getY());
+		return new LocalPoint(getX(), getY());
 	}
 
 	@Inject
@@ -194,5 +188,17 @@ public abstract class RSActorMixin implements RSActor
 		GraphicChanged graphicChanged = new GraphicChanged();
 		graphicChanged.setActor(this);
 		eventBus.post(graphicChanged);
+	}
+
+	@Inject
+	@Override
+	public Polygon getConvexHull()
+	{
+		RSModel model = getModel();
+		if (model == null)
+		{
+			return null;
+		}
+		return model.getConvexHull(getX(), getY(), getOrientation());
 	}
 }

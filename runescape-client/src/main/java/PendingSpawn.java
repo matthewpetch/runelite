@@ -4,74 +4,96 @@ import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("bc")
+@ObfuscatedName("bi")
 @Implements("PendingSpawn")
 public final class PendingSpawn extends Node {
-   @ObfuscatedName("n")
+   @ObfuscatedName("m")
    @ObfuscatedGetter(
-      intValue = 385040307
+      intValue = -1051628215
+   )
+   public static int field1146;
+   @ObfuscatedName("bw")
+   @ObfuscatedGetter(
+      intValue = -307529097
+   )
+   static int field1145;
+   @ObfuscatedName("cl")
+   @ObfuscatedSignature(
+      signature = "Ljs;"
+   )
+   @Export("indexTextures")
+   static IndexData indexTextures;
+   @ObfuscatedName("fn")
+   @ObfuscatedSignature(
+      signature = "[Llq;"
+   )
+   @Export("scrollbarSprites")
+   static IndexedSprite[] scrollbarSprites;
+   @ObfuscatedName("c")
+   @ObfuscatedGetter(
+      intValue = 979197913
    )
    @Export("level")
    int level;
-   @ObfuscatedName("v")
+   @ObfuscatedName("i")
    @ObfuscatedGetter(
-      intValue = -2008759881
+      intValue = -1073346127
    )
    @Export("type")
    int type;
-   @ObfuscatedName("y")
+   @ObfuscatedName("o")
    @ObfuscatedGetter(
-      intValue = 1557662453
+      intValue = -438486631
    )
    @Export("x")
    int x;
-   @ObfuscatedName("r")
+   @ObfuscatedName("j")
    @ObfuscatedGetter(
-      intValue = 799939429
+      intValue = -650060595
    )
    @Export("y")
    int y;
-   @ObfuscatedName("h")
+   @ObfuscatedName("k")
    @ObfuscatedGetter(
-      intValue = 1071753051
+      intValue = -754109851
    )
-   int field1140;
-   @ObfuscatedName("d")
+   int field1137;
+   @ObfuscatedName("x")
    @ObfuscatedGetter(
-      intValue = 1004995705
+      intValue = 121153031
    )
-   int field1141;
-   @ObfuscatedName("s")
+   int field1138;
+   @ObfuscatedName("z")
    @ObfuscatedGetter(
-      intValue = -1108987413
+      intValue = -1796400831
    )
-   int field1142;
-   @ObfuscatedName("b")
+   int field1134;
+   @ObfuscatedName("p")
    @ObfuscatedGetter(
-      intValue = 2048199829
+      intValue = 96829491
    )
    @Export("id")
    int id;
-   @ObfuscatedName("e")
+   @ObfuscatedName("w")
    @ObfuscatedGetter(
-      intValue = -2140050245
+      intValue = 291338857
    )
    @Export("orientation")
    int orientation;
-   @ObfuscatedName("f")
+   @ObfuscatedName("r")
    @ObfuscatedGetter(
-      intValue = -1483058037
+      intValue = -641602395
    )
-   int field1145;
-   @ObfuscatedName("z")
+   int field1142;
+   @ObfuscatedName("d")
    @ObfuscatedGetter(
-      intValue = -1835930035
+      intValue = -2105868869
    )
    @Export("delay")
    int delay;
-   @ObfuscatedName("u")
+   @ObfuscatedName("a")
    @ObfuscatedGetter(
-      intValue = 1028985825
+      intValue = -1885525981
    )
    @Export("hitpoints")
    int hitpoints;
@@ -81,68 +103,55 @@ public final class PendingSpawn extends Node {
       this.hitpoints = -1;
    }
 
-   @ObfuscatedName("n")
+   @ObfuscatedName("w")
    @ObfuscatedSignature(
-      signature = "(II)I",
-      garbageValue = "1477168548"
+      signature = "(B)Lfm;",
+      garbageValue = "-115"
    )
-   @Export("getVarbit")
-   public static int getVarbit(int var0) {
-      Varbit var1 = class231.method4261(var0);
-      int var2 = var1.configId;
-      int var3 = var1.leastSignificantBit;
-      int var4 = var1.mostSignificantBit;
-      int var5 = class222.varpsMasks[var4 - var3];
-      return class222.widgetSettings[var2] >> var3 & var5;
+   public static Timer method1581() {
+      try {
+         return new NanoTimer();
+      } catch (Throwable var1) {
+         return new MilliTimer();
+      }
    }
 
-   @ObfuscatedName("s")
+   @ObfuscatedName("n")
    @ObfuscatedSignature(
-      signature = "([BIILeh;[Lfi;B)V",
-      garbageValue = "-128"
+      signature = "(ILcx;ZI)I",
+      garbageValue = "1396819319"
    )
-   static final void method1552(byte[] var0, int var1, int var2, Region var3, CollisionData[] var4) {
-      Buffer var5 = new Buffer(var0);
-      int var6 = -1;
-
-      while(true) {
-         int var7 = var5.getUSmart();
-         if(var7 == 0) {
-            return;
-         }
-
-         var6 += var7;
-         int var8 = 0;
-
-         while(true) {
-            int var9 = var5.getUSmart();
-            if(var9 == 0) {
-               break;
+   static int method1582(int var0, Script var1, boolean var2) {
+      Widget var3 = class3.getWidget(class81.intStack[--SceneTilePaint.intStackSize]);
+      if(var0 == 2800) {
+         int[] var4 = class81.intStack;
+         int var5 = ++SceneTilePaint.intStackSize - 1;
+         int var7 = class45.getWidgetClickMask(var3);
+         int var6 = var7 >> 11 & 63;
+         var4[var5] = var6;
+         return 1;
+      } else if(var0 != 2801) {
+         if(var0 == 2802) {
+            if(var3.opBase == null) {
+               class81.scriptStringStack[++World.scriptStringStackSize - 1] = "";
+            } else {
+               class81.scriptStringStack[++World.scriptStringStackSize - 1] = var3.opBase;
             }
 
-            var8 += var9 - 1;
-            int var10 = var8 & 63;
-            int var11 = var8 >> 6 & 63;
-            int var12 = var8 >> 12;
-            int var13 = var5.readUnsignedByte();
-            int var14 = var13 >> 2;
-            int var15 = var13 & 3;
-            int var16 = var11 + var1;
-            int var17 = var10 + var2;
-            if(var16 > 0 && var17 > 0 && var16 < 103 && var17 < 103) {
-               int var18 = var12;
-               if((class61.tileSettings[1][var16][var17] & 2) == 2) {
-                  var18 = var12 - 1;
-               }
-
-               CollisionData var19 = null;
-               if(var18 >= 0) {
-                  var19 = var4[var18];
-               }
-
-               Ignore.addObject(var12, var16, var17, var6, var15, var14, var3, var19);
-            }
+            return 1;
+         } else {
+            return 2;
          }
+      } else {
+         int var8 = class81.intStack[--SceneTilePaint.intStackSize];
+         --var8;
+         if(var3.actions != null && var8 < var3.actions.length && var3.actions[var8] != null) {
+            class81.scriptStringStack[++World.scriptStringStackSize - 1] = var3.actions[var8];
+         } else {
+            class81.scriptStringStack[++World.scriptStringStackSize - 1] = "";
+         }
+
+         return 1;
       }
    }
 }

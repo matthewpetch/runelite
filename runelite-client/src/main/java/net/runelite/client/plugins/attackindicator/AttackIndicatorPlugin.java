@@ -24,10 +24,10 @@
  */
 package net.runelite.client.plugins.attackindicator;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import com.google.common.eventbus.Subscribe;
-import com.google.inject.Binder;
 import com.google.inject.Provides;
 import java.util.HashSet;
 import java.util.Set;
@@ -35,6 +35,7 @@ import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
+import net.runelite.api.Setting;
 import net.runelite.api.Skill;
 import net.runelite.api.Varbits;
 import net.runelite.api.events.ConfigChanged;
@@ -48,10 +49,12 @@ import static net.runelite.api.widgets.WidgetInfo.TO_GROUP;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
-import static net.runelite.client.plugins.attackindicator.AttackStyle.*;
+import static net.runelite.client.plugins.attackindicator.AttackStyle.CASTING;
+import static net.runelite.client.plugins.attackindicator.AttackStyle.DEFENSIVE_CASTING;
+import static net.runelite.client.plugins.attackindicator.AttackStyle.OTHER;
 
 @PluginDescriptor(
-	name = "Attack indicator plugin"
+	name = "Attack Indicators"
 )
 @Slf4j
 public class AttackIndicatorPlugin extends Plugin
@@ -65,19 +68,13 @@ public class AttackIndicatorPlugin extends Plugin
 	private final Table<WeaponType, WidgetInfo, Boolean> widgetsToHide = HashBasedTable.create();
 
 	@Inject
-	Client client;
+	private Client client;
 
 	@Inject
-	AttackIndicatorConfig config;
+	private AttackIndicatorConfig config;
 
 	@Inject
-	AttackIndicatorOverlay overlay;
-
-	@Override
-	public void configure(Binder binder)
-	{
-		binder.bind(AttackIndicatorOverlay.class);
-	}
+	private AttackIndicatorOverlay overlay;
 
 	@Provides
 	AttackIndicatorConfig provideConfig(ConfigManager configManager)
@@ -104,10 +101,18 @@ public class AttackIndicatorPlugin extends Plugin
 			updateWarnedSkills(config.warnForMagic(), Skill.MAGIC);
 			updateAttackStyle(
 				client.getSetting(Varbits.EQUIPPED_WEAPON_TYPE),
-				client.getSetting(Varbits.ATTACK_STYLE),
+				client.getSetting(Setting.ATTACK_STYLE),
 				client.getSetting(Varbits.DEFENSIVE_CASTING_MODE));
 			updateWarning(false);
+			processWidgets();
 		}
+	}
+
+	@Override
+	protected void shutDown()
+	{
+		hideWarnedStyles(false);
+		processWidgets();
 	}
 
 	public AttackStyle getAttackStyle()
@@ -123,7 +128,7 @@ public class AttackIndicatorPlugin extends Plugin
 	@Subscribe
 	public void hideWidgets(WidgetHiddenChanged event)
 	{
-		if (event.getWidget().isHidden() || TO_GROUP(event.getWidget().getId()) != COMBAT_GROUP_ID)
+		if (event.getWidget().isSelfHidden() || TO_GROUP(event.getWidget().getId()) != COMBAT_GROUP_ID)
 		{
 			return;
 		}
@@ -133,6 +138,14 @@ public class AttackIndicatorPlugin extends Plugin
 			return;
 		}
 
+		processWidgets();
+	}
+
+	/**
+	 * Hide or unhide widgets depending on widgetsToHide
+	 */
+	private void processWidgets()
+	{
 		WeaponType equippedWeaponType = WeaponType.getWeaponType(equippedWeaponTypeVarbit);
 
 		if (widgetsToHide.containsRow(equippedWeaponType))
@@ -160,9 +173,9 @@ public class AttackIndicatorPlugin extends Plugin
 	@Subscribe
 	public void onAttackStyleChange(VarbitChanged event)
 	{
-		if (attackStyleVarbit == -1 || attackStyleVarbit != client.getSetting(Varbits.ATTACK_STYLE))
+		if (attackStyleVarbit == -1 || attackStyleVarbit != client.getSetting(Setting.ATTACK_STYLE))
 		{
-			attackStyleVarbit = client.getSetting(Varbits.ATTACK_STYLE);
+			attackStyleVarbit = client.getSetting(Setting.ATTACK_STYLE);
 			updateAttackStyle(client.getSetting(Varbits.EQUIPPED_WEAPON_TYPE), attackStyleVarbit,
 				client.getSetting(Varbits.DEFENSIVE_CASTING_MODE));
 			updateWarning(false);
@@ -175,7 +188,7 @@ public class AttackIndicatorPlugin extends Plugin
 		if (equippedWeaponTypeVarbit == -1 || equippedWeaponTypeVarbit != client.getSetting(Varbits.EQUIPPED_WEAPON_TYPE))
 		{
 			equippedWeaponTypeVarbit = client.getSetting(Varbits.EQUIPPED_WEAPON_TYPE);
-			updateAttackStyle(equippedWeaponTypeVarbit, client.getSetting(Varbits.ATTACK_STYLE),
+			updateAttackStyle(equippedWeaponTypeVarbit, client.getSetting(Setting.ATTACK_STYLE),
 				client.getSetting(Varbits.DEFENSIVE_CASTING_MODE));
 			updateWarning(true);
 		}
@@ -187,7 +200,7 @@ public class AttackIndicatorPlugin extends Plugin
 		if (castingModeVarbit == -1 || castingModeVarbit != client.getSetting(Varbits.DEFENSIVE_CASTING_MODE))
 		{
 			castingModeVarbit = client.getSetting(Varbits.DEFENSIVE_CASTING_MODE);
-			updateAttackStyle(client.getSetting(Varbits.EQUIPPED_WEAPON_TYPE), client.getSetting(Varbits.ATTACK_STYLE),
+			updateAttackStyle(client.getSetting(Varbits.EQUIPPED_WEAPON_TYPE), client.getSetting(Setting.ATTACK_STYLE),
 				castingModeVarbit);
 			updateWarning(false);
 		}
@@ -201,8 +214,6 @@ public class AttackIndicatorPlugin extends Plugin
 			boolean enabled = event.getNewValue().equals("true");
 			switch (event.getKey())
 			{
-				case "enabled":
-					break;
 				case "warnForDefensive":
 					updateWarnedSkills(enabled, Skill.DEFENCE);
 					break;
@@ -221,9 +232,8 @@ public class AttackIndicatorPlugin extends Plugin
 				case "removeWarnedStyles":
 					hideWarnedStyles(enabled);
 					break;
-				default:
-					log.warn("Unreachable default case for config keys");
 			}
+			processWidgets();
 		}
 	}
 
@@ -248,7 +258,6 @@ public class AttackIndicatorPlugin extends Plugin
 	{
 		if (enabled)
 		{
-			warnedSkills.remove(skill);
 			warnedSkills.add(skill);
 		}
 		else
@@ -346,5 +355,17 @@ public class AttackIndicatorPlugin extends Plugin
 		{
 			widget.setHidden(hidden);
 		}
+	}
+
+	@VisibleForTesting
+	Set<Skill> getWarnedSkills()
+	{
+		return warnedSkills;
+	}
+
+	@VisibleForTesting
+	Table<WeaponType, WidgetInfo, Boolean> getHiddenWidgets()
+	{
+		return widgetsToHide;
 	}
 }

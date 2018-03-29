@@ -4,60 +4,60 @@ import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("er")
+@ObfuscatedName("ex")
 @Implements("WallObject")
 public final class WallObject {
-   @ObfuscatedName("n")
+   @ObfuscatedName("c")
    @ObfuscatedGetter(
-      intValue = 433254391
+      intValue = 721700685
    )
    @Export("floor")
    int floor;
-   @ObfuscatedName("v")
+   @ObfuscatedName("i")
    @ObfuscatedGetter(
-      intValue = 141605773
+      intValue = -1069278695
    )
    @Export("x")
    int x;
-   @ObfuscatedName("y")
+   @ObfuscatedName("o")
    @ObfuscatedGetter(
-      intValue = 1065730419
+      intValue = 1402981939
    )
    @Export("y")
    int y;
-   @ObfuscatedName("r")
+   @ObfuscatedName("j")
    @ObfuscatedGetter(
-      intValue = 1487602585
+      intValue = -120467245
    )
    @Export("orientationA")
    int orientationA;
-   @ObfuscatedName("h")
+   @ObfuscatedName("k")
    @ObfuscatedGetter(
-      intValue = -1333183839
+      intValue = -1569356951
    )
    @Export("orientationB")
    int orientationB;
-   @ObfuscatedName("d")
+   @ObfuscatedName("x")
    @ObfuscatedSignature(
-      signature = "Leo;"
+      signature = "Lek;"
    )
    @Export("renderable1")
    public Renderable renderable1;
-   @ObfuscatedName("s")
+   @ObfuscatedName("z")
    @ObfuscatedSignature(
-      signature = "Leo;"
+      signature = "Lek;"
    )
    @Export("renderable2")
    public Renderable renderable2;
-   @ObfuscatedName("b")
+   @ObfuscatedName("p")
    @ObfuscatedGetter(
-      intValue = -1866921115
+      intValue = 1091466637
    )
    @Export("hash")
    public int hash;
-   @ObfuscatedName("e")
+   @ObfuscatedName("w")
    @ObfuscatedGetter(
-      intValue = 179650203
+      intValue = -650877531
    )
    @Export("config")
    int config;
@@ -67,24 +67,48 @@ public final class WallObject {
       this.config = 0;
    }
 
-   @ObfuscatedName("r")
+   @ObfuscatedName("c")
    @ObfuscatedSignature(
-      signature = "(B)V",
-      garbageValue = "96"
+      signature = "(IS)I",
+      garbageValue = "-26914"
    )
-   public static void method2930() {
-      while(true) {
-         Deque var1 = IndexStoreActionHandler.IndexStoreActionHandler_requestQueue;
-         FileSystem var0;
-         synchronized(IndexStoreActionHandler.IndexStoreActionHandler_requestQueue) {
-            var0 = (FileSystem)IndexStoreActionHandler.IndexStoreActionHandler_responseQueue.popFront();
-         }
+   @Export("nextPowerOfTwo")
+   public static int nextPowerOfTwo(int var0) {
+      --var0;
+      var0 |= var0 >>> 1;
+      var0 |= var0 >>> 2;
+      var0 |= var0 >>> 4;
+      var0 |= var0 >>> 8;
+      var0 |= var0 >>> 16;
+      return var0 + 1;
+   }
 
-         if(var0 == null) {
-            return;
-         }
+   @ObfuscatedName("c")
+   @ObfuscatedSignature(
+      signature = "(I)V",
+      garbageValue = "-875562035"
+   )
+   static void method3074() {
+      class157.field2146 = new int[2000];
+      int var0 = 0;
+      int var1 = 240;
 
-         var0.data.load(var0.index, (int)var0.hash, var0.field3299, false);
+      int var3;
+      for(byte var2 = 12; var0 < 16; var1 -= var2) {
+         var3 = Area.method4771((double)((float)var1 / 360.0F), 0.9998999834060669D, (double)(0.075F + 0.425F * (float)var0 / 16.0F));
+         class157.field2146[var0] = var3;
+         ++var0;
       }
+
+      var1 = 48;
+
+      for(int var5 = var1 / 6; var0 < class157.field2146.length; var1 -= var5) {
+         var3 = var0 * 2;
+
+         for(int var4 = Area.method4771((double)((float)var1 / 360.0F), 0.9998999834060669D, 0.5D); var0 < var3 && var0 < class157.field2146.length; ++var0) {
+            class157.field2146[var0] = var4;
+         }
+      }
+
    }
 }

@@ -4,24 +4,22 @@ import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("dc")
+@ObfuscatedName("ds")
 @Implements("Resampler")
 public class Resampler {
-   @ObfuscatedName("b")
-   static byte[][][] field1595;
-   @ObfuscatedName("r")
+   @ObfuscatedName("j")
    @ObfuscatedGetter(
-      intValue = -340013429
+      intValue = -554086911
    )
    @Export("storedSampleRateRatio")
    int storedSampleRateRatio;
-   @ObfuscatedName("h")
+   @ObfuscatedName("k")
    @ObfuscatedGetter(
-      intValue = 1170989341
+      intValue = -144966917
    )
    @Export("playbackSampleRateRatio")
    int playbackSampleRateRatio;
-   @ObfuscatedName("d")
+   @ObfuscatedName("x")
    @Export("resampleTable")
    int[][] resampleTable;
 
@@ -60,24 +58,24 @@ public class Resampler {
             }
 
             for(double var13 = (double)var2 / (double)var1; var11 < var12; ++var11) {
-               double var15 = ((double)var11 - var9) * 3.141592653589793D;
+               double var15 = 3.141592653589793D * ((double)var11 - var9);
                double var17 = var13;
                if(var15 < -1.0E-4D || var15 > 1.0E-4D) {
                   var17 = var13 * (Math.sin(var15) / var15);
                }
 
-               var17 *= 0.54D + 0.46D * Math.cos(0.2243994752564138D * ((double)var11 - var9));
-               var8[var11] = (int)Math.floor(0.5D + var17 * 65536.0D);
+               var17 *= 0.54D + 0.46D * Math.cos(((double)var11 - var9) * 0.2243994752564138D);
+               var8[var11] = (int)Math.floor(65536.0D * var17 + 0.5D);
             }
          }
 
       }
    }
 
-   @ObfuscatedName("n")
+   @ObfuscatedName("c")
    @ObfuscatedSignature(
-      signature = "([BB)[B",
-      garbageValue = "85"
+      signature = "([BI)[B",
+      garbageValue = "-1285236461"
    )
    @Export("resampleIfNecessary")
    byte[] resampleIfNecessary(byte[] var1) {
@@ -94,7 +92,7 @@ public class Resampler {
 
             int var9;
             for(var9 = 0; var9 < 14; ++var9) {
-               var3[var9 + var4] += var8[var9] * var7;
+               var3[var4 + var9] += var7 * var8[var9];
             }
 
             var5 += this.playbackSampleRateRatio;
@@ -120,25 +118,25 @@ public class Resampler {
       return var1;
    }
 
-   @ObfuscatedName("v")
+   @ObfuscatedName("i")
    @ObfuscatedSignature(
-      signature = "(II)I",
-      garbageValue = "2131187198"
+      signature = "(IS)I",
+      garbageValue = "4117"
    )
-   int convertSampleLocation(int var1) {
+   int method2286(int var1) {
       if(this.resampleTable != null) {
-         var1 = (int)((long)this.playbackSampleRateRatio * (long)var1 / (long)this.storedSampleRateRatio);
+         var1 = (int)((long)var1 * (long)this.playbackSampleRateRatio / (long)this.storedSampleRateRatio);
       }
 
       return var1;
    }
 
-   @ObfuscatedName("y")
+   @ObfuscatedName("o")
    @ObfuscatedSignature(
-      signature = "(IB)I",
-      garbageValue = "-44"
+      signature = "(II)I",
+      garbageValue = "201385874"
    )
-   int convertSampleLocationPlusSix(int var1) {
+   int method2290(int var1) {
       if(this.resampleTable != null) {
          var1 = (int)((long)var1 * (long)this.playbackSampleRateRatio / (long)this.storedSampleRateRatio) + 6;
       }
@@ -146,95 +144,29 @@ public class Resampler {
       return var1;
    }
 
-   @ObfuscatedName("n")
+   @ObfuscatedName("c")
    @ObfuscatedSignature(
-      signature = "(IB)Ljl;",
-      garbageValue = "12"
+      signature = "(IIII)I",
+      garbageValue = "-1281656114"
    )
-   @Export("getItemDefinition")
-   public static ItemComposition getItemDefinition(int var0) {
-      ItemComposition var1 = (ItemComposition)ItemComposition.items.get((long)var0);
-      if(var1 != null) {
-         return var1;
-      } else {
-         byte[] var2 = ItemComposition.item_ref.getConfigData(10, var0);
-         var1 = new ItemComposition();
-         var1.id = var0;
-         if(var2 != null) {
-            var1.loadBuffer(new Buffer(var2));
-         }
-
-         var1.post();
-         if(var1.notedTemplate != -1) {
-            var1.method4762(getItemDefinition(var1.notedTemplate), getItemDefinition(var1.note));
-         }
-
-         if(var1.notedId != -1) {
-            var1.method4763(getItemDefinition(var1.notedId), getItemDefinition(var1.unnotedId));
-         }
-
-         if(var1.int3 != -1) {
-            var1.method4795(getItemDefinition(var1.int3), getItemDefinition(var1.int2));
-         }
-
-         if(!ItemComposition.isMembersWorld && var1.isMembers) {
-            var1.name = "Members object";
-            var1.isTradable = false;
-            var1.groundActions = null;
-            var1.inventoryActions = null;
-            var1.team = -1;
-            var1.int1 = 0;
-            if(var1.field3580 != null) {
-               boolean var3 = false;
-
-               for(Node var4 = var1.field3580.getHead(); var4 != null; var4 = var1.field3580.getTail()) {
-                  class262 var5 = DynamicObject.method1881((int)var4.hash);
-                  if(var5.field3476) {
-                     var4.unlink();
-                  } else {
-                     var3 = true;
-                  }
-               }
-
-               if(!var3) {
-                  var1.field3580 = null;
-               }
-            }
-         }
-
-         ItemComposition.items.put(var1, (long)var0);
-         return var1;
-      }
-   }
-
-   @ObfuscatedName("y")
-   @ObfuscatedSignature(
-      signature = "(IIIII)V",
-      garbageValue = "1127039850"
-   )
-   static final void method2169(int var0, int var1, int var2, int var3) {
-      for(int var4 = var1; var4 <= var3 + var1; ++var4) {
-         for(int var5 = var0; var5 <= var0 + var2; ++var5) {
-            if(var5 >= 0 && var5 < 104 && var4 >= 0 && var4 < 104) {
-               field1595[0][var5][var4] = 127;
-               if(var0 == var5 && var5 > 0) {
-                  class61.tileHeights[0][var5][var4] = class61.tileHeights[0][var5 - 1][var4];
-               }
-
-               if(var0 + var2 == var5 && var5 < 103) {
-                  class61.tileHeights[0][var5][var4] = class61.tileHeights[0][var5 + 1][var4];
-               }
-
-               if(var4 == var1 && var4 > 0) {
-                  class61.tileHeights[0][var5][var4] = class61.tileHeights[0][var5][var4 - 1];
-               }
-
-               if(var3 + var1 == var4 && var4 < 103) {
-                  class61.tileHeights[0][var5][var4] = class61.tileHeights[0][var5][var4 + 1];
-               }
-            }
-         }
+   static int method2295(int var0, int var1, int var2) {
+      if(var2 > 179) {
+         var1 /= 2;
       }
 
+      if(var2 > 192) {
+         var1 /= 2;
+      }
+
+      if(var2 > 217) {
+         var1 /= 2;
+      }
+
+      if(var2 > 243) {
+         var1 /= 2;
+      }
+
+      int var3 = (var1 / 32 << 7) + (var0 / 4 << 10) + var2 / 2;
+      return var3;
    }
 }

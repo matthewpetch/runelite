@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, UniquePassive <https://github.com/uniquepassive>
+ * Copyright (c) 2018, Lotto <https://github.com/devLotto>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -25,18 +25,17 @@
 package net.runelite.client.plugins.screenshot;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Provides;
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
-import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -46,36 +45,40 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.SwingUtilities;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
+import net.runelite.api.GameState;
+import net.runelite.api.Point;
 import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.WidgetHiddenChanged;
 import net.runelite.api.widgets.Widget;
 import static net.runelite.api.widgets.WidgetID.BARROWS_REWARD_GROUP_ID;
 import static net.runelite.api.widgets.WidgetID.CLUE_SCROLL_REWARD_GROUP_ID;
+import static net.runelite.api.widgets.WidgetID.DIALOG_SPRITE_GROUP_ID;
 import static net.runelite.api.widgets.WidgetID.LEVEL_UP_GROUP_ID;
 import static net.runelite.api.widgets.WidgetID.QUEST_COMPLETED_GROUP_ID;
+import static net.runelite.api.widgets.WidgetID.RAIDS_REWARD_GROUP_ID;
 import net.runelite.api.widgets.WidgetInfo;
 import static net.runelite.api.widgets.WidgetInfo.TO_GROUP;
 import net.runelite.client.Notifier;
 import net.runelite.client.RuneLite;
 import net.runelite.client.config.ConfigManager;
-import net.runelite.client.events.ClientUILoaded;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.plugins.screenshot.imgur.ImageUploadRequest;
 import net.runelite.client.plugins.screenshot.imgur.ImageUploadResponse;
 import net.runelite.client.ui.ClientUI;
 import net.runelite.client.ui.FontManager;
+import net.runelite.client.ui.NavigationButton;
+import net.runelite.client.ui.TitleToolbar;
 import net.runelite.client.ui.overlay.OverlayRenderer;
+import net.runelite.client.util.Text;
 import net.runelite.http.api.RuneLiteAPI;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -84,10 +87,9 @@ import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
-import org.pushingpixels.substance.internal.utils.SubstanceCoreUtilities;
 
 @PluginDescriptor(
-	name = "Screenshot plugin"
+	name = "Screenshot"
 )
 @Slf4j
 public class ScreenshotPlugin extends Plugin
@@ -97,7 +99,7 @@ public class ScreenshotPlugin extends Plugin
 	private static final MediaType JSON = MediaType.parse("application/json");
 
 	private static final DateFormat DATE_FORMAT = new SimpleDateFormat("MMM. dd, yyyy", Locale.US);
-	private static final DateFormat TIME_FORMAT = new SimpleDateFormat("h.m.s a d MMM. yyyy", Locale.US);
+	private static final DateFormat TIME_FORMAT = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.US);
 
 	private static final Pattern NUMBER_PATTERN = Pattern.compile("([0-9]+)");
 
@@ -106,22 +108,30 @@ public class ScreenshotPlugin extends Plugin
 
 	private Integer barrowsNumber;
 
-	@Inject
-	ScreenshotConfig config;
+	private Integer raidsNumber;
 
 	@Inject
-	Notifier notifier;
+	private ScreenshotConfig config;
 
 	@Inject
-	Client client;
+	private Notifier notifier;
 
 	@Inject
-	ClientUI clientUi;
+	private Client client;
 
 	@Inject
-	OverlayRenderer overlayRenderer;
+	private ClientUI clientUi;
 
-	private JButton titleBarButton;
+	@Inject
+	private TitleToolbar titleToolbar;
+
+	@Inject
+	private OverlayRenderer overlayRenderer;
+
+	@Inject
+	private ScheduledExecutorService executor;
+
+	private NavigationButton titleBarButton;
 
 	@Provides
 	ScreenshotConfig getConfig(ConfigManager configManager)
@@ -132,45 +142,38 @@ public class ScreenshotPlugin extends Plugin
 	@Override
 	protected void startUp() throws Exception
 	{
-		// prior to UI loading this does nothing
-		addButtonToTitleBar();
-	}
-
-	@Override
-	protected void shutDown() throws Exception
-	{
-		removeButtonFromTitlebar();
-	}
-
-	@Subscribe
-	public void clientUiLoaded(ClientUILoaded e)
-	{
-		addButtonToTitleBar();
-	}
-
-	private void addButtonToTitleBar()
-	{
 		try
 		{
-			BufferedImage iconImage = ImageIO.read(ScreenshotPlugin.class.getResourceAsStream("screenshot.png"));
-			BufferedImage invertedIconImage = ImageIO.read(ScreenshotPlugin.class.getResourceAsStream("screenshot_inverted.png"));
-
-			SwingUtilities.invokeLater(() ->
+			BufferedImage iconImage;
+			synchronized (ImageIO.class)
 			{
-				titleBarButton = new JButton();
-				titleBarButton.setToolTipText("Take screenshot");
-				titleBarButton.addMouseListener(new MouseAdapter()
-				{
-					@Override
-					public void mouseClicked(MouseEvent e)
-					{
-						super.mouseClicked(e);
-						takeScreenshot(TIME_FORMAT.format(new Date()), client.getLocalPlayer() != null);
-					}
-				});
+				iconImage = ImageIO.read(ScreenshotPlugin.class.getResourceAsStream("screenshot.png"));
+			}
 
-				clientUi.addButtonToTitleBar(titleBarButton, iconImage, invertedIconImage, 130);
-			});
+			titleBarButton = NavigationButton.builder()
+				.tooltip("Take screenshot")
+				.icon(iconImage)
+				.onClick(() -> takeScreenshot(
+					TIME_FORMAT.format(new Date()),
+					client.getLocalPlayer() != null))
+				.popup(ImmutableMap
+					.<String, Runnable>builder()
+					.put("Open screenshot folder...", () ->
+					{
+						try
+						{
+							Desktop.getDesktop().open(RuneLite.SCREENSHOT_DIR);
+						}
+						catch (IOException ex)
+						{
+							log.warn("Error opening screenshot dir", ex);
+
+						}
+					})
+					.build())
+				.build();
+
+			titleToolbar.addNavigation(titleBarButton);
 		}
 		catch (IOException ex)
 		{
@@ -178,19 +181,10 @@ public class ScreenshotPlugin extends Plugin
 		}
 	}
 
-	private void removeButtonFromTitlebar()
+	@Override
+	protected void shutDown() throws Exception
 	{
-		SwingUtilities.invokeLater(() ->
-		{
-			JComponent titleBar = SubstanceCoreUtilities.getTitlePaneComponent(clientUi);
-
-			if (titleBar != null)
-			{
-				titleBar.remove(titleBarButton);
-				clientUi.revalidate();
-				clientUi.repaint();
-			}
-		});
+		titleToolbar.removeNavigation(titleBarButton);
 	}
 
 	@Subscribe
@@ -201,32 +195,36 @@ public class ScreenshotPlugin extends Plugin
 			return;
 		}
 
-		if (event.getMessage().contains("Treasure"))
-		{
-			String chatMessage = event.getMessage().replaceAll("<col=3300ff>", "");
+		String chatMessage = event.getMessage();
 
-			if (chatMessage.startsWith("You have completed"))
+		if (chatMessage.contains("You have completed") && chatMessage.contains("Treasure"))
+		{
+			Matcher m = NUMBER_PATTERN.matcher(Text.removeTags(chatMessage));
+			if (m.find())
 			{
-				Matcher m = NUMBER_PATTERN.matcher(chatMessage);
-				if (m.find())
-				{
-					clueNumber = Integer.valueOf(m.group());
-					clueType = chatMessage.substring(chatMessage.lastIndexOf(m.group()) + m.group().length() + 1, chatMessage.indexOf("Treasure") - 1);
-				}
+				clueNumber = Integer.valueOf(m.group());
+				clueType = chatMessage.substring(chatMessage.lastIndexOf(m.group()) + m.group().length() + 1, chatMessage.indexOf("Treasure") - 1);
+				return;
 			}
 		}
 
-		if (event.getMessage().contains("Barrows"))
+		if (chatMessage.startsWith("Your Barrows chest count is"))
 		{
-			String chatMessage = event.getMessage().replaceAll("<col=ff0000>", "");
-
-			if (chatMessage.startsWith("Your Barrows chest count is"))
+			Matcher m = NUMBER_PATTERN.matcher(Text.removeTags(chatMessage));
+			if (m.find())
 			{
-				Matcher m = NUMBER_PATTERN.matcher(chatMessage);
-				if (m.find())
-				{
-					barrowsNumber = Integer.valueOf(m.group());
-				}
+				barrowsNumber = Integer.valueOf(m.group());
+				return;
+			}
+		}
+
+		if (chatMessage.startsWith("Your completed Chambers of Xeric count is:"))
+		{
+			Matcher m = NUMBER_PATTERN.matcher(Text.removeTags(chatMessage));
+			if (m.find())
+			{
+				raidsNumber = Integer.valueOf(m.group());
+				return;
 			}
 		}
 	}
@@ -241,28 +239,37 @@ public class ScreenshotPlugin extends Plugin
 			return;
 		}
 
+		switch (TO_GROUP(widget.getId()))
+		{
+			case LEVEL_UP_GROUP_ID:
+				if (!config.screenshotLevels())
+				{
+					return;
+				}
+				break;
+			case QUEST_COMPLETED_GROUP_ID:
+			case CLUE_SCROLL_REWARD_GROUP_ID:
+			case BARROWS_REWARD_GROUP_ID:
+			case RAIDS_REWARD_GROUP_ID:
+				if (!config.screenshotRewards())
+				{
+					return;
+				}
+				break;
+		}
+
 		String fileName;
 
 		switch (TO_GROUP(widget.getId()))
 		{
 			case LEVEL_UP_GROUP_ID:
 			{
-				Widget skillChild = client.getWidget(WidgetInfo.LEVEL_UP_SKILL);
-				Widget levelChild = client.getWidget(WidgetInfo.LEVEL_UP_LEVEL);
-
-				if (skillChild == null || levelChild == null)
-				{
-					return;
-				}
-
-				// "Your Firemaking level is now 9."
-				String skillText = skillChild.getText();
-				String levelText = levelChild.getText();
-
-				String skillName = skillText.substring(skillText.indexOf("a ") + 2, skillText.indexOf(" level."));
-				String skillLevel = levelText.substring(levelText.lastIndexOf(" ") + 1, levelText.length() - 1);
-
-				fileName = skillName + " (" + skillLevel + ")";
+				fileName = parseLevelUpWidget(WidgetInfo.LEVEL_UP_SKILL, WidgetInfo.LEVEL_UP_LEVEL);
+				break;
+			}
+			case DIALOG_SPRITE_GROUP_ID:
+			{
+				fileName = parseLevelUpWidget(WidgetInfo.DIALOG_SPRITE_SPRITE, WidgetInfo.DIALOG_SPRITE_TEXT);
 				break;
 			}
 			case QUEST_COMPLETED_GROUP_ID:
@@ -303,15 +310,60 @@ public class ScreenshotPlugin extends Plugin
 				barrowsNumber = null;
 				break;
 			}
+			case RAIDS_REWARD_GROUP_ID:
+			{
+				if (raidsNumber == null)
+				{
+					return;
+				}
+
+				fileName = "Raids(" + raidsNumber + ")";
+				raidsNumber = null;
+				break;
+			}
 			default:
 				return;
+		}
+
+		if (fileName == null)
+		{
+			return;
 		}
 
 		takeScreenshot(fileName, config.displayDate());
 	}
 
+	public String parseLevelUpWidget(WidgetInfo levelUpSkill, WidgetInfo levelUpLevel)
+	{
+		Widget skillChild = client.getWidget(levelUpSkill);
+		Widget levelChild = client.getWidget(levelUpLevel);
+
+		if (skillChild == null || levelChild == null)
+		{
+			return null;
+		}
+
+		// "Congratulations, you just advanced a Firemaking level."
+		String skillText = skillChild.getText();
+		// "Your Firemaking level is now 9."
+		String levelText = levelChild.getText();
+
+		String[] splitSkillName = skillText.split(" ");
+		String skillName = splitSkillName[splitSkillName.length - 2];
+		String skillLevel = levelText.substring(levelText.lastIndexOf(" ") + 1, levelText.length() - 1);
+
+		return skillName + "(" + skillLevel + ")";
+	}
+
 	private void takeScreenshot(String fileName, boolean displayDate)
 	{
+		if (client.getGameState() == GameState.LOGIN_SCREEN)
+		{
+			// Prevent the screenshot from being captured
+			log.info("Login screenshot prevented");
+			return;
+		}
+
 		overlayRenderer.requestScreenshot(image ->
 		{
 			BufferedImage screenshot = config.includeFrame()
@@ -329,9 +381,9 @@ public class ScreenshotPlugin extends Plugin
 				clientUi.paint(graphics);
 
 				// Evaluate the position of the game inside the frame
-				Point gamePoint = SwingUtilities.convertPoint(client.getCanvas(), 0, 0, clientUi);
-				gameOffsetX = gamePoint.x;
-				gameOffsetY = gamePoint.y;
+				final Point canvasOffset = clientUi.getCanvasOffset();
+				gameOffsetX = canvasOffset.getX();
+				gameOffsetY = canvasOffset.getY();
 			}
 
 			// Draw the game onto the screenshot
@@ -341,7 +393,11 @@ public class ScreenshotPlugin extends Plugin
 			{
 				try (InputStream reportButton = ScreenshotPlugin.class.getResourceAsStream("report_button.png"))
 				{
-					BufferedImage reportButtonImage = ImageIO.read(reportButton);
+					BufferedImage reportButtonImage;
+					synchronized (ImageIO.class)
+					{
+						reportButtonImage = ImageIO.read(reportButton);
+					}
 
 					int x = gameOffsetX + 403;
 					int y = gameOffsetY + image.getHeight() - reportButtonImage.getHeight() - 1;
@@ -370,34 +426,40 @@ public class ScreenshotPlugin extends Plugin
 				}
 			}
 
-			File playerFolder = RuneLite.SCREENSHOT_DIR;
-
+			File playerFolder;
 			if (client.getLocalPlayer() != null)
 			{
 				playerFolder = new File(RuneLite.SCREENSHOT_DIR, client.getLocalPlayer().getName());
 			}
+			else
+			{
+				playerFolder = RuneLite.SCREENSHOT_DIR;
+			}
 
 			playerFolder.mkdirs();
 
-			try
+			executor.execute(() ->
 			{
-				File screenshotFile = new File(playerFolder, fileName + ".png");
-
-				ImageIO.write(screenshot, "PNG", screenshotFile);
-
-				if (config.uploadScreenshot())
+				try
 				{
-					uploadScreenshot(screenshotFile);
+					File screenshotFile = new File(playerFolder, fileName + ".png");
+
+					ImageIO.write(screenshot, "PNG", screenshotFile);
+
+					if (config.uploadScreenshot())
+					{
+						uploadScreenshot(screenshotFile);
+					}
+					else if (config.notifyWhenTaken())
+					{
+						notifier.notify("A screenshot was saved to " + screenshotFile, TrayIcon.MessageType.INFO);
+					}
 				}
-				else if (config.notifyWhenTaken())
+				catch (IOException ex)
 				{
-					notifier.notify("A screenshot was saved to " + screenshotFile, TrayIcon.MessageType.INFO);
+					log.warn("error writing screenshot", ex);
 				}
-			}
-			catch (IOException ex)
-			{
-				log.warn("error writing screenshot", ex);
-			}
+			});
 		});
 	}
 
@@ -422,21 +484,23 @@ public class ScreenshotPlugin extends Plugin
 			@Override
 			public void onResponse(Call call, Response response) throws IOException
 			{
-				InputStream in = response.body().byteStream();
-				ImageUploadResponse imageUploadResponse = RuneLiteAPI.GSON
-					.fromJson(new InputStreamReader(in), ImageUploadResponse.class);
-
-				if (imageUploadResponse.isSuccess())
+				try (InputStream in = response.body().byteStream())
 				{
-					String link = imageUploadResponse.getData().getLink();
+					ImageUploadResponse imageUploadResponse = RuneLiteAPI.GSON
+							.fromJson(new InputStreamReader(in), ImageUploadResponse.class);
 
-					StringSelection selection = new StringSelection(link);
-					Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-					clipboard.setContents(selection, selection);
-
-					if (config.notifyWhenTaken())
+					if (imageUploadResponse.isSuccess())
 					{
-						notifier.notify("A screenshot was uploaded and inserted into your clipboard!", TrayIcon.MessageType.INFO);
+						String link = imageUploadResponse.getData().getLink();
+
+						StringSelection selection = new StringSelection(link);
+						Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+						clipboard.setContents(selection, selection);
+
+						if (config.notifyWhenTaken())
+						{
+							notifier.notify("A screenshot was uploaded and inserted into your clipboard!", TrayIcon.MessageType.INFO);
+						}
 					}
 				}
 			}
@@ -444,20 +508,26 @@ public class ScreenshotPlugin extends Plugin
 	}
 
 	@VisibleForTesting
-	public int getClueNumber()
+	int getClueNumber()
 	{
 		return clueNumber;
 	}
 
 	@VisibleForTesting
-	public String getClueType()
+	String getClueType()
 	{
 		return clueType;
 	}
 
 	@VisibleForTesting
-	public int getBarrowsNumber()
+	int getBarrowsNumber()
 	{
 		return barrowsNumber;
+	}
+
+	@VisibleForTesting
+	int getRaidsNumber()
+	{
+		return raidsNumber;
 	}
 }

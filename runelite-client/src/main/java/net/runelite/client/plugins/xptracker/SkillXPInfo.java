@@ -26,6 +26,7 @@ package net.runelite.client.plugins.xptracker;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalTime;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Experience;
@@ -43,10 +44,16 @@ class SkillXPInfo
 	private int actionExp = 0;
 	private int nextLevelExp = 0;
 	private int startLevelExp = 0;
+	private int level = 0;
 
 	int getXpHr()
 	{
 		return toHourly(xpGained);
+	}
+
+	int getXpSec()
+	{
+		return getXpHr() / 3600;
 	}
 
 	int getActionsHr()
@@ -72,7 +79,7 @@ class SkillXPInfo
 
 	int getActionsRemaining()
 	{
-		return getXpRemaining() / actionExp;
+		return (int) Math.ceil(getXpRemaining() / (float) actionExp);
 	}
 
 	int getSkillProgress()
@@ -82,6 +89,15 @@ class SkillXPInfo
 		double xpGained = currentXp - startLevelExp;
 		double xpGoal = nextLevelExp - startLevelExp;
 		return (int) ((xpGained / xpGoal) * 100);
+	}
+
+	String getTimeTillLevel()
+	{
+		if (getXpSec() > 0)
+		{
+			return LocalTime.MIN.plusSeconds( getXpRemaining() / getXpSec() ).toString();
+		}
+		return "\u221e";
 	}
 
 	void reset(int currentXp)
@@ -116,6 +132,9 @@ class SkillXPInfo
 		startLevelExp = Experience.getXpForLevel(Experience.getLevelForXp(currentXp));
 
 		int currentLevel = Experience.getLevelForXp(currentXp);
+
+		level = currentLevel;
+
 		nextLevelExp = currentLevel + 1 <= Experience.MAX_VIRT_LEVEL ? Experience.getXpForLevel(currentLevel + 1) : -1;
 
 		if (skillTimeStart == null)

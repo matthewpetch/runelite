@@ -1,512 +1,537 @@
 import net.runelite.mapping.Export;
+import net.runelite.mapping.Hook;
 import net.runelite.mapping.Implements;
 import net.runelite.mapping.ObfuscatedGetter;
 import net.runelite.mapping.ObfuscatedName;
 import net.runelite.mapping.ObfuscatedSignature;
 
-@ObfuscatedName("fn")
+@ObfuscatedName("fe")
 @Implements("ServerPacket")
 public class ServerPacket {
-   @ObfuscatedName("n")
+   @ObfuscatedName("op")
    @ObfuscatedSignature(
-      signature = "Lfn;"
+      signature = "Lla;"
    )
-   public static final ServerPacket field2306;
-   @ObfuscatedName("v")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2301;
-   @ObfuscatedName("y")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2258;
-   @ObfuscatedName("r")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2250;
-   @ObfuscatedName("h")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2247;
-   @ObfuscatedName("d")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2252;
-   @ObfuscatedName("s")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2251;
-   @ObfuscatedName("b")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2326;
-   @ObfuscatedName("e")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2255;
-   @ObfuscatedName("f")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2256;
-   @ObfuscatedName("z")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2257;
-   @ObfuscatedName("u")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2254;
-   @ObfuscatedName("p")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2259;
-   @ObfuscatedName("w")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2260;
-   @ObfuscatedName("t")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2311;
-   @ObfuscatedName("o")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2262;
-   @ObfuscatedName("a")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2294;
-   @ObfuscatedName("i")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2264;
-   @ObfuscatedName("m")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2273;
-   @ObfuscatedName("x")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2266;
-   @ObfuscatedName("l")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2267;
-   @ObfuscatedName("j")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2268;
-   @ObfuscatedName("g")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2269;
+   @Export("minimapSprite")
+   static SpritePixels minimapSprite;
    @ObfuscatedName("c")
    @ObfuscatedSignature(
-      signature = "Lfn;"
+      signature = "Lfe;"
    )
-   public static final ServerPacket field2270;
-   @ObfuscatedName("k")
+   public static final ServerPacket field2302;
+   @ObfuscatedName("i")
    @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2271;
-   @ObfuscatedName("q")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2272;
-   @ObfuscatedName("ac")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
+      signature = "Lfe;"
    )
    public static final ServerPacket field2286;
-   @ObfuscatedName("aw")
+   @ObfuscatedName("o")
    @ObfuscatedSignature(
-      signature = "Lfn;"
+      signature = "Lfe;"
    )
-   public static final ServerPacket field2274;
-   @ObfuscatedName("at")
+   public static final ServerPacket field2360;
+   @ObfuscatedName("j")
    @ObfuscatedSignature(
-      signature = "Lfn;"
+      signature = "Lfe;"
    )
-   public static final ServerPacket field2275;
-   @ObfuscatedName("ag")
+   public static final ServerPacket field2332;
+   @ObfuscatedName("k")
    @ObfuscatedSignature(
-      signature = "Lfn;"
+      signature = "Lfe;"
    )
-   public static final ServerPacket field2296;
-   @ObfuscatedName("ad")
+   public static final ServerPacket field2310;
+   @ObfuscatedName("x")
    @ObfuscatedSignature(
-      signature = "Lfn;"
+      signature = "Lfe;"
    )
-   public static final ServerPacket field2277;
-   @ObfuscatedName("af")
+   public static final ServerPacket field2300;
+   @ObfuscatedName("z")
    @ObfuscatedSignature(
-      signature = "Lfn;"
+      signature = "Lfe;"
    )
-   public static final ServerPacket field2278;
-   @ObfuscatedName("az")
+   public static final ServerPacket field2291;
+   @ObfuscatedName("p")
    @ObfuscatedSignature(
-      signature = "Lfn;"
+      signature = "Lfe;"
    )
-   public static final ServerPacket field2279;
-   @ObfuscatedName("ae")
+   public static final ServerPacket field2289;
+   @ObfuscatedName("w")
    @ObfuscatedSignature(
-      signature = "Lfn;"
+      signature = "Lfe;"
    )
-   public static final ServerPacket field2280;
-   @ObfuscatedName("av")
+   public static final ServerPacket field2293;
+   @ObfuscatedName("r")
    @ObfuscatedSignature(
-      signature = "Lfn;"
+      signature = "Lfe;"
    )
-   public static final ServerPacket field2281;
-   @ObfuscatedName("am")
+   public static final ServerPacket field2294;
+   @ObfuscatedName("d")
    @ObfuscatedSignature(
-      signature = "Lfn;"
+      signature = "Lfe;"
    )
-   public static final ServerPacket field2282;
-   @ObfuscatedName("ax")
+   public static final ServerPacket field2295;
+   @ObfuscatedName("a")
    @ObfuscatedSignature(
-      signature = "Lfn;"
+      signature = "Lfe;"
    )
-   public static final ServerPacket field2283;
-   @ObfuscatedName("ah")
+   public static final ServerPacket field2316;
+   @ObfuscatedName("e")
    @ObfuscatedSignature(
-      signature = "Lfn;"
+      signature = "Lfe;"
    )
-   public static final ServerPacket field2303;
+   public static final ServerPacket field2297;
+   @ObfuscatedName("f")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2298;
+   @ObfuscatedName("l")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2299;
+   @ObfuscatedName("m")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2356;
+   @ObfuscatedName("b")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2301;
+   @ObfuscatedName("h")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2361;
+   @ObfuscatedName("t")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2334;
+   @ObfuscatedName("v")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2304;
+   @ObfuscatedName("n")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2305;
+   @ObfuscatedName("u")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2322;
+   @ObfuscatedName("q")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2307;
+   @ObfuscatedName("g")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2308;
+   @ObfuscatedName("y")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2341;
+   @ObfuscatedName("s")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2313;
+   @ObfuscatedName("ac")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2290;
+   @ObfuscatedName("ap")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2312;
+   @ObfuscatedName("al")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2342;
+   @ObfuscatedName("ai")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2314;
    @ObfuscatedName("ab")
    @ObfuscatedSignature(
-      signature = "Lfn;"
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2350;
+   @ObfuscatedName("ak")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
    )
    public static final ServerPacket field2285;
-   @ObfuscatedName("aj")
+   @ObfuscatedName("as")
    @ObfuscatedSignature(
-      signature = "Lfn;"
+      signature = "Lfe;"
    )
    public static final ServerPacket field2317;
    @ObfuscatedName("aa")
    @ObfuscatedSignature(
-      signature = "Lfn;"
+      signature = "Lfe;"
    )
-   public static final ServerPacket field2287;
-   @ObfuscatedName("ao")
+   public static final ServerPacket field2346;
+   @ObfuscatedName("ah")
    @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2288;
-   @ObfuscatedName("al")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2289;
-   @ObfuscatedName("ay")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2290;
-   @ObfuscatedName("aq")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2304;
-   @ObfuscatedName("ak")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2292;
-   @ObfuscatedName("as")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2276;
-   @ObfuscatedName("au")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2253;
-   @ObfuscatedName("an")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2295;
-   @ObfuscatedName("ai")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2307;
-   @ObfuscatedName("ap")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2297;
-   @ObfuscatedName("ar")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2298;
-   @ObfuscatedName("bg")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2299;
-   @ObfuscatedName("bq")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2263;
-   @ObfuscatedName("bk")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2293;
-   @ObfuscatedName("by")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2302;
-   @ObfuscatedName("bz")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2248;
-   @ObfuscatedName("bj")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2249;
-   @ObfuscatedName("bd")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2305;
-   @ObfuscatedName("bi")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2320;
-   @ObfuscatedName("bo")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2265;
-   @ObfuscatedName("bx")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2308;
-   @ObfuscatedName("bu")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2309;
-   @ObfuscatedName("bt")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2310;
-   @ObfuscatedName("be")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2318;
-   @ObfuscatedName("ba")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2312;
-   @ObfuscatedName("bw")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2313;
-   @ObfuscatedName("bp")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2314;
-   @ObfuscatedName("bn")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2315;
-   @ObfuscatedName("bl")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2316;
-   @ObfuscatedName("bv")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2300;
-   @ObfuscatedName("bs")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
-   )
-   public static final ServerPacket field2291;
-   @ObfuscatedName("bh")
-   @ObfuscatedSignature(
-      signature = "Lfn;"
+      signature = "Lfe;"
    )
    public static final ServerPacket field2319;
-   @ObfuscatedName("bf")
+   @ObfuscatedName("ao")
    @ObfuscatedSignature(
-      signature = "Lfn;"
+      signature = "Lfe;"
    )
-   public static final ServerPacket field2261;
-   @ObfuscatedName("bb")
+   public static final ServerPacket field2320;
+   @ObfuscatedName("am")
    @ObfuscatedSignature(
-      signature = "Lfn;"
+      signature = "Lfe;"
    )
    public static final ServerPacket field2321;
-   @ObfuscatedName("br")
+   @ObfuscatedName("aq")
    @ObfuscatedSignature(
-      signature = "Lfn;"
+      signature = "Lfe;"
    )
-   public static final ServerPacket field2322;
-   @ObfuscatedName("bc")
+   public static final ServerPacket field2288;
+   @ObfuscatedName("ae")
    @ObfuscatedSignature(
-      signature = "Lfn;"
+      signature = "Lfe;"
    )
    public static final ServerPacket field2323;
-   @ObfuscatedName("bm")
+   @ObfuscatedName("af")
    @ObfuscatedSignature(
-      signature = "Lfn;"
+      signature = "Lfe;"
    )
    public static final ServerPacket field2324;
-   @ObfuscatedName("cj")
+   @ObfuscatedName("aw")
    @ObfuscatedSignature(
-      signature = "Lfn;"
+      signature = "Lfe;"
    )
-   public static final ServerPacket field2325;
-   @ObfuscatedName("ch")
+   public static final ServerPacket field2309;
+   @ObfuscatedName("ax")
    @ObfuscatedSignature(
-      signature = "Lfn;"
+      signature = "Lfe;"
    )
-   public static final ServerPacket field2284;
-   @ObfuscatedName("ck")
+   public static final ServerPacket field2326;
+   @ObfuscatedName("ag")
    @ObfuscatedSignature(
-      signature = "Lfn;"
+      signature = "Lfe;"
    )
    public static final ServerPacket field2327;
-   @ObfuscatedName("cl")
+   @ObfuscatedName("ay")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2296;
+   @ObfuscatedName("ad")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2329;
+   @ObfuscatedName("at")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2330;
+   @ObfuscatedName("av")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2331;
+   @ObfuscatedName("az")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2292;
+   @ObfuscatedName("aj")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2333;
+   @ObfuscatedName("ar")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2306;
+   @ObfuscatedName("au")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2335;
+   @ObfuscatedName("an")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2336;
+   @ObfuscatedName("bv")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2337;
+   @ObfuscatedName("bw")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2363;
+   @ObfuscatedName("bj")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2339;
+   @ObfuscatedName("ba")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2340;
+   @ObfuscatedName("bl")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2287;
+   @ObfuscatedName("br")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2315;
+   @ObfuscatedName("bh")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2343;
+   @ObfuscatedName("bf")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2344;
+   @ObfuscatedName("bu")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2345;
+   @ObfuscatedName("bp")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2325;
+   @ObfuscatedName("bc")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2347;
+   @ObfuscatedName("bb")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2348;
+   @ObfuscatedName("bt")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2349;
+   @ObfuscatedName("by")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2328;
+   @ObfuscatedName("be")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2351;
+   @ObfuscatedName("bs")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2352;
+   @ObfuscatedName("bq")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2353;
+   @ObfuscatedName("bn")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2354;
+   @ObfuscatedName("bk")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2355;
+   @ObfuscatedName("bm")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2366;
+   @ObfuscatedName("bx")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2357;
+   @ObfuscatedName("bo")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2358;
+   @ObfuscatedName("bi")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2359;
+   @ObfuscatedName("bg")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2303;
+   @ObfuscatedName("bd")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2318;
+   @ObfuscatedName("bz")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2362;
+   @ObfuscatedName("ca")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2311;
+   @ObfuscatedName("ct")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2364;
+   @ObfuscatedName("ck")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2365;
+   @ObfuscatedName("cy")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2338;
+   @ObfuscatedName("cd")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2367;
+   @ObfuscatedName("cu")
+   @ObfuscatedSignature(
+      signature = "Lfe;"
+   )
+   public static final ServerPacket field2368;
+   @ObfuscatedName("cq")
    @ObfuscatedGetter(
-      intValue = -1288651075
+      intValue = -1322544437
    )
    @Export("packetId")
    public final int packetId;
-   @ObfuscatedName("cd")
+   @ObfuscatedName("cj")
    @ObfuscatedGetter(
-      intValue = 716505925
+      intValue = 875912003
    )
    @Export("packetLength")
    public final int packetLength;
 
    static {
-      field2306 = new ServerPacket(0, 6);
-      field2301 = new ServerPacket(1, 8);
-      field2258 = new ServerPacket(2, 2);
-      field2250 = new ServerPacket(3, 3);
-      field2247 = new ServerPacket(4, 1);
-      field2252 = new ServerPacket(5, 5);
-      field2251 = new ServerPacket(6, 1);
-      field2326 = new ServerPacket(7, 7);
-      field2255 = new ServerPacket(8, 6);
-      field2256 = new ServerPacket(9, 2);
-      field2257 = new ServerPacket(10, 2);
-      field2254 = new ServerPacket(11, 6);
-      field2259 = new ServerPacket(12, 8);
-      field2260 = new ServerPacket(13, 2);
-      field2311 = new ServerPacket(14, -2);
-      field2262 = new ServerPacket(15, -2);
-      field2294 = new ServerPacket(16, -2);
-      field2264 = new ServerPacket(17, 2);
-      field2273 = new ServerPacket(18, 6);
-      field2266 = new ServerPacket(19, -2);
-      field2267 = new ServerPacket(20, 14);
-      field2268 = new ServerPacket(21, -1);
-      field2269 = new ServerPacket(22, 8);
-      field2270 = new ServerPacket(23, 12);
-      field2271 = new ServerPacket(24, -2);
-      field2272 = new ServerPacket(25, 2);
-      field2286 = new ServerPacket(26, 5);
-      field2274 = new ServerPacket(27, 4);
-      field2275 = new ServerPacket(28, 20);
-      field2296 = new ServerPacket(29, -2);
-      field2277 = new ServerPacket(30, 4);
-      field2278 = new ServerPacket(31, 6);
-      field2279 = new ServerPacket(32, 6);
-      field2280 = new ServerPacket(33, 2);
-      field2281 = new ServerPacket(34, 7);
-      field2282 = new ServerPacket(35, 0);
-      field2283 = new ServerPacket(36, 4);
-      field2303 = new ServerPacket(37, 0);
-      field2285 = new ServerPacket(38, -2);
-      field2317 = new ServerPacket(39, 5);
-      field2287 = new ServerPacket(40, 6);
-      field2288 = new ServerPacket(41, -2);
-      field2289 = new ServerPacket(42, -1);
-      field2290 = new ServerPacket(43, 4);
-      field2304 = new ServerPacket(44, -1);
-      field2292 = new ServerPacket(45, -2);
-      field2276 = new ServerPacket(46, 6);
-      field2253 = new ServerPacket(47, 3);
-      field2295 = new ServerPacket(48, -2);
-      field2307 = new ServerPacket(49, 0);
-      field2297 = new ServerPacket(50, 10);
-      field2298 = new ServerPacket(51, -1);
-      field2299 = new ServerPacket(52, -2);
-      field2263 = new ServerPacket(53, 2);
-      field2293 = new ServerPacket(54, 10);
-      field2302 = new ServerPacket(55, 6);
-      field2248 = new ServerPacket(56, 6);
-      field2249 = new ServerPacket(57, 0);
-      field2305 = new ServerPacket(58, -2);
-      field2320 = new ServerPacket(59, 4);
-      field2265 = new ServerPacket(60, 2);
-      field2308 = new ServerPacket(61, 5);
-      field2309 = new ServerPacket(62, 2);
-      field2310 = new ServerPacket(63, 28);
-      field2318 = new ServerPacket(64, 15);
-      field2312 = new ServerPacket(65, -2);
-      field2313 = new ServerPacket(66, -2);
-      field2314 = new ServerPacket(67, 8);
-      field2315 = new ServerPacket(68, -2);
-      field2316 = new ServerPacket(69, -1);
-      field2300 = new ServerPacket(70, 0);
-      field2291 = new ServerPacket(71, 4);
-      field2319 = new ServerPacket(72, 1);
-      field2261 = new ServerPacket(73, -1);
-      field2321 = new ServerPacket(74, 5);
-      field2322 = new ServerPacket(75, 0);
-      field2323 = new ServerPacket(76, -2);
-      field2324 = new ServerPacket(77, 6);
-      field2325 = new ServerPacket(78, -2);
-      field2284 = new ServerPacket(79, -2);
-      field2327 = new ServerPacket(80, 0);
+      field2302 = new ServerPacket(0, -2);
+      field2286 = new ServerPacket(1, 7);
+      field2360 = new ServerPacket(2, 6);
+      field2332 = new ServerPacket(3, 0);
+      field2310 = new ServerPacket(4, 2);
+      field2300 = new ServerPacket(5, 10);
+      field2291 = new ServerPacket(6, -2);
+      field2289 = new ServerPacket(7, 8);
+      field2293 = new ServerPacket(8, 5);
+      field2294 = new ServerPacket(9, 5);
+      field2295 = new ServerPacket(10, 3);
+      field2316 = new ServerPacket(11, 2);
+      field2297 = new ServerPacket(12, -1);
+      field2298 = new ServerPacket(13, 4);
+      field2299 = new ServerPacket(14, 4);
+      field2356 = new ServerPacket(15, -2);
+      field2301 = new ServerPacket(16, 6);
+      field2361 = new ServerPacket(17, 1);
+      field2334 = new ServerPacket(18, -1);
+      field2304 = new ServerPacket(19, -2);
+      field2305 = new ServerPacket(20, 6);
+      field2322 = new ServerPacket(21, -2);
+      field2307 = new ServerPacket(22, -1);
+      field2308 = new ServerPacket(23, 2);
+      field2341 = new ServerPacket(24, 5);
+      field2313 = new ServerPacket(25, 4);
+      field2290 = new ServerPacket(26, 1);
+      field2312 = new ServerPacket(27, 2);
+      field2342 = new ServerPacket(28, 0);
+      field2314 = new ServerPacket(29, 1);
+      field2350 = new ServerPacket(30, 8);
+      field2285 = new ServerPacket(31, -2);
+      field2317 = new ServerPacket(32, 7);
+      field2346 = new ServerPacket(33, 6);
+      field2319 = new ServerPacket(34, -2);
+      field2320 = new ServerPacket(35, 2);
+      field2321 = new ServerPacket(36, 6);
+      field2288 = new ServerPacket(37, 5);
+      field2323 = new ServerPacket(38, -2);
+      field2324 = new ServerPacket(39, 4);
+      field2309 = new ServerPacket(40, 6);
+      field2326 = new ServerPacket(41, -2);
+      field2327 = new ServerPacket(42, 2);
+      field2296 = new ServerPacket(43, -2);
+      field2329 = new ServerPacket(44, 14);
+      field2330 = new ServerPacket(45, -2);
+      field2331 = new ServerPacket(46, 2);
+      field2292 = new ServerPacket(47, 6);
+      field2333 = new ServerPacket(48, 5);
+      field2306 = new ServerPacket(49, 8);
+      field2335 = new ServerPacket(50, 12);
+      field2336 = new ServerPacket(51, 4);
+      field2337 = new ServerPacket(52, -2);
+      field2363 = new ServerPacket(53, 2);
+      field2339 = new ServerPacket(54, 6);
+      field2340 = new ServerPacket(55, 20);
+      field2287 = new ServerPacket(56, -2);
+      field2315 = new ServerPacket(57, -2);
+      field2343 = new ServerPacket(58, 0);
+      field2344 = new ServerPacket(59, 4);
+      field2345 = new ServerPacket(60, 15);
+      field2325 = new ServerPacket(61, -1);
+      field2347 = new ServerPacket(62, 0);
+      field2348 = new ServerPacket(63, 28);
+      field2349 = new ServerPacket(64, 6);
+      field2328 = new ServerPacket(65, 2);
+      field2351 = new ServerPacket(66, 4);
+      field2352 = new ServerPacket(67, 10);
+      field2353 = new ServerPacket(68, 1);
+      field2354 = new ServerPacket(69, -2);
+      field2355 = new ServerPacket(70, 0);
+      field2366 = new ServerPacket(71, 0);
+      field2357 = new ServerPacket(72, -2);
+      field2358 = new ServerPacket(73, -1);
+      field2359 = new ServerPacket(74, 0);
+      field2303 = new ServerPacket(75, -2);
+      field2318 = new ServerPacket(76, 2);
+      field2362 = new ServerPacket(77, 1);
+      field2311 = new ServerPacket(78, 8);
+      field2364 = new ServerPacket(79, -1);
+      field2365 = new ServerPacket(80, 6);
+      field2338 = new ServerPacket(81, 3);
+      field2367 = new ServerPacket(82, -2);
+      field2368 = new ServerPacket(83, 6);
    }
 
    ServerPacket(int var1, int var2) {
@@ -514,220 +539,290 @@ public class ServerPacket {
       this.packetLength = var2;
    }
 
-   @ObfuscatedName("n")
+   @ObfuscatedName("hc")
    @ObfuscatedSignature(
-      signature = "(III)Z",
-      garbageValue = "1725025672"
+      signature = "(I)I",
+      garbageValue = "114597872"
    )
-   public static boolean method3243(int var0, int var1) {
-      return (var0 >> var1 + 1 & 1) != 0;
+   static final int method3419() {
+      if(class46.preferences.hideRoofs) {
+         return class237.plane;
+      } else {
+         int var0 = 3;
+         if(BoundingBox3D.cameraPitch < 310) {
+            int var1;
+            int var2;
+            if(Client.field930 == 1) {
+               var1 = class190.field2522 >> 7;
+               var2 = NetWriter.field1474 >> 7;
+            } else {
+               var1 = WorldComparator.localPlayer.x >> 7;
+               var2 = WorldComparator.localPlayer.y >> 7;
+            }
+
+            int var3 = Sequence.cameraX >> 7;
+            int var4 = ChatLineBuffer.cameraY >> 7;
+            if(var3 < 0 || var4 < 0 || var3 >= 104 || var4 >= 104) {
+               return class237.plane;
+            }
+
+            if(var1 < 0 || var2 < 0 || var1 >= 104 || var2 >= 104) {
+               return class237.plane;
+            }
+
+            if((class62.tileSettings[class237.plane][var3][var4] & 4) != 0) {
+               var0 = class237.plane;
+            }
+
+            int var5;
+            if(var1 > var3) {
+               var5 = var1 - var3;
+            } else {
+               var5 = var3 - var1;
+            }
+
+            int var6;
+            if(var2 > var4) {
+               var6 = var2 - var4;
+            } else {
+               var6 = var4 - var2;
+            }
+
+            int var7;
+            int var8;
+            if(var5 > var6) {
+               var7 = var6 * 65536 / var5;
+               var8 = 32768;
+
+               while(var1 != var3) {
+                  if(var3 < var1) {
+                     ++var3;
+                  } else if(var3 > var1) {
+                     --var3;
+                  }
+
+                  if((class62.tileSettings[class237.plane][var3][var4] & 4) != 0) {
+                     var0 = class237.plane;
+                  }
+
+                  var8 += var7;
+                  if(var8 >= 65536) {
+                     var8 -= 65536;
+                     if(var4 < var2) {
+                        ++var4;
+                     } else if(var4 > var2) {
+                        --var4;
+                     }
+
+                     if((class62.tileSettings[class237.plane][var3][var4] & 4) != 0) {
+                        var0 = class237.plane;
+                     }
+                  }
+               }
+            } else if(var6 > 0) {
+               var7 = var5 * 65536 / var6;
+               var8 = 32768;
+
+               while(var4 != var2) {
+                  if(var4 < var2) {
+                     ++var4;
+                  } else if(var4 > var2) {
+                     --var4;
+                  }
+
+                  if((class62.tileSettings[class237.plane][var3][var4] & 4) != 0) {
+                     var0 = class237.plane;
+                  }
+
+                  var8 += var7;
+                  if(var8 >= 65536) {
+                     var8 -= 65536;
+                     if(var3 < var1) {
+                        ++var3;
+                     } else if(var3 > var1) {
+                        --var3;
+                     }
+
+                     if((class62.tileSettings[class237.plane][var3][var4] & 4) != 0) {
+                        var0 = class237.plane;
+                     }
+                  }
+               }
+            }
+         }
+
+         if(WorldComparator.localPlayer.x >= 0 && WorldComparator.localPlayer.y >= 0 && WorldComparator.localPlayer.x < 13312 && WorldComparator.localPlayer.y < 13312) {
+            if((class62.tileSettings[class237.plane][WorldComparator.localPlayer.x >> 7][WorldComparator.localPlayer.y >> 7] & 4) != 0) {
+               var0 = class237.plane;
+            }
+
+            return var0;
+         } else {
+            return class237.plane;
+         }
+      }
    }
 
-   @ObfuscatedName("r")
+   @ObfuscatedName("hi")
    @ObfuscatedSignature(
-      signature = "(Lgr;II)V",
-      garbageValue = "-751314889"
+      signature = "(ZLgf;I)V",
+      garbageValue = "2052098768"
    )
-   @Export("decodeMovement")
-   static void decodeMovement(PacketBuffer var0, int var1) {
-      boolean var2 = var0.getBits(1) == 1;
-      if(var2) {
-         class94.field1413[++class94.field1403 - 1] = var1;
+   @Hook("onNpcUpdate")
+   @Export("updateNpcs")
+   static final void updateNpcs(boolean var0, PacketBuffer var1) {
+      Client.field976 = 0;
+      Client.pendingNpcFlagsCount = 0;
+      PacketBuffer var2 = Client.field902.packetBuffer;
+      var2.bitAccess();
+      int var3 = var2.getBits(8);
+      int var4;
+      if(var3 < Client.npcIndexesCount) {
+         for(var4 = var3; var4 < Client.npcIndexesCount; ++var4) {
+            Client.field995[++Client.field976 - 1] = Client.npcIndices[var4];
+         }
       }
 
-      int var3 = var0.getBits(2);
-      Player var4 = Client.cachedPlayers[var1];
-      if(var3 == 0) {
-         if(var2) {
-            var4.field858 = false;
-         } else if(Client.localInteractingIndex == var1) {
-            throw new RuntimeException();
-         } else {
-            class94.Players_regions[var1] = (var4.field856 << 28) + (GraphicsObject.baseY + var4.pathY[0] >> 13) + (class175.baseX + var4.pathX[0] >> 13 << 14);
-            if(var4.field1177 != -1) {
-               class94.Players_orientations[var1] = var4.field1177;
-            } else {
-               class94.Players_orientations[var1] = var4.orientation;
-            }
-
-            class94.Players_targetIndices[var1] = var4.interacting;
-            Client.cachedPlayers[var1] = null;
-            if(var0.getBits(1) != 0) {
-               GrandExchangeEvent.decodeRegionHash(var0, var1);
-            }
-
-         }
+      if(var3 > Client.npcIndexesCount) {
+         throw new RuntimeException("");
       } else {
+         Client.npcIndexesCount = 0;
+
          int var5;
-         int var6;
          int var7;
-         if(var3 == 1) {
-            var5 = var0.getBits(3);
-            var6 = var4.pathX[0];
-            var7 = var4.pathY[0];
-            if(var5 == 0) {
-               --var6;
-               --var7;
-            } else if(var5 == 1) {
-               --var7;
-            } else if(var5 == 2) {
-               ++var6;
-               --var7;
-            } else if(var5 == 3) {
-               --var6;
-            } else if(var5 == 4) {
-               ++var6;
-            } else if(var5 == 5) {
-               --var6;
-               ++var7;
-            } else if(var5 == 6) {
-               ++var7;
-            } else if(var5 == 7) {
-               ++var6;
-               ++var7;
-            }
-
-            if(Client.localInteractingIndex == var1 && (var4.x < 1536 || var4.y < 1536 || var4.x >= 11776 || var4.y >= 11776)) {
-               var4.method1154(var6, var7);
-               var4.field858 = false;
-            } else if(var2) {
-               var4.field858 = true;
-               var4.field839 = var6;
-               var4.field835 = var7;
+         int var8;
+         int var9;
+         for(var4 = 0; var4 < var3; ++var4) {
+            var5 = Client.npcIndices[var4];
+            NPC var6 = Client.cachedNPCs[var5];
+            var7 = var2.getBits(1);
+            if(var7 == 0) {
+               Client.npcIndices[++Client.npcIndexesCount - 1] = var5;
+               var6.npcCycle = Client.gameCycle;
             } else {
-               var4.field858 = false;
-               var4.method1151(var6, var7, class94.field1401[var1]);
+               var8 = var2.getBits(2);
+               if(var8 == 0) {
+                  Client.npcIndices[++Client.npcIndexesCount - 1] = var5;
+                  var6.npcCycle = Client.gameCycle;
+                  Client.pendingNpcFlagsIndices[++Client.pendingNpcFlagsCount - 1] = var5;
+               } else {
+                  int var10;
+                  if(var8 == 1) {
+                     Client.npcIndices[++Client.npcIndexesCount - 1] = var5;
+                     var6.npcCycle = Client.gameCycle;
+                     var9 = var2.getBits(3);
+                     var6.method1825(var9, (byte)1);
+                     var10 = var2.getBits(1);
+                     if(var10 == 1) {
+                        Client.pendingNpcFlagsIndices[++Client.pendingNpcFlagsCount - 1] = var5;
+                     }
+                  } else if(var8 == 2) {
+                     Client.npcIndices[++Client.npcIndexesCount - 1] = var5;
+                     var6.npcCycle = Client.gameCycle;
+                     var9 = var2.getBits(3);
+                     var6.method1825(var9, (byte)2);
+                     var10 = var2.getBits(3);
+                     var6.method1825(var10, (byte)2);
+                     int var11 = var2.getBits(1);
+                     if(var11 == 1) {
+                        Client.pendingNpcFlagsIndices[++Client.pendingNpcFlagsCount - 1] = var5;
+                     }
+                  } else if(var8 == 3) {
+                     Client.field995[++Client.field976 - 1] = var5;
+                  }
+               }
+            }
+         }
+
+         int var12;
+         while(var1.bitsAvail(Client.field902.packetLength) >= 27) {
+            var12 = var1.getBits(15);
+            if(var12 == 32767) {
+               break;
             }
 
-         } else if(var3 == 2) {
-            var5 = var0.getBits(4);
-            var6 = var4.pathX[0];
-            var7 = var4.pathY[0];
-            if(var5 == 0) {
-               var6 -= 2;
-               var7 -= 2;
-            } else if(var5 == 1) {
-               --var6;
-               var7 -= 2;
-            } else if(var5 == 2) {
-               var7 -= 2;
-            } else if(var5 == 3) {
-               ++var6;
-               var7 -= 2;
-            } else if(var5 == 4) {
-               var6 += 2;
-               var7 -= 2;
-            } else if(var5 == 5) {
-               var6 -= 2;
-               --var7;
-            } else if(var5 == 6) {
-               var6 += 2;
-               --var7;
-            } else if(var5 == 7) {
-               var6 -= 2;
-            } else if(var5 == 8) {
-               var6 += 2;
-            } else if(var5 == 9) {
-               var6 -= 2;
-               ++var7;
-            } else if(var5 == 10) {
-               var6 += 2;
-               ++var7;
-            } else if(var5 == 11) {
-               var6 -= 2;
-               var7 += 2;
-            } else if(var5 == 12) {
-               --var6;
-               var7 += 2;
-            } else if(var5 == 13) {
-               var7 += 2;
-            } else if(var5 == 14) {
-               ++var6;
-               var7 += 2;
-            } else if(var5 == 15) {
-               var6 += 2;
-               var7 += 2;
+            boolean var15 = false;
+            if(Client.cachedNPCs[var12] == null) {
+               Client.cachedNPCs[var12] = new NPC();
+               var15 = true;
             }
 
-            if(Client.localInteractingIndex == var1 && (var4.x < 1536 || var4.y < 1536 || var4.x >= 11776 || var4.y >= 11776)) {
-               var4.method1154(var6, var7);
-               var4.field858 = false;
-            } else if(var2) {
-               var4.field858 = true;
-               var4.field839 = var6;
-               var4.field835 = var7;
+            NPC var13 = Client.cachedNPCs[var12];
+            Client.npcIndices[++Client.npcIndexesCount - 1] = var12;
+            var13.npcCycle = Client.gameCycle;
+            var5 = var1.getBits(1);
+            int var14;
+            if(var0) {
+               var14 = var1.getBits(8);
+               if(var14 > 127) {
+                  var14 -= 256;
+               }
             } else {
-               var4.field858 = false;
-               var4.method1151(var6, var7, class94.field1401[var1]);
+               var14 = var1.getBits(5);
+               if(var14 > 15) {
+                  var14 -= 32;
+               }
             }
 
-         } else {
-            var5 = var0.getBits(1);
-            int var8;
-            int var9;
-            int var10;
-            int var11;
-            if(var5 == 0) {
-               var6 = var0.getBits(12);
-               var7 = var6 >> 10;
-               var8 = var6 >> 5 & 31;
+            var13.composition = ScriptEvent.getNpcDefinition(var1.getBits(14));
+            var7 = Client.field981[var1.getBits(3)];
+            if(var15) {
+               var13.orientation = var13.angle = var7;
+            }
+
+            if(var0) {
+               var8 = var1.getBits(8);
+               if(var8 > 127) {
+                  var8 -= 256;
+               }
+            } else {
+               var8 = var1.getBits(5);
                if(var8 > 15) {
                   var8 -= 32;
                }
-
-               var9 = var6 & 31;
-               if(var9 > 15) {
-                  var9 -= 32;
-               }
-
-               var10 = var8 + var4.pathX[0];
-               var11 = var9 + var4.pathY[0];
-               if(Client.localInteractingIndex != var1 || var4.x >= 1536 && var4.y >= 1536 && var4.x < 11776 && var4.y < 11776) {
-                  if(var2) {
-                     var4.field858 = true;
-                     var4.field839 = var10;
-                     var4.field835 = var11;
-                  } else {
-                     var4.field858 = false;
-                     var4.method1151(var10, var11, class94.field1401[var1]);
-                  }
-               } else {
-                  var4.method1154(var10, var11);
-                  var4.field858 = false;
-               }
-
-               var4.field856 = (byte)(var7 + var4.field856 & 3);
-               if(Client.localInteractingIndex == var1) {
-                  class7.plane = var4.field856;
-               }
-
-            } else {
-               var6 = var0.getBits(30);
-               var7 = var6 >> 28;
-               var8 = var6 >> 14 & 16383;
-               var9 = var6 & 16383;
-               var10 = (var8 + class175.baseX + var4.pathX[0] & 16383) - class175.baseX;
-               var11 = (var9 + GraphicsObject.baseY + var4.pathY[0] & 16383) - GraphicsObject.baseY;
-               if(Client.localInteractingIndex != var1 || var4.x >= 1536 && var4.y >= 1536 && var4.x < 11776 && var4.y < 11776) {
-                  if(var2) {
-                     var4.field858 = true;
-                     var4.field839 = var10;
-                     var4.field835 = var11;
-                  } else {
-                     var4.field858 = false;
-                     var4.method1151(var10, var11, class94.field1401[var1]);
-                  }
-               } else {
-                  var4.method1154(var10, var11);
-                  var4.field858 = false;
-               }
-
-               var4.field856 = (byte)(var7 + var4.field856 & 3);
-               if(Client.localInteractingIndex == var1) {
-                  class7.plane = var4.field856;
-               }
-
             }
+
+            var9 = var1.getBits(1);
+            if(var9 == 1) {
+               Client.pendingNpcFlagsIndices[++Client.pendingNpcFlagsCount - 1] = var12;
+            }
+
+            var13.field1153 = var13.composition.field3702;
+            var13.field1203 = var13.composition.field3728;
+            if(var13.field1203 == 0) {
+               var13.angle = 0;
+            }
+
+            var13.field1158 = var13.composition.field3707;
+            var13.field1172 = var13.composition.field3709;
+            var13.field1160 = var13.composition.field3710;
+            var13.field1161 = var13.composition.field3711;
+            var13.idlePoseAnimation = var13.composition.field3716;
+            var13.field1195 = var13.composition.field3706;
+            var13.field1157 = var13.composition.field3721;
+            var13.method1827(WorldComparator.localPlayer.pathX[0] + var8, WorldComparator.localPlayer.pathY[0] + var14, var5 == 1);
+         }
+
+         var1.byteAccess();
+         class23.method189(var1);
+
+         for(var12 = 0; var12 < Client.field976; ++var12) {
+            var3 = Client.field995[var12];
+            if(Client.cachedNPCs[var3].npcCycle != Client.gameCycle) {
+               Client.cachedNPCs[var3].composition = null;
+               Client.cachedNPCs[var3] = null;
+            }
+         }
+
+         if(var1.offset != Client.field902.packetLength) {
+            throw new RuntimeException(var1.offset + "," + Client.field902.packetLength);
+         } else {
+            for(var12 = 0; var12 < Client.npcIndexesCount; ++var12) {
+               if(Client.cachedNPCs[Client.npcIndices[var12]] == null) {
+                  throw new RuntimeException(var12 + "," + Client.npcIndexesCount);
+               }
+            }
+
          }
       }
    }
