@@ -36,4 +36,5 @@ public class GraphicID
 	public static final int VENGEANCE = 726;
 	public static final int IMBUED_HEART = 1316;
 	public static final int FLYING_FISH = 1387;
+	public static final int STUN_STARS = 245;
 }
