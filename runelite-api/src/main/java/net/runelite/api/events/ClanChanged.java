@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, Adam <Adam@sigterm.info>
+ * Copyright (c) 2018, Tomas Slusny <slusnucky@gmail.com>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -24,10 +24,10 @@
  */
 package net.runelite.api.events;
 
-import lombok.Data;
+import lombok.Value;
 
-@Data
-public class WidgetOpened
+@Value
+public class ClanChanged
 {
-	private int groupId;
+	private boolean joined;
 }

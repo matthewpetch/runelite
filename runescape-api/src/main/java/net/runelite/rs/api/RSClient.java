@@ -163,6 +163,7 @@ public interface RSClient extends RSGameEngine, Client
 	int[] getPlayerIndices();
 
 	@Import("cachedPlayers")
+	@Override
 	RSPlayer[] getCachedPlayers();
 
 	@Import("localInteractingIndex")
@@ -251,6 +252,14 @@ public interface RSClient extends RSGameEngine, Client
 	@Override
 	int getViewportWidth();
 
+	@Import("Viewport_xOffset")
+	@Override
+	int getViewportXOffset();
+
+	@Import("Viewport_yOffset")
+	@Override
+	int getViewportYOffset();
+
 	@Import("isResized")
 	@Override
 	boolean isResized();
@@ -272,6 +281,10 @@ public interface RSClient extends RSGameEngine, Client
 
 	@Import("createSprite")
 	RSSpritePixels createItemSprite(int itemId, int quantity, int thickness, int borderColor, int stackable, boolean noted);
+
+	@Import("widgetFlags")
+	@Override
+	RSHashTable getWidgetFlags();
 
 	@Import("componentTable")
 	@Override
@@ -545,4 +558,10 @@ public interface RSClient extends RSGameEngine, Client
 
 	@Import("drawObject")
 	void drawObject(int z, int x, int y, int randomColor1, int randomColor2);
+
+	@Construct
+	RSScriptEvent createScriptEvent();
+
+	@Import("runScript")
+	void runScript(RSScriptEvent ev, int ex);
 }

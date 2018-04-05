@@ -22,14 +22,18 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package net.runelite.api.events;
+package net.runelite.rs.api;
 
-import lombok.Data;
-import net.runelite.api.Script;
+import net.runelite.api.IntegerNode;
+import net.runelite.mapping.Import;
 
-@Data
-public class ScriptEvent
+public interface RSIntegerNode extends RSNode, IntegerNode
 {
-	private Script script;
-	private String eventName;
+	@Import("value")
+	@Override
+	int getValue();
+
+	@Import("value")
+	@Override
+	void setValue(int value);
 }

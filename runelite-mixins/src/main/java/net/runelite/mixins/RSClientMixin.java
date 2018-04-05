@@ -56,15 +56,17 @@ import net.runelite.api.Varbits;
 import net.runelite.api.WidgetNode;
 import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.events.BoostedLevelChanged;
+import net.runelite.api.events.ClanChanged;
 import net.runelite.api.events.DraggingWidgetChanged;
 import net.runelite.api.events.ExperienceChanged;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.GrandExchangeOfferChanged;
 import net.runelite.api.events.MapRegionChanged;
+import net.runelite.api.events.MenuOpened;
 import net.runelite.api.events.PlayerMenuOptionsChanged;
 import net.runelite.api.events.ResizeableChanged;
 import net.runelite.api.events.VarbitChanged;
-import net.runelite.api.events.WidgetOpened;
+import net.runelite.api.events.WidgetLoaded;
 import net.runelite.api.mixins.Copy;
 import net.runelite.api.mixins.FieldHook;
 import net.runelite.api.mixins.Inject;
@@ -326,7 +328,7 @@ public abstract class RSClientMixin implements RSClient
 			entry.setOption(menuOptions[i]);
 			entry.setTarget(menuTargets[i]);
 			entry.setIdentifier(menuIdentifiers[i]);
-			entry.setType(MenuAction.of(menuTypes[i]));
+			entry.setType(menuTypes[i]);
 			entry.setParam0(params0[i]);
 			entry.setParam1(params1[i]);
 		}
@@ -350,7 +352,7 @@ public abstract class RSClientMixin implements RSClient
 			menuOptions[count] = entry.getOption();
 			menuTargets[count] = entry.getTarget();
 			menuIdentifiers[count] = entry.getIdentifier();
-			menuTypes[count] = entry.getType().getId();
+			menuTypes[count] = entry.getType();
 			params0[count] = entry.getParam0();
 			params1[count] = entry.getParam1();
 			++count;
@@ -507,28 +509,26 @@ public abstract class RSClientMixin implements RSClient
 		client.setMenuEntries(entries);
 	}
 
-	@Copy("loadWidget")
-	public static boolean rs$loadWidget(int widgetId)
+	@Copy("runWidgetOnLoadListener")
+	public static void rs$runWidgetOnLoadListener(int groupId)
 	{
 		throw new RuntimeException();
 	}
 
-	@Replace("loadWidget")
-	public static boolean rl$loadWidget(int widgetId)
+	@Replace("runWidgetOnLoadListener")
+	public static void rl$runWidgetOnLoadListener(int groupId)
 	{
+		rs$runWidgetOnLoadListener(groupId);
+
 		RSWidget[][] widgets = client.getWidgets();
-		boolean loadedBefore = widgets != null && widgets[widgetId] != null;
+		boolean loaded = widgets != null && widgets[groupId] != null;
 
-		boolean loaded = rs$loadWidget(widgetId);
-
-		if (!loadedBefore && loaded)
+		if (loaded)
 		{
-			WidgetOpened event = new WidgetOpened();
-			event.setGroupId(widgetId);
+			WidgetLoaded event = new WidgetLoaded();
+			event.setGroupId(groupId);
 			eventBus.post(event);
 		}
-
-		return loaded;
 	}
 
 	@FieldHook("skillExperiences")
@@ -654,5 +654,26 @@ public abstract class RSClientMixin implements RSClient
 		ResizeableChanged resizeableChanged = new ResizeableChanged();
 		resizeableChanged.setResized(client.isResized());
 		eventBus.post(resizeableChanged);
+	}
+
+	@FieldHook("clanMemberManager")
+	@Inject
+	public static void clanMemberManagerChanged(int idx)
+	{
+		eventBus.post(new ClanChanged(client.getClanMemberManager() != null));
+	}
+
+	@FieldHook("isMenuOpen")
+	@Inject
+	public static void menuOpened(int opened)
+	{
+		if (!client.isMenuOpen())
+		{
+			return;
+		}
+
+		MenuOpened event = new MenuOpened();
+		event.setMenuEntries(client.getMenuEntries());
+		eventBus.post(event);
 	}
 }
