@@ -29,16 +29,24 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import lombok.Getter;
+import lombok.Setter;
+import net.runelite.api.coords.WorldPoint;
 import net.runelite.client.plugins.raids.solver.Layout;
 import net.runelite.client.plugins.raids.solver.Room;
 
 public class Raid
 {
+	public static final int MAX_RAID_ROOMS = 16;
+
 	@Getter
-	private final RaidRoom[] rooms = new RaidRoom[16];
+	private final RaidRoom[] rooms = new RaidRoom[MAX_RAID_ROOMS];
 
 	@Getter
 	private Layout layout;
+
+	@Getter
+	@Setter
+	private WorldPoint base;
 
 	public void updateLayout(Layout layout)
 	{
@@ -61,7 +69,7 @@ public class Raid
 			if (room == null)
 			{
 				RaidRoom.Type type = RaidRoom.Type.fromCode(layout.getRoomAt(i).getSymbol());
-				room = new RaidRoom(null, type);
+				room = new RaidRoom(getBaseFromPosition(i), type);
 
 				if (type == RaidRoom.Type.COMBAT)
 				{
@@ -75,12 +83,44 @@ public class Raid
 
 				setRoom(room, i);
 			}
+
+			room.setIndex(layout.getRooms().indexOf(layout.getRoomAt(i)));
 		}
 	}
 
-	public RaidRoom getRoom(int position)
+	private WorldPoint getBaseFromPosition(int position)
 	{
-		return rooms[position];
+		int x = base.getX();
+		int y = base.getY();
+		int plane = 3;
+
+		if (position >= 8)
+		{
+			plane = 2;
+			position -= 8;
+		}
+
+		if (position >= 4)
+		{
+			position -= 4;
+		}
+		else
+		{
+			y += RaidRoom.ROOM_MAX_SIZE;
+		}
+
+		x += RaidRoom.ROOM_MAX_SIZE * position;
+		return new WorldPoint(x, y, plane);
+	}
+
+	public RaidRoom getRoomAt(int room)
+	{
+		if (layout == null || room >= layout.getRooms().size())
+		{
+			return null;
+		}
+
+		return rooms[layout.getRooms().get(room).getPosition()];
 	}
 
 	public void setRoom(RaidRoom room, int position)

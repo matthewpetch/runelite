@@ -6886,9 +6886,9 @@ public final class NpcID
 	public static final int SOLDIER_7524 = 7524;
 	public static final int VANGUARD = 7525;
 	public static final int VANGUARD_7526 = 7526;
-	public static final int VANGUARD_7527 = 7527;
-	public static final int VANGUARD_7528 = 7528;
-	public static final int VANGUARD_7529 = 7529;
+	public static final int VANGUARD_MELEE = 7527;
+	public static final int VANGUARD_RANGED = 7528;
+	public static final int VANGUARD_MAGE = 7529;
 	public static final int VESPULA = 7530;
 	public static final int VESPULA_7531 = 7531;
 	public static final int VESPULA_7532 = 7532;

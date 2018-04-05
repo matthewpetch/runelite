@@ -59,6 +59,28 @@ public interface RaidsConfig extends Config
 
 	@ConfigItem(
 		position = 2,
+		keyName = "vanguardsOverlay",
+		name = "Display vanguards overlay",
+		description = "Display a timer that shows how much longer a crab is stunned for"
+	)
+	default boolean vanguardsOverlay()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		position = 3,
+		keyName = "crabStunTimer",
+		name = "Display crab stun timer",
+		description = "Display a timer that shows how much longer a crab is stunned for"
+	)
+	default boolean crabStunTimer()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		position = 4,
 		keyName = "scoutOverlay",
 		name = "Show scout overlay",
 		description = "Display an overlay that shows the current raid layout (when entering lobby)"
@@ -69,9 +91,9 @@ public interface RaidsConfig extends Config
 	}
 
 	@ConfigItem(
-		position = 3,
+		position = 5,
 		keyName = "scoutOverlayAtBank",
-		name = "Show scout overlay outside lobby",
+		name = "Show scout overlay at bank",
 		description = "Keep the overlay active while at the raids area"
 	)
 	default boolean scoutOverlayAtBank()
@@ -80,7 +102,18 @@ public interface RaidsConfig extends Config
 	}
 
 	@ConfigItem(
-		position = 4,
+		position = 6,
+		keyName = "scoutOverlayDuringRaid",
+		name = "Show scout overlay during raid",
+		description = "Keep the overlay active while raiding"
+	)
+	default boolean scoutOverlayDuringRaid()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		position = 7,
 		keyName = "whitelistedRooms",
 		name = "Whitelisted rooms",
 		description = "Display whitelisted rooms in green on the overlay. Separate with comma (full name)"
@@ -91,7 +124,7 @@ public interface RaidsConfig extends Config
 	}
 
 	@ConfigItem(
-		position = 5,
+		position = 8,
 		keyName = "blacklistedRooms",
 		name = "Blacklisted rooms",
 		description = "Display blacklisted rooms in red on the overlay. Separate with comma (full name)"
@@ -102,7 +135,7 @@ public interface RaidsConfig extends Config
 	}
 
 	@ConfigItem(
-		position = 6,
+		position = 9,
 		keyName = "enableRotationWhitelist",
 		name = "Enable rotation whitelist",
 		description = "Enable the rotation whitelist"
@@ -113,7 +146,7 @@ public interface RaidsConfig extends Config
 	}
 
 	@ConfigItem(
-		position = 7,
+		position = 10,
 		keyName = "whitelistedRotations",
 		name = "Whitelisted rotations",
 		description = "Warn when boss rotation doesn't match a whitelisted one. Add rotations like [tekton, muttadile, guardians]"
@@ -124,7 +157,7 @@ public interface RaidsConfig extends Config
 	}
 
 	@ConfigItem(
-		position = 8,
+		position = 11,
 		keyName = "enableLayoutWhitelist",
 		name = "Enable layout whitelist",
 		description = "Enable the layout whitelist"
@@ -135,7 +168,7 @@ public interface RaidsConfig extends Config
 	}
 
 	@ConfigItem(
-		position = 9,
+		position = 12,
 		keyName = "whitelistedLayouts",
 		name = "Whitelisted layouts",
 		description = "Warn when layout doesn't match a whitelisted one. Add layouts like CFSCPPCSCF separated with comma"
