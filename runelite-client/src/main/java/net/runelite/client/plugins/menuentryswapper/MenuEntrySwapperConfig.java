@@ -49,8 +49,8 @@ public interface MenuEntrySwapperConfig extends Config
 	@ConfigItem(
 		position = 1,
 		keyName = "swapPickpocket",
-		name = "Pickpocket",
-		description = "Swap Talk-to with Pickpocket on NPC<br>Example: Man, Woman"
+		name = "Pickpocket on H.A.M.",
+		description = "Swap Talk-to with Pickpocket on H.A.M members"
 	)
 	default boolean swapPickpocket()
 	{
@@ -196,6 +196,17 @@ public interface MenuEntrySwapperConfig extends Config
 		description = "Swap Bury with Use on Bones"
 	)
 	default boolean swapBones()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		position = 15,
+		keyName = "swapChase",
+		name = "Chase",
+		description = "Allows to left click your cat to chase"
+	)
+	default boolean swapChase()
 	{
 		return true;
 	}
