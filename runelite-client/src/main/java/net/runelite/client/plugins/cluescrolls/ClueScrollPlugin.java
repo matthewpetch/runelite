@@ -31,8 +31,6 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 import javax.inject.Inject;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -43,14 +41,17 @@ import net.runelite.api.GameState;
 import net.runelite.api.InventoryID;
 import net.runelite.api.Item;
 import net.runelite.api.ItemComposition;
+import net.runelite.api.ItemContainer;
 import net.runelite.api.NPC;
 import net.runelite.api.Query;
+import net.runelite.api.Region;
+import net.runelite.api.Tile;
+import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.ItemContainerChanged;
-import net.runelite.api.queries.GameObjectQuery;
 import net.runelite.api.queries.InventoryItemQuery;
 import net.runelite.api.queries.NPCQuery;
 import net.runelite.api.widgets.Widget;
@@ -71,6 +72,7 @@ import net.runelite.client.plugins.cluescrolls.clues.NpcClueScroll;
 import net.runelite.client.plugins.cluescrolls.clues.ObjectClueScroll;
 import net.runelite.client.plugins.cluescrolls.clues.TextClueScroll;
 import net.runelite.client.ui.overlay.Overlay;
+import net.runelite.client.util.Text;
 import net.runelite.client.util.QueryRunner;
 
 @PluginDescriptor(
@@ -91,7 +93,7 @@ public class ClueScrollPlugin extends Plugin
 	private GameObject[] objectsToMark;
 
 	@Getter
-	private Set<Integer> equippedItems;
+	private Item[] equippedItems;
 
 	@Getter
 	private Instant clueTimeout;
@@ -213,33 +215,45 @@ public class ClueScrollPlugin extends Plugin
 
 		if (clue instanceof ObjectClueScroll)
 		{
-			int objectId = ((ObjectClueScroll) clue).getObjectId();
+			final ObjectClueScroll objectClueScroll = (ObjectClueScroll) clue;
+			int objectId = objectClueScroll.getObjectId();
 
 			if (objectId != -1)
 			{
-				GameObjectQuery query = new GameObjectQuery().idEquals(objectId);
-				objectsToMark = queryRunner.runQuery(query);
+				// Match object with location every time
+				final WorldPoint location = objectClueScroll.getLocation();
 
-				// Set hint arrow to first object found as there can only be 1 hint arrow
-				if (objectsToMark.length >= 1)
+				if (location != null)
 				{
-					client.setHintArrow(objectsToMark[0].getWorldLocation());
+					final LocalPoint localLocation = LocalPoint.fromWorld(client, location);
+
+					if (localLocation != null)
+					{
+						final Region region = client.getRegion();
+						final Tile[][][] tiles = region.getTiles();
+						final Tile tile = tiles[client.getPlane()][localLocation.getRegionX()][localLocation.getRegionY()];
+
+						objectsToMark = Arrays.stream(tile.getGameObjects())
+							.filter(object -> object != null && object.getId() == objectId)
+							.toArray(GameObject[]::new);
+
+						// Set hint arrow to first object found as there can only be 1 hint arrow
+						if (objectsToMark.length >= 1)
+						{
+							client.setHintArrow(objectsToMark[0].getWorldLocation());
+						}
+					}
 				}
 			}
 		}
 
 		if (clue instanceof EmoteClue)
 		{
-			equippedItems = new HashSet<>();
-
-			Item[] result = queryRunner.runQuery(new InventoryItemQuery(InventoryID.EQUIPMENT));
-
-			if (result != null)
+			ItemContainer container = client.getItemContainer(InventoryID.EQUIPMENT);
+			
+			if (container != null)
 			{
-				for (Item item : result)
-				{
-					equippedItems.add(item.getId());
-				}
+				equippedItems = container.getItems();
 			}
 		}
 
@@ -283,11 +297,11 @@ public class ClueScrollPlugin extends Plugin
 		if (clueScrollText != null)
 		{
 			// Remove line breaks and also the rare occasion where there are double line breaks
-			String text = clueScrollText.getText()
+			String text = Text.removeTags(clueScrollText.getText()
 					.replaceAll("-<br>", "-")
 					.replaceAll("<br>", " ")
 					.replaceAll("[ ]+", " ")
-					.toLowerCase();
+					.toLowerCase());
 
 			if (clue != null && clue instanceof TextClueScroll)
 			{
