@@ -33,7 +33,6 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.text.DecimalFormat;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
 import net.runelite.api.Client;
@@ -51,10 +50,10 @@ public class RaidsVanguardsOverlay extends Overlay
 	//in ground = NpcID.VANGUARD
 	//traveling trough ground = NpcID.VANGUARD_7526;
 	private static final Map<Integer, Color> VANGUARDS = new ImmutableMap.Builder<Integer, Color>()
-			.put(NpcID.VANGUARD_MELEE, Color.RED.darker())
-			.put(NpcID.VANGUARD_RANGED, Color.GREEN.darker())
-			.put(NpcID.VANGUARD_MAGE, Color.BLUE.brighter())
-			.build();
+		.put(NpcID.VANGUARD_MELEE, Color.RED.darker()) //melee
+		.put(NpcID.VANGUARD_RANGED, Color.GREEN.darker()) //ranged
+		.put(NpcID.VANGUARD_MAGE, Color.BLUE.brighter()) //mage
+		.build();
 
 	private final int PADDING = 5;
 	private final int GAP = 3;
@@ -63,7 +62,7 @@ public class RaidsVanguardsOverlay extends Overlay
 	private final int OVERLAY_HEIGHT = BAR_HEIGHT * VANGUARDS.size() + GAP * (VANGUARDS.size() - 1) + PADDING * 2;
 	private final int BAR_WIDTH = OVERLAY_WIDTH - PADDING * 2;
 	private final Color BAR_BORDER_COLOR = Color.BLACK;
-	private final Color BAR_BACKGROUND_COLOR = new Color(90, 82, 69);
+	private final Color BAR_BACKGROUND_COLOR = new Color(56, 48, 35);
 	private final Font FONT = FontManager.getRunescapeSmallFont();
 	private final DecimalFormat format = new DecimalFormat("#.#");
 
@@ -155,9 +154,7 @@ public class RaidsVanguardsOverlay extends Overlay
 
 	public void updateVanguardsHealth()
 	{
-		List<NPC> npcs = plugin.getCurrentRoomNPCs();
-
-		for (NPC npc : npcs)
+		for (NPC npc : client.getNpcs())
 		{
 			int id = npc.getComposition().getId();
 
@@ -174,5 +171,10 @@ public class RaidsVanguardsOverlay extends Overlay
 				lastKnownHealth.put(id, healthRatio);
 			}
 		}
+	}
+
+	public void reset()
+	{
+		lastKnownHealth.clear();
 	}
 }

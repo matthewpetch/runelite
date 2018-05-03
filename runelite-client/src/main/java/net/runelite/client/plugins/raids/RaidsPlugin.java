@@ -25,34 +25,26 @@
 package net.runelite.client.plugins.raids;
 
 import com.google.common.eventbus.Subscribe;
-import com.google.inject.Binder;
 import com.google.inject.Provides;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
 import javax.inject.Inject;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import net.runelite.api.Actor;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
-import net.runelite.api.GraphicID;
 import net.runelite.api.InstanceTemplates;
-import net.runelite.api.NPC;
 import net.runelite.api.ObjectID;
-import net.runelite.api.Player;
 import net.runelite.api.Point;
 import net.runelite.api.VarPlayer;
 import net.runelite.api.Tile;
@@ -61,8 +53,8 @@ import static net.runelite.api.Perspective.SCENE_SIZE;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.ConfigChanged;
+import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.GameTick;
-import net.runelite.api.events.GraphicChanged;
 import net.runelite.api.events.MapRegionChanged;
 import net.runelite.api.events.VarbitChanged;
 import net.runelite.api.events.WidgetHiddenChanged;
@@ -97,21 +89,15 @@ public class RaidsPlugin extends Plugin
 	public static final DecimalFormat POINTS_FORMAT = new DecimalFormat("#,###");
 	private static final String SPLIT_REGEX = "\\s*,\\s*";
 	private static final Pattern ROTATION_REGEX = Pattern.compile("\\[(.*?)\\]");
-	public static final int CRAB_STUN_LENGTH = 25;
-	private static final Duration CRAB_STUN_DURATION = Duration.ofSeconds(CRAB_STUN_LENGTH);
 
 	private BufferedImage raidsIcon;
 	private RaidsTimer timer;
-	private boolean checkUnknownRooms = false;
 
 	@Getter
-	private RaidRoom currentRoom;
+	private boolean raidOngoing = false;
 
 	@Getter
 	private boolean inRaidChambers;
-
-	@Getter
-	private boolean raidOngoing;
 
 	@Inject
 	private ChatMessageManager chatMessageManager;
@@ -126,13 +112,10 @@ public class RaidsPlugin extends Plugin
 	private RaidsConfig config;
 
 	@Inject
-	private RaidsScoutOverlay scoutOverlay;
+	private RaidsScoutOverlay overlay;
 
 	@Inject
 	private RaidsPointsOverlay pointsOverlay;
-
-	@Inject
-	private RaidsCrabsOverlay crabsOverlay;
 
 	@Inject
 	private RaidsVanguardsOverlay vanguardsOverlay;
@@ -144,22 +127,19 @@ public class RaidsPlugin extends Plugin
 	private Raid raid;
 
 	@Getter
-	private List<String> roomWhitelist = new ArrayList<>();
+	private RaidRoom currentRoom;
 
 	@Getter
-	private List<String> roomBlacklist = new ArrayList<>();
+	private ArrayList<String> roomWhitelist = new ArrayList<>();
 
 	@Getter
-	private List<String> rotationWhitelist = new ArrayList<>();
+	private ArrayList<String> roomBlacklist = new ArrayList<>();
 
 	@Getter
-	private List<String> layoutWhitelist = new ArrayList<>();
+	private ArrayList<String> rotationWhitelist = new ArrayList<>();
 
 	@Getter
-	private List<NPC> currentRoomNPCs = new ArrayList<>();
-
-	@Getter
-	private Map<NPC, Instant> stunnedCrabs = new HashMap<>();
+	private ArrayList<String> layoutWhitelist = new ArrayList<>();
 
 	@Provides
 	RaidsConfig provideConfig(ConfigManager configManager)
@@ -168,15 +148,9 @@ public class RaidsPlugin extends Plugin
 	}
 
 	@Override
-	public void configure(Binder binder)
-	{
-		binder.bind(RaidsScoutOverlay.class);
-	}
-
-	@Override
 	public List<Overlay> getOverlays()
 	{
-		return Arrays.asList(scoutOverlay, pointsOverlay, crabsOverlay, vanguardsOverlay);
+		return Arrays.asList(overlay, pointsOverlay, vanguardsOverlay);
 	}
 
 	@Override
@@ -216,22 +190,6 @@ public class RaidsPlugin extends Plugin
 		if (event.getKey().equals("raidsTimer"))
 		{
 			updateInfoBoxState();
-		}
-
-		if (event.getKey().equals("scoutOverlayAtBank"))
-		{
-			if (raid != null && !inRaidChambers)
-			{
-				scoutOverlay.setScoutOverlayShown(Boolean.valueOf(event.getNewValue()));
-			}
-		}
-
-		if (event.getKey().equals("scoutOverlayDuringRaid"))
-		{
-			if (raid != null && raidOngoing)
-			{
-				scoutOverlay.setScoutOverlayShown(Boolean.valueOf(event.getNewValue()));
-			}
 		}
 
 		if (event.getKey().equals("whitelistedRooms"))
@@ -283,71 +241,39 @@ public class RaidsPlugin extends Plugin
 
 			if (inRaidChambers)
 			{
-				prepareScoutOverlay();
+				raid = buildRaid();
+
+				if (raid == null)
+				{
+					log.debug("Failed to build raid");
+					return;
+				}
+
+				Layout layout = layoutSolver.findLayout(raid.toCode());
+
+				if (layout == null)
+				{
+					log.debug("Could not find layout match");
+					return;
+				}
+
+				raid.updateLayout(layout);
+				RotationSolver.solve(raid.getCombatRooms());
+				overlay.setScoutOverlayShown(true);
 			}
 			else if (!config.scoutOverlayAtBank())
 			{
-				resetOverlays();
+				resetRaid();
 			}
 		}
 
-		if (client.getSetting(Setting.IN_RAID_PARTY) == -1)
-		{
-			if (inRaidChambers)
-			{
-				raidOngoing = true;
-
-				if (!config.scoutOverlayDuringRaid())
-				{
-					scoutOverlay.setScoutOverlayShown(false);
-				}
-				else if (raid == null)
-				{
-					prepareScoutOverlay();
-				}
-			}
-			else
-			{
-				raidOngoing = false;
-				resetOverlays();
-			}
-		}
-	}
-
-	private void resetOverlays()
-	{
-		scoutOverlay.setScoutOverlayShown(false);
-		raid = null;
-		currentRoom = null;
-		currentRoomNPCs.clear();
-	}
-
-	private void prepareScoutOverlay()
-	{
-		raid = buildRaid();
-
-		if (raid == null)
-		{
-			log.debug("Failed to build raid");
-			return;
-		}
-
-<<<<<<< HEAD
-		Layout layout = layoutSolver.findLayout(raid.toCode());
-
-		if (layout == null)
-=======
 		if (client.getVar(VarPlayer.IN_RAID_PARTY) == -1)
->>>>>>> pr/6
 		{
-			log.debug("Could not find layout match");
-			return;
+			if (!inRaidChambers || !config.scoutOverlayDuringRaid())
+			{
+				resetRaid();
+			}
 		}
-
-		raid.updateLayout(layout);
-		RotationSolver.solve(raid.getCombatRooms());
-		currentRoom = raid.getRoomAt(0);
-		scoutOverlay.setScoutOverlayShown(true);
 	}
 
 	@Subscribe
@@ -359,8 +285,10 @@ public class RaidsPlugin extends Plugin
 
 			if (config.raidsTimer() && message.startsWith(RAID_START_MESSAGE))
 			{
+				raidOngoing = true;
 				timer = new RaidsTimer(getRaidsIcon(), this, Instant.now());
 				infoBoxManager.addInfoBox(timer);
+				currentRoom = raid.getStartingRoom();
 			}
 
 			if (timer != null && message.contains(LEVEL_COMPLETE_MESSAGE))
@@ -410,44 +338,22 @@ public class RaidsPlugin extends Plugin
 	}
 
 	@Subscribe
-	public void onGraphicChanged(GraphicChanged event)
+	public void onGameStateChanged(GameStateChanged event)
 	{
-		if (!raidOngoing || currentRoom == null)
+		if (!inRaidChambers || !raidOngoing || event.getGameState() != GameState.LOGGED_IN)
 		{
 			return;
 		}
 
-		RaidRoom.Type currentType = currentRoom.getType();
-		if (currentType == RaidRoom.Type.PUZZLE)
-		{
-			if (currentRoom.getPuzzle() == RaidRoom.Puzzle.CRABS)
-			{
-				Actor actor = event.getActor();
-				if (actor instanceof NPC && currentRoom.contains(actor.getWorldLocation()))
-				{
-					if (actor.getGraphic() == GraphicID.STUN_STARS)
-					{
-						stunnedCrabs.put((NPC) actor, Instant.now().plus(CRAB_STUN_DURATION));
-					}
-				}
-			}
-		}
+		checkUnknownRooms();
 	}
 
 	@Subscribe
-	public void onGameTick(GameTick event)
+	public void onTick(GameTick event)
 	{
-		if (!raidOngoing || raid == null || client.getPlane() < 2)
+		if (!inRaidChambers || !raidOngoing)
 		{
 			return;
-		}
-
-		loadCurrentNPCs();
-
-		if (checkUnknownRooms && client.getGameState() != GameState.LOADING)
-		{
-			checkUnknownRooms();
-			checkUnknownRooms = false;
 		}
 
 		if (config.vanguardsOverlay() && currentRoom.getBoss() == RaidRoom.Boss.VANGUARDS)
@@ -455,73 +361,62 @@ public class RaidsPlugin extends Plugin
 			vanguardsOverlay.updateVanguardsHealth();
 		}
 
-		final Player player = client.getLocalPlayer();
-		int position = currentRoom.getIndex();
+		WorldPoint playerPos = client.getLocalPlayer().getWorldLocation();
 
-		RaidRoom next = raid.getRoomAt(position + 1);
-
-		if (next == null)
+		if (currentRoom.contains(playerPos))
 		{
 			return;
 		}
 
-		if (next.contains(player.getWorldLocation()))
+		RaidRoom nextRoom = currentRoom.getNextRoom();
+		if (nextRoom != null && nextRoom.contains(playerPos))
 		{
 			currentRoom.setCompleted(true);
-			currentRoom = next;
+			currentRoom = nextRoom;
 		}
-		else if (!currentRoom.contains(player.getWorldLocation()))
+		else
 		{
-			currentRoom = raid.getRoomAt(position - 1);
-		}
-	}
-
-	@Subscribe
-	public void mapRegionChanged(MapRegionChanged event)
-	{
-		if (raidOngoing && config.scoutOverlayDuringRaid())
-		{
-			checkUnknownRooms = true;
+			//it is safe to assume this is never null, and this part will never be reached when in the first room of the raid
+			currentRoom = currentRoom.getPreviousRoom();
 		}
 	}
 
-	public void repositionPointsBox()
+	public void resetRaid()
 	{
-		Widget widget = client.getWidget(WidgetInfo.RAIDS_POINTS_INFOBOX);
-		int x = widget.getParent().getWidth() - widget.getWidth() - 2;
-		int y = widget.getOriginalY();
+		overlay.setScoutOverlayShown(false);
+		currentRoom = null;
+		raid = null;
+		vanguardsOverlay.reset();
+	}
 
-		if (client.getSetting(Varbits.EXPERIENCE_TRACKER_POSITION) == 0)
+	private void checkUnknownRooms()
+	{
+		Arrays.stream(raid.getRooms()).filter(x -> x.getType() == RaidRoom.Type.UNKNOWN ||
+			(x.getType() == RaidRoom.Type.COMBAT && x.getBoss() == RaidRoom.Boss.UNKNOWN) ||
+			(x.getType() == RaidRoom.Type.PUZZLE && x.getPuzzle() == RaidRoom.Puzzle.UNKNOWN)).forEach(x ->
 		{
-			Widget area = client.getWidget(WidgetInfo.EXPERIENCE_TRACKER_BOTTOM_BAR);
+			WorldPoint worldPoint = x.getBase();
+			int xCoord = worldPoint.getX() - client.getBaseX();
 
-			if (area != null)
+			//in case the room is out of scene it is skipped
+			if (xCoord >= SCENE_SIZE || xCoord <= -RaidRoom.ROOM_MAX_SIZE)
 			{
-				y = area.getOriginalY() + 2;
-				area.setRelativeY(y + widget.getHeight());
+				return;
 			}
-		}
-
-		widget.setRelativeX(x);
-		widget.setRelativeY(y);
-	}
-
-	private void loadCurrentNPCs()
-	{
-		currentRoomNPCs.clear();
-
-		if (currentRoom == null)
-		{
-			return;
-		}
-
-		for (NPC npc : client.getNpcs())
-		{
-			if (currentRoom.contains(npc.getWorldLocation()))
+			else if (xCoord <= 0)
 			{
-				currentRoomNPCs.add(npc);
+				//this would mean the room is partially visible, so we check the first tile of the scene
+				xCoord = 1;
 			}
-		}
+
+			Tile tile = client.getRegion().getTiles()[worldPoint.getPlane()][xCoord][worldPoint.getY() - client.getBaseY()];
+			RaidRoom room = determineRoom(tile, 0);
+			x.setType(room.getType());
+			x.setBoss(room.getBoss());
+			x.setPuzzle(room.getPuzzle());
+		});
+
+		RotationSolver.solve(raid.getCombatRooms());
 	}
 
 	private void updateInfoBoxState()
@@ -552,7 +447,7 @@ public class RaidsPlugin extends Plugin
 		updateList(layoutWhitelist, config.whitelistedLayouts());
 	}
 
-	private void updateList(List<String> list, String input)
+	private void updateList(ArrayList<String> list, String input)
 	{
 		list.clear();
 
@@ -626,155 +521,138 @@ public class RaidsPlugin extends Plugin
 		return false;
 	}
 
-	private Point findLobbyBase()
+	/**
+	 * Determines the bottom left-most point of the raid
+	 *
+	 * @return the bottom left-most corner of the raid in region coords
+	 */
+	private Point findRaidBase()
 	{
 		Tile[][] tiles = client.getRegion().getTiles()[LOBBY_PLANE];
+		Point lobbyBase = null;
+		Point firstNonNull = null;
 
 		for (int x = 0; x < SCENE_SIZE; x++)
 		{
 			for (int y = 0; y < SCENE_SIZE; y++)
 			{
-				if (tiles[x][y] == null || tiles[x][y].getWallObject() == null)
+				if (tiles[x][y] == null)
+				{
+					continue;
+				}
+				else if (firstNonNull == null)
+				{
+					firstNonNull = tiles[x][y].getRegionLocation();
+				}
+
+				if (tiles[x][y].getWallObject() == null)
 				{
 					continue;
 				}
 
 				if (tiles[x][y].getWallObject().getId() == ObjectID.NULL_12231)
 				{
-					return tiles[x][y].getRegionLocation();
+					lobbyBase = tiles[x][y].getRegionLocation();
+					break;
 				}
+			}
+
+			if (lobbyBase != null)
+			{
+				break;
 			}
 		}
 
-		return null;
+		if (lobbyBase == null || firstNonNull == null)
+		{
+			return null;
+		}
+
+
+		//if the remainder of this is 0, it means our first non-null tile is a valid point on the grid and we don't need to look further
+		if ((lobbyBase.getX() - firstNonNull.getX()) % RaidRoom.ROOM_MAX_SIZE == 0)
+		{
+			return firstNonNull;
+		}
+
+		int baseX = lobbyBase.getX();
+		int baseY = firstNonNull.getY(); //we always want the bottom row, so the first non-null tile's Y coord is always correct
+
+		//based on checking if there is another room east of the lobby, we can determine the west-most room of the raid
+		if (tiles[baseX + RaidRoom.ROOM_MAX_SIZE][baseY] == null)
+		{
+			baseX -= RaidRoom.ROOM_MAX_SIZE * 3;
+		}
+		else
+		{
+			baseX -= RaidRoom.ROOM_MAX_SIZE * 2;
+		}
+
+		return new Point(baseX, baseY);
 	}
 
 	private Raid buildRaid()
 	{
-		Point gridBase = findLobbyBase();
+		//find the raid base region coords as starting point for the grid
+		Point raidBase = findRaidBase();
 
-		if (gridBase == null)
+		if (raidBase == null)
 		{
 			return null;
 		}
 
 		Raid raid = new Raid();
 		Tile[][] tiles;
-		int position, x, y, offsetX;
-		int startY = 1;
-		int startX = -2;
-		int baseX = 0;
+		int roomBaseX, roomBaseY, roomTileOffsetX;
+		int position = 0;
 
 		for (int plane = 3; plane > 1; plane--)
 		{
 			tiles = client.getRegion().getTiles()[plane];
 
-			if (tiles[gridBase.getX() + RaidRoom.ROOM_MAX_SIZE][gridBase.getY()] == null)
+			for (int i = 1; i > -1; i--)
 			{
-				position = 1;
-				baseX = -RaidRoom.ROOM_MAX_SIZE;
-			}
-			else
-			{
-				position = 0;
-			}
+				roomBaseY = raidBase.getY() + (i * RaidRoom.ROOM_MAX_SIZE);
 
-			for (int i = startY; i > -2; i--)
-			{
-				y = gridBase.getY() + (i * RaidRoom.ROOM_MAX_SIZE);
-
-				for (int j = startX; j < 4; j++)
+				for (int j = 0; j < 4; j++)
 				{
-					x = gridBase.getX() + (j * RaidRoom.ROOM_MAX_SIZE);
-					offsetX = 0;
+					RaidRoom room;
+					roomBaseX = raidBase.getX() + (j * RaidRoom.ROOM_MAX_SIZE);
 
-					if (x > SCENE_SIZE && position > 1 && position < 4)
+					if (roomBaseX < 0)
 					{
-						position++;
+						roomTileOffsetX = Math.abs(roomBaseX) + 1; //add 1 because the tile at x=0 will always be null
+					}
+					else
+					{
+						roomTileOffsetX = 0;
 					}
 
-					if (x < 0)
+					if (roomBaseX >= SCENE_SIZE || roomTileOffsetX >= RaidRoom.ROOM_MAX_SIZE)
 					{
-						offsetX = Math.abs(x) + 1; //add 1 because the tile at x=0 will always be null
+						//in this case the room is so far that it is not visible in any way on the map
+						WorldPoint base = WorldPoint.fromRegion(client, roomBaseX, roomBaseY, plane);
+						room = new RaidRoom(base, RaidRoom.Type.UNKNOWN);
+					}
+					else
+					{
+						Tile base = tiles[roomBaseX + roomTileOffsetX][roomBaseY];
+						room = determineRoom(base, roomTileOffsetX);
 					}
 
-					if (x < SCENE_SIZE && y >= 0 && y < SCENE_SIZE)
-					{
-						if (tiles[x + offsetX][y] == null)
-						{
-							if (position == 4)
-							{
-								position++;
-								break;
-							}
-
-							continue;
-						}
-
-						if (position == 0)
-						{
-							startX = j;
-							startY = i;
-						}
-
-						Tile base = tiles[offsetX > 0 ? 1 : x][y];
-						RaidRoom room = determineRoom(base, plane, offsetX);
-						raid.setRoom(room, position + Math.abs((plane - 3) * 8));
-						position++;
-					}
+					raid.setRoom(room, position);
+					position++;
 				}
 			}
 		}
 
-		baseX += gridBase.getX() + RaidRoom.ROOM_MAX_SIZE * startX;
-		int baseY = gridBase.getY() - RaidRoom.ROOM_MAX_SIZE + (RaidRoom.ROOM_MAX_SIZE * startY);
-		raid.setBase(WorldPoint.fromRegion(client, baseX, baseY, 0));
 		return raid;
 	}
 
-	private void checkUnknownRooms()
+	private RaidRoom determineRoom(Tile base, int tileOffset)
 	{
-		for (RaidRoom room : raid.getRooms())
-		{
-			if (room == null)
-			{
-				continue;
-			}
-
-			if (room.getType() == RaidRoom.Type.UNKNOWN || room.getType() == RaidRoom.Type.COMBAT && room.getBoss() == RaidRoom.Boss.UNKNOWN ||
-					room.getType() == RaidRoom.Type.PUZZLE && room.getPuzzle() == RaidRoom.Puzzle.UNKNOWN)
-			{
-				int x = room.getBase().getX() - client.getBaseX();
-				int y = room.getBase().getY() - client.getBaseY();
-
-				if (x <= -32 || x >= SCENE_SIZE || y >= SCENE_SIZE)
-				{
-					continue;
-				}
-
-				int plane = room.getBase().getPlane();
-				Tile tile = client.getRegion().getTiles()[plane][x <= 0 ? 1 : x][y];
-
-				if (tile == null)
-				{
-					System.out.println("Tile null?!");
-					continue;
-				}
-
-				RaidRoom raidRoom = determineRoom(tile, plane, 0);
-				room.setBoss(raidRoom.getBoss());
-				room.setPuzzle(raidRoom.getPuzzle());
-			}
-		}
-
-		RotationSolver.solve(raid.getCombatRooms());
-	}
-
-	private RaidRoom determineRoom(Tile tile, int plane, int offset)
-	{
-		WorldPoint base = new WorldPoint(tile.getWorldLocation().getX() - offset, tile.getWorldLocation().getY(), plane);
-		RaidRoom room = new RaidRoom(base, RaidRoom.Type.EMPTY);
-		int chunkData = client.getInstanceTemplateChunks()[tile.getPlane()][(tile.getRegionLocation().getX()) / 8][tile.getRegionLocation().getY() / 8];
+		RaidRoom room = new RaidRoom(base.getWorldLocation().dx(-tileOffset), RaidRoom.Type.EMPTY);
+		int chunkData = client.getInstanceTemplateChunks()[base.getPlane()][(base.getRegionLocation().getX()) / 8][base.getRegionLocation().getY() / 8];
 		InstanceTemplates template = InstanceTemplates.findMatch(chunkData);
 
 		if (template == null)

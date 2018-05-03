@@ -29,6 +29,7 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import javax.inject.Inject;
 import lombok.Setter;
+import net.runelite.client.plugins.raids.solver.Room;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.OverlayPriority;
@@ -47,7 +48,7 @@ public class RaidsScoutOverlay extends Overlay
 	public RaidsScoutOverlay(RaidsPlugin plugin, RaidsConfig config)
 	{
 		setPosition(OverlayPosition.TOP_LEFT);
-		setPriority(OverlayPriority.LOW);
+		setPriority(OverlayPriority.MED);
 		this.plugin = plugin;
 		this.config = config;
 	}
@@ -72,20 +73,17 @@ public class RaidsScoutOverlay extends Overlay
 		panelComponent.setTitleColor(Color.WHITE);
 		panelComponent.setTitle("Raid scouter");
 
+		boolean raidOngoing = plugin.isRaidOngoing();
 		Color color = Color.WHITE;
 		String layout = plugin.getRaid().getLayout().toCode();
-		int position;
 
-		if (plugin.getCurrentRoom() != null)
+		if (raidOngoing)
 		{
-			position = plugin.getCurrentRoom().getIndex();
+			int progress = plugin.getRaid().getProgress();
 
-			if (position > 1)
-			{
-				layout = "<col=" + Integer.toHexString(Color.GREEN.getRGB() & 0xFFFFFF) + ">" +
-						layout.substring(0, position) + "<col=ffffff>" +
-						layout.substring(position, layout.length());
-			}
+			layout = "<col=" + Integer.toHexString(Color.GREEN.getRGB() & 0xFFFFFF) + ">" +
+				layout.substring(0, progress) + "<col=" + Integer.toHexString(color.getRGB() & 0xFFFFFF) + ">" +
+				layout.substring(progress, layout.length());
 		}
 
 		layout = layout.replaceAll("#", "").replaceAll("¤", "");
@@ -106,37 +104,34 @@ public class RaidsScoutOverlay extends Overlay
 				"Layout", Color.WHITE, layout, color
 		));
 
-		boolean isWhitelistedRotation = false;
+		boolean isWhitelistedRotation = config.enableRotationWhitelist() && plugin.isRotationWhitelisted();
 
-		if (config.enableRotationWhitelist())
+		for (Room layoutRoom : plugin.getRaid().getLayout().getRooms())
 		{
-			isWhitelistedRotation = plugin.isRotationWhitelisted();
-		}
-
-		for (int i = 0; i < plugin.getRaid().getLayout().getRooms().size(); i++)
-		{
-			RaidRoom room = plugin.getRaid().getRoomAt(i);
+			int position = layoutRoom.getPosition();
+			RaidRoom room = plugin.getRaid().getRoom(position);
 
 			if (room == null)
 			{
 				continue;
 			}
 
-			color = Color.WHITE;
+			color = raidOngoing ? (room.isCompleted() ? Color.GREEN : Color.WHITE) : Color.WHITE;
 
 			switch (room.getType())
 			{
 				case COMBAT:
-					if (room.isCompleted() || !plugin.isRaidOngoing() &&
-							(plugin.getRoomWhitelist().contains(room.getBoss().getName().toLowerCase()) ||
-									config.enableRotationWhitelist() && isWhitelistedRotation))
+					if (!raidOngoing)
 					{
-						color = Color.GREEN;
-					}
-					else if (!plugin.isRaidOngoing() && (plugin.getRoomBlacklist().contains(room.getBoss().getName().toLowerCase())
-							|| config.enableRotationWhitelist()))
-					{
-						color = Color.RED;
+						if (plugin.getRoomWhitelist().contains(room.getBoss().getName().toLowerCase())
+							|| config.enableRotationWhitelist() && isWhitelistedRotation)
+						{
+							color = Color.GREEN;
+						}
+						else if (plugin.getRoomBlacklist().contains(room.getBoss().getName().toLowerCase()) || config.enableRotationWhitelist())
+						{
+							color = Color.RED;
+						}
 					}
 
 					panelComponent.getLines().add(new PanelComponent.Line(
@@ -145,24 +140,20 @@ public class RaidsScoutOverlay extends Overlay
 					break;
 
 				case PUZZLE:
-					if (room.isCompleted() || !plugin.isRaidOngoing() && plugin.getRoomWhitelist().contains(room.getPuzzle().getName().toLowerCase()))
+					if (!raidOngoing)
 					{
-						color = Color.GREEN;
-					}
-					else if (!plugin.isRaidOngoing() && (plugin.getRoomBlacklist().contains(room.getPuzzle().getName().toLowerCase())))
-					{
-						color = Color.RED;
+						if (plugin.getRoomWhitelist().contains(room.getPuzzle().getName().toLowerCase()))
+						{
+							color = Color.GREEN;
+						}
+						else if (plugin.getRoomBlacklist().contains(room.getPuzzle().getName().toLowerCase()))
+						{
+							color = Color.RED;
+						}
 					}
 
 					panelComponent.getLines().add(new PanelComponent.Line(
 						room.getType().getName(), Color.WHITE, room.getPuzzle().getName(), color
-					));
-					break;
-
-				case START:
-					String str = room.getIndex() == 0 ? "First floor" : "Second floor";
-					panelComponent.getLines().add(new PanelComponent.Line(
-							str, Color.WHITE, "", Color.WHITE
 					));
 					break;
 			}

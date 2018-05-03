@@ -27,8 +27,6 @@ package net.runelite.client.plugins.raids;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import net.runelite.api.Point;
-import net.runelite.api.Tile;
 import net.runelite.api.coords.WorldPoint;
 
 public class RaidRoom
@@ -148,11 +146,7 @@ public class RaidRoom
 
 	@Getter
 	@Setter
-	private int index;
-
-	@Getter
-	@Setter
-	private boolean isCompleted = false;
+	private boolean completed = false;
 
 	public RaidRoom(WorldPoint base, Type type)
 	{
@@ -162,13 +156,8 @@ public class RaidRoom
 
 	public boolean contains(WorldPoint point)
 	{
-		if (base == null || point == null)
-		{
-			return false;
-		}
-
 		return point.getX() >= base.getX() && point.getX() < base.getX() + ROOM_MAX_SIZE &&
-				point.getY() >= base.getY() && point.getY() < base.getY() + ROOM_MAX_SIZE;
+			point.getY() >= base.getY() && point.getY() < base.getY() + ROOM_MAX_SIZE;
 	}
 
 	@Override
